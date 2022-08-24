@@ -39,7 +39,7 @@ class Productions extends \Elementor\Widget_Base
 	 * @return string Widget icon.
 	 */
 	public function get_icon() {
-		return 'eicon-code';
+		return 'eicon-post-list';
 	}
 
 	/**
@@ -322,7 +322,7 @@ class Productions extends \Elementor\Widget_Base
                             break;
                     }
                 }
-                $items[] = $row;
+                $items[] = ['url' => esc_url(get_permalink($production->ID)), 'fields' => $row];
             }
         }
 

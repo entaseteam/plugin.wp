@@ -2,3 +2,36 @@ th#entase_photo_poster,
 td.entase_photo_poster {
     width: 150px !important;
 }
+
+.entase_status_badge {
+    color: #fff;
+    display: inline-block;
+
+    padding: 3px 7px;
+    border-radius: 12px;
+    line-height: 21px;
+    
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+.entase_status_badge[data-status="0"] {
+    background-color: #F7C241;
+}
+.entase_status_badge[data-status="1"] {
+    background-color: #4FA650;
+}
+.entase_status_badge[data-status="2"] {
+    background-color: #48A0B5;
+}
+.entase_status_badge[data-status="3"] {
+    background-color: #C8CBD3;
+}
+.entase_status_badge[data-status="4"] {
+    background-color: #CE464C;
+}
+.entase_status_badge[data-status="5"] {
+    background-color: #6b73e0;
+}

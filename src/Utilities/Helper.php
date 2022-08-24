@@ -19,10 +19,42 @@ class Helper
     {
         global $post, $wp_query;
         if ($column == 'entase_photo_poster')
-        {
+        {            
             $meta = get_post_meta($post->ID, 'entase_photo', true);
             $photo = $meta != '' ? @json_decode($meta) : null;
             if ($photo != null) echo '<img src="'.$photo->poster->small.'" style="width:150px" />';
+        }
+        elseif ($column == 'entase_dateStart')
+        {
+            $timeStart = (int)get_post_meta($post->ID, 'entase_dateStart', true);
+            echo date('Y/m/d \a\t H:i', $timeStart);
+        }
+        elseif ($column == 'entase_status')
+        {
+            $status = (int)get_post_meta($post->ID, 'entase_status', true);
+            echo '<div class="entase_status_badge" data-status="'.$status.'">';
+            switch($status)
+            {
+                case 0:
+                    echo 'Pending';
+                    break;
+                case 1:
+                    echo 'Open Sell';
+                    break;
+                case 2:
+                    echo 'Closed Sell';
+                    break;
+                case 3:
+                    echo 'Finsihed';
+                    break;
+                case 4:
+                    echo 'Canceled';
+                    break;
+                case 5:
+                    echo 'Rescheduling';
+                    break;
+            }
+            echo '</div>';
         }
     }
 

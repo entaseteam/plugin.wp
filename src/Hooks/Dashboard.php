@@ -3,6 +3,7 @@
 namespace Entase\Plugins\WP\Hooks;
 
 use \Entase\Plugins\WP\Core\Productions;
+use \Entase\Plugins\WP\Core\Events;
 
 class Dashboard 
 {
@@ -31,13 +32,13 @@ class Dashboard
     public static function PostsMenu()
     {
         Productions::PostsMenu();
-        //Events::PostsMenu();
+        Events::PostsMenu();
     }    
 
     public static function MetaBoxes()
     {
         Productions::MetaBoxes();
-        //Events::MetaBoxes();
+        Events::MetaBoxes();
     }
 
     public static function SavePost($id)

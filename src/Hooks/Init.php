@@ -18,7 +18,7 @@ class Init {
         $productionPosts = GeneralSettings::Get('productionPosts');
         if (!$productionPosts['enabled']) return;
 
-        $supports = ['title', 'thumbnail', 'editor', 'entase_story'];
+        $supports = ['title', 'thumbnail', 'editor'];
         $slug = $productionPosts['slug'];
         register_post_type('production', [
             'labels' => [
