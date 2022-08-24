@@ -16,6 +16,7 @@ class Events extends BaseShortcode
             'fields' => ['entase_photo_poster', 'post_title', 'entase_dateonly', 'entase_timeonly', 'entase_book'],
 
             // Query
+            'filter_status' => [1],
             'filter_productions' => [],
             'filter_current_production' => 'no',
             'allow_qs_production' => 'no',
