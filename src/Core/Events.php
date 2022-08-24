@@ -45,13 +45,13 @@ class Events
 
         $shortcodeBtn = '<a href="javascript:void(0);" class="_btnEntase_CopyShortcode" data-shortcode="$1">Shortcode</a>';
         $metaboxes = [
-            /*[
-                'name' => 'entase_story',
-                'shortcode' => 'entase_story',
-                'title' => 'Status',
+            [
+                'name' => 'entase_info',
+                'shortcode' => '',
+                'title' => 'Info - Entase',
                 'context' => 'advanced',
                 'priority' => 'default'                
-            ],*/
+            ],
             [
                 'name' => 'entase_status',
                 'shortcode' => '',
@@ -77,7 +77,7 @@ class Events
 
         foreach ($metaboxes as $box)
         {
-            add_meta_box($box['name'], $box['title'].' '.str_replace('$1', $box['shortcode'], $shortcodeBtn), [__CLASS__, 'DisplayMetaBox'], 'event', $box['context'], $box['priority'], $box);
+            add_meta_box($box['name'], $box['title'].' '.($box['shortcode'] != '' ? str_replace('$1', $box['shortcode'], $shortcodeBtn) : ''), [__CLASS__, 'DisplayMetaBox'], 'event', $box['context'], $box['priority'], $box);
         }
     }
 
@@ -86,18 +86,27 @@ class Events
         $box = $args['args'];
         switch($box['name'])
         {
-            case 'entase_story':
-                /*$story = get_post_meta($post->ID, 'entase_story', true);
-                echo Shortcodes::MarkupToHTML(Helper::EscapeDocument($story));*/
+            case 'entase_info':
+                $properties = [
+                    [
+                        'name' => 'Event ID',
+                        'value' => get_post_meta($post->ID, 'entase_id', true),
+                        'shortcode' => '[entase_id]'
+                    ],
+                    [
+                        'name' => 'Production ID',
+                        'value' => get_post_meta($post->ID, 'entase_productionID', true),
+                        'shortcode' => '[entase_productionid]'
+                    ],
+                ];
+
+                $atmf = \ATMF\Setup::GetEngine();
+                $atmf->vars['properties'] = $properties;
+                $atmf->RendTemplate('Snipptes/EventInfoBox');
                 break;
             case 'entase_status':
-
-                /*echo '<div>Start: '.Helper::
-                $timeStart = (int)get_post_meta($post->ID, 'entase_dateStart', true);
-                echo '<div>Start: '.date('Y/m/d \a\t H:i', $timeStart).'</div>';
-
-
-                echo '<div>Status: '.date('Y/m/d \a\t H:i', $timeStart).'</div>';*/
+                echo '<div><label>Start:</label> '; Helper::CustomTableColumns('entase_dateStart'); echo '</div>';
+                echo '<div><label>Status:</label> '; Helper::CustomTableColumns('entase_status'); echo '</div>';
                 break;
             case 'entase_photo_poster':
                 self::ExtractMetaPhoto($post);
