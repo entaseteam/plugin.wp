@@ -38,7 +38,7 @@ class Productions
         wp_enqueue_script('entase-meta', Conf::JSUrl.'/admin/meta.js', ['jquery'], false, true);
         wp_enqueue_style('entase-meta', Conf::CSSUrl.'/admin/meta-boxes.css');
 
-        $shortcodeBtn = '<a href="javascript:void(0);" class="_btnEntase_CopyShortcode" data-shortcode="$1">Shortcode</a>';
+        $shortcodeBtn = '<a href="javascript:void(0);" class="_btnEntase_CopyValue" data-value="$1" data-type="shortcode">Shortcode</a>';
         $metaboxes = [
             [
                 'name' => 'entase_story',

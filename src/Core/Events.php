@@ -43,12 +43,12 @@ class Events
         wp_enqueue_script('entase-meta', Conf::JSUrl.'/admin/meta.js', ['jquery'], false, true);
         wp_enqueue_style('entase-meta', Conf::CSSUrl.'/admin/meta-boxes.css');
 
-        $shortcodeBtn = '<a href="javascript:void(0);" class="_btnEntase_CopyShortcode" data-shortcode="$1">Shortcode</a>';
+        $shortcodeBtn = '<a href="javascript:void(0);" class="_btnEntase_CopyValue" data-value="$1" data-type="shortcode">Shortcode</a>';
         $metaboxes = [
             [
-                'name' => 'entase_info',
+                'name' => 'entase_shortcodes',
                 'shortcode' => '',
-                'title' => 'Info - Entase',
+                'title' => 'Shortcodes - Entase',
                 'context' => 'advanced',
                 'priority' => 'default'                
             ],
@@ -86,23 +86,32 @@ class Events
         $box = $args['args'];
         switch($box['name'])
         {
-            case 'entase_info':
+            case 'entase_shortcodes':
                 $properties = [
                     [
                         'name' => 'Event ID',
                         'value' => get_post_meta($post->ID, 'entase_id', true),
-                        'shortcode' => '[entase_id]'
+                        'shortcode' => 'entase_id'
                     ],
                     [
                         'name' => 'Production ID',
                         'value' => get_post_meta($post->ID, 'entase_productionID', true),
-                        'shortcode' => '[entase_productionid]'
+                        'shortcode' => 'entase_productionid'
+                    ],
+                    [
+                        'name' => 'Book Link',
+                        'value' => 'https://www.entase.bg/book?eid='.get_post_meta($post->ID, 'entase_id', true),
+                        'shortcode' => 'entase_link event='.get_post_meta($post->ID, 'entase_id', true)
+                    ],
+                    [
+                        'name' => 'Book Button',
+                        'shortcode' => 'entase_book event='.get_post_meta($post->ID, 'entase_id', true)
                     ],
                 ];
 
                 $atmf = \ATMF\Setup::GetEngine();
                 $atmf->vars['properties'] = $properties;
-                $atmf->RendTemplate('Snipptes/EventInfoBox');
+                $atmf->RendTemplate('Snippets/EventInfoBox');
                 break;
             case 'entase_status':
                 echo '<div><label>Start:</label> '; Helper::CustomTableColumns('entase_dateStart'); echo '</div>';

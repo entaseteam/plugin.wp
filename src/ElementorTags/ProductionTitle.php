@@ -99,6 +99,6 @@ class ProductionTitle extends \Elementor\Core\DynamicTags\Tag
      */
 	public function render() 
     {
-        echo \Entase\Plugins\WP\Core\Shortcodes::Title([]);
+        echo \Entase\Plugins\WP\Shortcodes\Meta::Do([], '', 'entase_title');
 	}
 }

@@ -10,10 +10,13 @@ var EntaseMeta = new function() {
     this.PageLoad = function() {
         var $ = this.$;
 
-        $('._btnEntase_CopyShortcode').click(function() {
-            var shortcode = $(this).data('shortcode');
-            if (shortcode)
-                EntaseMeta.CopyToClipboard('[' + shortcode + ']');
+        $('._btnEntase_CopyValue').click(function() {
+            var value = $(this).data('value');
+            if (value)
+            {
+                var isShortcode = $(this).data('type') == 'shortcode';
+                EntaseMeta.CopyToClipboard(isShortcode ? '[' + value + ']' : value);
+            }
         });
     };
 

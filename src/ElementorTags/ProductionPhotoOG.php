@@ -108,7 +108,7 @@ class ProductionPhotoOG extends \Elementor\Core\DynamicTags\Data_Tag
         $atts = ['srconly' => 1];
         if ($size != '') $atts['size'] = $size;
 
-        return ['url' => \Entase\Plugins\WP\Core\Shortcodes::PhotoOG($atts)];
+        return ['url' => \Entase\Plugins\WP\Core\Shortcodes\PhotoOG::Do($atts)];
     }
 	
 }

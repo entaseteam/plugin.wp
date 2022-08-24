@@ -119,6 +119,6 @@ class ProductionStory extends \Elementor\Core\DynamicTags\Tag
         if ($searchurl != '') $atts['searchurl'] = $searchurl;
         if ($linktarget != '') $atts['linktarget'] = $linktarget;
 
-        echo \Entase\Plugins\WP\Core\Shortcodes::Story($atts);
+        echo \Entase\Plugins\WP\Shortcodes\Meta::Do($atts, '', 'entase_title');
 	}
 }
