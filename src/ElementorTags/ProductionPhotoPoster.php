@@ -109,7 +109,7 @@ class ProductionPhotoPoster extends \Elementor\Core\DynamicTags\Data_Tag
         $atts = ['srconly' => 1];
         if ($size != '') $atts['size'] = $size;
 
-        return ['url' => \Entase\Plugins\WP\Core\Shortcodes\PhotoPoster::Do($atts)]; 
+        return ['url' => \Entase\Plugins\WP\Shortcodes\Photo::Do($atts, '', 'entase_photo_poster')]; 
     }
 	
 }

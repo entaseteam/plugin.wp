@@ -15,5 +15,6 @@ class Elementor
     public static function Widgets($widgetManager)
     {
         $widgetManager->register(new \Entase\Plugins\WP\ElementorWidgets\Productions());
+        $widgetManager->register(new \Entase\Plugins\WP\ElementorWidgets\Events());
     }
 }

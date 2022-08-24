@@ -4,10 +4,10 @@ namespace Entase\Plugins\WP\ElementorWidgets;
 
 use \Entase\Plugins\WP\Conf;
 
-class Productions extends \Elementor\Widget_Base
+class Events extends \Elementor\Widget_Base
 {
-    private static $widgetName = 'entase_productions';
-    private static $widgetTitle = 'Productions - Entase';
+    private static $widgetName = 'entase_events';
+    private static $widgetTitle = 'Events - Entase';
 
     /**
 	 * Get widget name.
@@ -39,7 +39,7 @@ class Productions extends \Elementor\Widget_Base
 	 * @return string Widget icon.
 	 */
 	public function get_icon() {
-		return 'eicon-post-list';
+		return 'eicon-calendar';
 	}
 
 	/**
@@ -107,13 +107,16 @@ class Productions extends \Elementor\Widget_Base
                     'post_title' => 'Post title',
                     'post_content' => 'Post content',
                     'post_feature_image' => 'Post feature image',
-                    'post_tags' => 'Post tags',
                     'entase_title' => 'Entase title',
                     'entase_story' => 'Entase story',
+                    'entase_dateStart' => 'Event start date - Full',
+                    'entase_dateonly' => 'Event start date - Date only',
+                    'entase_timeonly' => 'Event start date - Time only',
+                    'entase_book' => 'Book button',
                     'entase_photo_poster' => 'Entase photo poster',
                     'entase_photo_og' => 'Entase photo og',
                 ],
-                'default' => ['post_title', 'entase_photo_poster']
+                'default' => ['entase_photo_poster', 'post_title', 'entase_dateonly', 'entase_timeonly', 'entase_book']
 			]
 		);
 
@@ -142,6 +145,62 @@ class Productions extends \Elementor\Widget_Base
 		$this->end_controls_section();
 
 
+        /* ***************** */
+        /* CUSTOMIZE SECTION */
+        /* ***************** */
+		$this->start_controls_section(
+			'customize_section',
+			[
+				'label' => 'Customize',
+				'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+        $this->add_control(
+			'targeturl',
+			[
+				'label' => 'Default click action',
+				'type' => \Elementor\Controls_Manager::SELECT,
+				'options' => [
+                    'book' => 'Open book window',
+                    'production' => 'Redirect to production page',
+                ],
+                'default' => 'book'
+			]
+		);
+
+        $this->add_control(
+			'booklabel',
+			[
+				'label' => 'Book button label',
+				'type' => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Book',
+                'placeholder' => 'Default: Book',
+			]
+		);
+
+        $this->add_control(
+			'dateformat',
+			[
+				'label' => 'Date format',
+				'type' => \Elementor\Controls_Manager::TEXT,
+                'default' => 'd/m',
+                'placeholder' => 'Default: d/m'
+			]
+		);
+
+        $this->add_control(
+			'timeformat',
+			[
+				'label' => 'Time format',
+				'type' => \Elementor\Controls_Manager::TEXT,
+                'default' => 'H:i',
+                'placeholder' => 'Default: H:i'
+			]
+		);
+
+        $this->end_controls_section();
+
         /* ************** */
         /* QUERY SECTION */
         /* ************** */
@@ -153,44 +212,53 @@ class Productions extends \Elementor\Widget_Base
 			]
 		);
 
-        $categories = get_categories(['hide_empty' => false]);
-        $categoryArr = [];
-        foreach ($categories as $category) $categoryArr[$category->term_id] = $category->name;
+        
         $this->add_control(
-			'filter_categories',
+			'filter_status',
 			[
-				'label' => 'Categories',
+				'label' => 'Status',
 				'type' => \Elementor\Controls_Manager::SELECT2,
 				'multiple' => true,
-				'options' => $categoryArr,
+				'options' => ['Pending', 'Open Sell', 'Closed Sell', 'Finished', 'Canceled'],
+                'default' => 1
+			]
+		);
+
+        $productions = get_posts(['post_type' => 'production']);
+        $productionsArr = [];
+        foreach ($productions as $production) $productionsArr[$production->ID] = $production->post_title;
+        $this->add_control(
+			'filter_productions',
+			[
+				'label' => 'Productions',
+				'type' => \Elementor\Controls_Manager::SELECT2,
+				'multiple' => true,
+				'options' => $productionsArr,
 			]
 		);
         
         $this->add_control(
-			'filter_current_categories',
+			'filter_current_production',
 			[
-				'label' => 'All in queried object categories',
+				'label' => 'All in queried production',
 				'type' => \Elementor\Controls_Manager::SWITCHER
 			]
 		);
 
-        $tags = get_tags(['hide_empty' => false]);
-        $tagArr = [];
-        foreach ($tags as $tag) $tagArr[$tag->term_id] = $tag->name;
         $this->add_control(
-			'filter_tags',
+			'allow_qs_production',
 			[
-				'label' => 'Tags',
-				'type' => \Elementor\Controls_Manager::SELECT2,
-				'multiple' => true,
-				'options' => $tagArr,
+				'label' => 'Allow production filter in query string',
+                'description' => 'Use "?production=...."',
+				'type' => \Elementor\Controls_Manager::SWITCHER
 			]
 		);
 
         $this->add_control(
-			'filter_current_tags',
+			'allow_qs_date',
 			[
-				'label' => 'All in queried object tags',
+				'label' => 'Allow date filter in query string',
+                'description' => 'Use "?date=YYYMMDD-YYYMMDD"',
 				'type' => \Elementor\Controls_Manager::SWITCHER
 			]
 		);
@@ -201,10 +269,10 @@ class Productions extends \Elementor\Widget_Base
 
     public function get_style_depends() {
 
-		wp_register_style('entase-widget-productions', Conf::CSSUrl.'/front/widgets/productions-classic.css');
+		wp_register_style('entase-widget-events', Conf::CSSUrl.'/front/widgets/events-classic.css');
 
 		return [
-			'entase-widget-productions',
+			'entase-widget-events',
 		];
 
 	}
@@ -220,6 +288,7 @@ class Productions extends \Elementor\Widget_Base
     {
         $settings = $this->get_settings_for_display();
 		$settings['nostyles'] = true;
-        echo \Entase\Plugins\WP\Shortcodes\Productions::Do($settings, '', 'entase_productions');
+        if (is_admin()) $settings['targeturl'] = '';
+        echo \Entase\Plugins\WP\Shortcodes\Events::Do($settings, '', 'entase_events');
 	}
 }

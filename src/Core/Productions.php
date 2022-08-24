@@ -126,7 +126,13 @@ class Productions
                     else return ($a->type < $b->type) ? -1 : 1;
                 });
                 $tags = [];
-                foreach ($production->tags as $tag) $tags[] = str_replace('\\', '\\\\', $tag->name);
+                foreach ($production->tags as $tag) {
+                    $tagName = $tag->name;
+                    $tagName = str_replace('\\', ' ', $tagName);
+                    $tagName = str_replace('  ', ' ', $tagName);
+                    $tagName = str_replace('  ', ' ', $tagName);
+                    $tags[] = $tagName;
+                }
 
                 $meta = self::PrepareMetaFromAPI($production);
                 wp_insert_post([

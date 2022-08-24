@@ -1,6 +1,7 @@
 var EntaseMeta = new function() {
 
-    this.$ = jQuery;
+    var $ = jQuery;
+
     this.Init = function() {
         this.$(document).ready(function() {
             EntaseMeta.PageLoad();
@@ -8,8 +9,6 @@ var EntaseMeta = new function() {
     };
 
     this.PageLoad = function() {
-        var $ = this.$;
-
         $('._btnEntase_CopyValue').click(function() {
             var value = $(this).data('value');
             if (value)

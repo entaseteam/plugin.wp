@@ -11,9 +11,11 @@ class BaseShortcode
         return '';
     }
 
-    public static function GetRelatedProduction()
-    {
-        $post = get_post($post);
+    public static function GetRelatedProduction($post=null)
+    {        
+        if ($post == null) 
+            $post = get_post();
+
         if ($post)
         {
             if ($post->post_type == 'production')
@@ -22,10 +24,11 @@ class BaseShortcode
             {
                 $entasePID = get_post_meta($post->ID, 'entase_productionID', true);
                 $posts = get_posts([
-                    'meta_key' => 'entase_productionID',
+                    'post_type' => 'production',
+                    'meta_key' => 'entase_id',
                     'meta_value' => $entasePID
                 ]);
-
+                
                 if ($posts) 
                     return $posts[0];
             }

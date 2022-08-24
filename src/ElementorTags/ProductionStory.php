@@ -89,7 +89,7 @@ class ProductionStory extends \Elementor\Core\DynamicTags\Tag
             'type' => \Elementor\Controls_Manager::CHOOSE,
             'label' => 'Target',
             'options' => [
-                '' => [
+                '_same' => [
                     'title' => 'Same window',
                     'icon' => 'eicon-image',
                 ],
@@ -114,11 +114,11 @@ class ProductionStory extends \Elementor\Core\DynamicTags\Tag
     {
         $searchurl = $this->get_settings('searchurl');
         $linktarget = $this->get_settings('linktarget');
-
+        
         $atts = [];
         if ($searchurl != '') $atts['searchurl'] = $searchurl;
-        if ($linktarget != '') $atts['linktarget'] = $linktarget;
+        if ($linktarget != '') $atts['linktarget'] = $linktarget != '_same' ? $linktarget : '';
 
-        echo \Entase\Plugins\WP\Shortcodes\Meta::Do($atts, '', 'entase_title');
+        echo \Entase\Plugins\WP\Shortcodes\Meta::Do($atts, '', 'entase_story');
 	}
 }

@@ -146,7 +146,7 @@ class Events
     public static function Import()
     {
         $settings = GeneralSettings::Get('eventPosts');
-        $settings['lastIDSync'] = ''; // Debug
+        //$settings['lastIDSync'] = ''; // Debug
 
         $filter = ['extend' => 'productionTitle', 'sort' => ['id' => 'asc']];
         if (trim($settings['lastIDSync']) != '')
@@ -175,7 +175,7 @@ class Events
                 break;
             }
 
-            GeneralSettings::Set('productionPosts', $settings);
+            GeneralSettings::Set('eventPosts', $settings);
         }
 
         Ajax::StatusOK(['hasMore' => $events->hasMore]);

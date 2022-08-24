@@ -20,6 +20,7 @@ class Init {
 
         $supports = ['title', 'thumbnail', 'editor'];
         $slug = $productionPosts['slug'];
+        
         register_post_type('production', [
             'labels' => [
                 'name' => __('Productions'),

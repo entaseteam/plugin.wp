@@ -2,18 +2,27 @@
 
 namespace Entase\Plugins\WP\Shortcodes;
 
+use Entase\Plugins\WP\Conf;
+
 class Productions extends BaseShortcode
 {
     public static function Do($atts, $content, $tag)
     {
         $atts = array_merge([
+            'nostyles' => false,
             'limit' => 0,
             'fields' => ['entase_photo_poster', 'post_title', 'post_tags']
         ], is_array($atts) ? $atts : []);
 
+        if (!$atts['nostyles'])
+            wp_enqueue_style('entase-widget-productions', Conf::CSSUrl.'/front/widgets/productions-classic.css');
+
         $limit = $atts['limit'] ?? 0;
         $categories = $atts['filter_categories'] ?? [];
         $tags = $atts['filter_tags'] ?? [];
+
+        if (is_string($categories)) $categories = explode(',', $categories);
+        if (is_string($tags)) $tags = explode(',', $tags);
 
         if ($atts['filter_current_categories'] == 'yes')
         {
@@ -121,7 +130,7 @@ class Productions extends BaseShortcode
                             break;
                     }
                 }
-                $items[] = ['url' => esc_url(get_permalink($production->ID)), 'fields' => $row];
+                $items[] = ['url' => esc_url(get_permalink($production)), 'fields' => $row];
             }
         }
 
