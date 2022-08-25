@@ -1,77 +1,13 @@
-:root {
-
-
-    --color-white: #fff;
-}
-
-
-
-
 .event_items {
     display: inline-grid;
     grid-column-gap: 15px;
     grid-row-gap: 15px;
     width: 100%;
     grid-template-columns: repeat(3, 1fr);
-
 }
-
-.event_item {
-   
-}
-.event_item img {
-    will-change: auto;
-    -o-object-fit: cover;
-    object-fit: cover;
-    -webkit-transition: opacity 0.15s linear;
-    transition: opacity 0.15s linear;
-    will-change: transform;
-    left: 0;
-    top: 0;
- 
-    display: block;
-    overflow: hidden;
-    height: 100%;
-    width: 100%;
-}
-.event_item > a > div {
-    display: flex;
-    flex-direction: column;
-}
-.event_item .event_entase_photo_poster { order: 1; }
-.event_item .event_post_title { order: 2; }
-.event_item .event_entase_title { order: 2; }
-.event_item .event_post_tags { order: 3; }
-.event_item .event_post_content { order: 4; }
-
-
-
-.event_post_title,
-.event_post_tags {
-    background-color: var(--e-global-color-7fbed91)!important;
-    padding: 20px;
-    text-align: center;
-    color: var(--color-white);
-
-    
-}
-.event_post_title {
-    padding-bottom: 0;
- 
-
-    font-family: var( --e-global-typography-c7a8306-font-family ), Sans-serif;
-    font-size: 27px;
-    line-height: 33px;
-    font-weight: 600;
-    text-transform:uppercase;
-
-}
-.event_post_tags {
-    padding-top: 3px;
-    
-    font-family: var( --e-global-typography-c7a8306-font-family ), Sans-serif;
-    font-size: 22px;
-    line-height: 25px;
-    font-weight: 500;
-    text-transform:uppercase;
+	
+@media only screen and (max-width: 767px) {
+	.event_items {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
