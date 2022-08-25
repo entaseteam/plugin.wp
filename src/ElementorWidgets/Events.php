@@ -107,14 +107,22 @@ class Events extends \Elementor\Widget_Base
                     'post_title' => 'Post title',
                     'post_content' => 'Post content',
                     'post_feature_image' => 'Post feature image',
-                    'entase_title' => 'Entase title',
-                    'entase_story' => 'Entase story',
-                    'entase_dateStart' => 'Event start date - Full',
-                    'entase_dateonly' => 'Event start date - Date only',
-                    'entase_timeonly' => 'Event start date - Time only',
-                    'entase_book' => 'Book button',
-                    'entase_photo_poster' => 'Entase photo poster',
-                    'entase_photo_og' => 'Entase photo og',
+                    'entase_title' => '[Entase] Title',
+                    'entase_story' => '[Entase] Story',
+                    'entase_dateStart' => '[Entase] Start date - Full',
+                    'entase_dateonly' => '[Entase] Start date - Date only',
+                    'entase_timeonly' => '[Entase] Start date - Time only',
+                    'entase_book' => '[Entase] Book button',
+                    'entase_photo_poster' => '[Entase] Photo - Poster',
+                    'entase_photo_og' => '[Entase] Photo - OG',
+					'entase_location_countryCode' => '[Entase] Location - Country code',
+					'entase_location_countryName' => '[Entase] Location - Country name',
+					'entase_location_cityName' => '[Entase] Location - City name',
+					'entase_location_postCode' => '[Entase] Location - Post code',
+					'entase_location_address' => '[Entase] Location - Address',
+					'entase_location_placeName' => '[Entase] Location - Place name',
+					'entase_location_lat' => '[Entase] Location - Latitude',
+					'entase_location_lng' => '[Entase] Location - Longitude',
                 ],
                 'default' => ['entase_photo_poster', 'post_title', 'entase_dateonly', 'entase_timeonly', 'entase_book']
 			]
@@ -129,6 +137,19 @@ class Events extends \Elementor\Widget_Base
                     'classic' => 'Classic'
                 ],
                 'default' => 'classic'
+			]
+		);
+
+		$this->add_control(
+			'sort',
+			[
+				'label' => 'Sort',                
+				'type' => \Elementor\Controls_Manager::SELECT,
+				'options' => [
+                    'entase_dateStart/asc' => 'Date ASC',
+					'entase_dateStart/desc' => 'Date DESC',
+                ],
+                'default' => 'entase_dateStart/asc'
 			]
 		);
 
@@ -226,7 +247,11 @@ class Events extends \Elementor\Widget_Base
 
         $productions = get_posts(['post_type' => 'production']);
         $productionsArr = [];
-        foreach ($productions as $production) $productionsArr[$production->ID] = $production->post_title;
+        foreach ($productions as $production) 
+		{
+			$productionID = get_post_meta($production->ID, 'entase_id', true);
+			$productionsArr[$productionID] = $production->post_title;
+		}
         $this->add_control(
 			'filter_productions',
 			[
@@ -249,7 +274,7 @@ class Events extends \Elementor\Widget_Base
 			'allow_qs_production',
 			[
 				'label' => 'Allow production filter in query string',
-                'description' => 'Use "?production=...."',
+                'description' => 'Use "?prod=...."',
 				'type' => \Elementor\Controls_Manager::SWITCHER
 			]
 		);
