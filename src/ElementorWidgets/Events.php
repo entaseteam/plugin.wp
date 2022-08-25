@@ -104,25 +104,32 @@ class Events extends \Elementor\Widget_Base
 				'type' => \Elementor\Controls_Manager::SELECT2,
 				'multiple' => true,
 				'options' => [
-                    'post_title' => 'Post title',
-                    'post_content' => 'Post content',
-                    'post_feature_image' => 'Post feature image',
-                    'entase_title' => '[Entase] Title',
-                    'entase_story' => '[Entase] Story',
-                    'entase_dateStart' => '[Entase] Start date - Full',
-                    'entase_dateonly' => '[Entase] Start date - Date only',
-                    'entase_timeonly' => '[Entase] Start date - Time only',
-                    'entase_book' => '[Entase] Book button',
-                    'entase_photo_poster' => '[Entase] Photo - Poster',
-                    'entase_photo_og' => '[Entase] Photo - OG',
-					'entase_location_countryCode' => '[Entase] Location - Country code',
-					'entase_location_countryName' => '[Entase] Location - Country name',
-					'entase_location_cityName' => '[Entase] Location - City name',
-					'entase_location_postCode' => '[Entase] Location - Post code',
-					'entase_location_address' => '[Entase] Location - Address',
-					'entase_location_placeName' => '[Entase] Location - Place name',
-					'entase_location_lat' => '[Entase] Location - Latitude',
-					'entase_location_lng' => '[Entase] Location - Longitude',
+
+					// From production
+					'production_post_title' => '[Production] Post title',
+                    'production_post_content' => '[Production] Post content',
+                    'production_post_feature_image' => '[Production] Post feature image',
+                    'entase_title' => '[Production] Title',
+                    'entase_story' => '[Production] Story',
+					'entase_photo_poster' => '[Production] Photo - Poster',
+                    'entase_photo_og' => '[Production] Photo - OG',
+
+					// From Event
+					'post_title' => '[Event] Post title',
+                    'post_content' => '[Event] Post content',
+                    'post_feature_image' => '[Event] Post feature image',
+                    'entase_dateStart' => '[Event] Start date - Full',
+                    'entase_dateonly' => '[Event] Start date - Date only',
+                    'entase_timeonly' => '[Event] Start date - Time only',
+                    'entase_book' => '[Event] Book button',
+					'entase_location_countryCode' => '[Event] Location - Country code',
+					'entase_location_countryName' => '[Event] Location - Country name',
+					'entase_location_cityName' => '[Event] Location - City name',
+					'entase_location_postCode' => '[Event] Location - Post code',
+					'entase_location_address' => '[Event] Location - Address',
+					'entase_location_placeName' => '[Event] Location - Place name',
+					'entase_location_lat' => '[Event] Location - Latitude',
+					'entase_location_lng' => '[Event] Location - Longitude',
                 ],
                 'default' => ['entase_photo_poster', 'post_title', 'entase_dateonly', 'entase_timeonly', 'entase_book']
 			]
@@ -217,6 +224,16 @@ class Events extends \Elementor\Widget_Base
 				'type' => \Elementor\Controls_Manager::TEXT,
                 'default' => 'H:i',
                 'placeholder' => 'Default: H:i'
+			]
+		);
+
+		$this->add_control(
+			'contentchars',
+			[
+				'label' => 'Max content chars',
+				'type' => \Elementor\Controls_Manager::TEXT,
+                'default' => 200,
+                'placeholder' => 'Default: 30'
 			]
 		);
 

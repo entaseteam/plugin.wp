@@ -148,7 +148,7 @@ class Events
         $settings = GeneralSettings::Get('eventPosts');
         //$settings['lastIDSync'] = ''; // Debug
 
-        $filter = ['extend' => 'productionTitle', 'sort' => ['id' => 'asc']];
+        $filter = ['extend' => 'productionTitle', 'sort' => ['id' => 'desc']];
         if (trim($settings['lastIDSync']) != '')
             $filter['after'] = $settings['lastIDSync'];
 

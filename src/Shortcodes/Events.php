@@ -3,6 +3,7 @@
 namespace Entase\Plugins\WP\Shortcodes;
 
 use \Entase\Plugins\WP\Conf;
+use \Entase\Plugins\WP\Utilities\Shortcodes;
 
 class Events extends BaseShortcode
 {
@@ -31,6 +32,7 @@ class Events extends BaseShortcode
             'booklabel' => 'Book',
             'dateformat' => 'd/m',
             'timeformat' => 'H:i',
+            'contentchars' => 200
             
         ], is_array($atts) ? $atts : []);
 
@@ -46,8 +48,10 @@ class Events extends BaseShortcode
         /* ******************** */
         /* SANITIZE QUERY ARGS */
         /* ******************** */
+        $limit = (int)$atts['limit'];
         $statuses = is_string($atts['filter_status']) ? explode(',', $atts['filter_status']) : $atts['filter_status'];
         $productions = is_string($atts['filter_productions']) ? explode(',', $atts['filter_productions']) : $atts['filter_productions'];
+        $atts['contentchars'] = (int)$atts['contentchars'];
 
         // Find and add current production
         if ($atts['filter_current_production'] == 'yes')
@@ -158,19 +162,39 @@ class Events extends BaseShortcode
                 // Extract related production if needed
                 $production = null;
                 if($atts['targeturl'] == 'production' ||
-                    count(array_intersect(['entase_title', 'entase_story', 'entase_photo_poster', 'entase_photo_og'], $atts['fields'] )) > 0)
+                    count(array_intersect([
+                        'production_post_title', 
+                        'production_post_content', 
+                        'production_post_feature_image', 
+                        'entase_title', 
+                        'entase_story', 
+                        'entase_photo_poster', 
+                        'entase_photo_og'
+                    ], $atts['fields'] )) > 0)
                     $production = self::GetRelatedProduction($post);
+
 
                 // Add fields
                 foreach ($atts['fields'] as $field)
                 {
                     switch($field)
                     {
+                        case 'production_post_title':
+                            $itemProps['production_post_title'] = $production->post_title;
+                            break;
+                        case 'production_post_content':
+                            $content = $production->post_content;
+                            $itemProps['production_post_content'] = mb_strlen($content) > $atts['contentchars'] ? mb_substr($content, 0, $atts['contentchars']).'...' : $content;
+                            break;
+                        case 'production_post_feature_image':
+                            $itemProps['production_post_feature_image'] = get_the_post_thumbnail($production->ID, 'large');
+                            break;
                         case 'post_title':
                             $itemProps['post_title'] = $post->post_title;
                             break;
                         case 'post_content':
-                            $itemProps['post_content'] = $post->post_content;
+                            $content = $post->post_content;
+                            $itemProps['post_content'] = mb_strlen($content) > $atts['contentchars'] ? mb_substr($content, 0, $atts['contentchars']).'...' : $content;
                             break;
                         case 'post_feature_image':
                             $itemProps['post_feature_image'] = get_the_post_thumbnail($post->ID, 'large');
@@ -179,7 +203,8 @@ class Events extends BaseShortcode
                             $itemProps['entase_title'] = get_post_meta($production->ID, 'entase_title', true);
                             break;
                         case 'entase_story':
-                            $itemProps['entase_story'] = get_post_meta($production->ID, 'entase_story', true);
+                            $story = Shortcodes::MarkupToHTML(get_post_meta($production->ID, 'entase_story', true), ['searchurl' => '']);
+                            $itemProps['entase_story'] = mb_strlen($story) > $atts['contentchars'] ? mb_substr($story, 0, $atts['contentchars']).'...' : $story;
                             break;
                         case 'entase_datestart':
                             $time = (int)get_post_meta($post->ID, 'entase_dateStart', true);

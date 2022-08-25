@@ -106,7 +106,7 @@ class Productions
         $settings = GeneralSettings::Get('productionPosts');
         //$settings['lastIDSync'] = ''; // Debug
 
-        $filter = ['sort' => ['id' => 'asc']];
+        $filter = ['sort' => ['id' => 'desc']];
         if (trim($settings['lastIDSync']) != '')
             $filter['after'] = $settings['lastIDSync'];
 
