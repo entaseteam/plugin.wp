@@ -197,6 +197,37 @@ class Productions extends \Elementor\Widget_Base
 
         $this->end_controls_section();
 
+
+		/* ******************* */
+        /* CUSTOM META SECTION */
+        /* ******************* */
+        $this->start_controls_section(
+			'meta_section',
+			[
+				'label' => 'Custom Meta Fields',
+				'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$repeater = new \Elementor\Repeater();
+		$repeater->add_control(
+			'field', [
+				'label' => 'Meta Field',
+				'type' => \Elementor\Controls_Manager::TEXT
+			]
+		);
+
+		$this->add_control(
+			'metafields',
+			[
+				'label' => 'Display additional custom meta fields',
+				'type' => \Elementor\Controls_Manager::REPEATER,
+				'fields' => $repeater->get_controls(),
+				'title_field' => '{{{ field }}}',
+			]
+		);
+		$this->end_controls_section();
+
 	}
 
     public function get_style_depends() {

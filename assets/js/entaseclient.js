@@ -48,8 +48,8 @@ var EntaseClient = function(pk) {
                 window.open(url, '_blank');
                 return;
             }
-
-            this.window = window.open(url, 'entasebooking', 'toolbar=no,location=no,status=no,menubar=no,width=' + width + ',height=' + height + ',left=' + left + ',top=' + top + ',screenX=' + left + ',screenY=' + top);
+            
+            this.window = window.open(url, 'entasebooking', 'modal=yes,toolbar=no,location=no,status=no,menubar=no,width=' + width + ',height=' + height + ',left=' + left + ',top=' + top + ',screenX=' + left + ',screenY=' + top);
             this.closeHandler = setInterval(function (self, settings) {
                 if (self.window.closed) {
                     self.client.HideBGWrap();

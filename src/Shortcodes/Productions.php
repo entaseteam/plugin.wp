@@ -24,6 +24,12 @@ class Productions extends BaseShortcode
         if (is_string($categories)) $categories = explode(',', $categories);
         if (is_string($tags)) $tags = explode(',', $tags);
 
+        foreach ($categories as $key => $value) 
+            if ($value == '') unset($categories[$key]);
+
+        foreach ($tags as $key => $value) 
+            if ($value == '') unset($tags[$key]);
+
         if ($atts['filter_current_categories'] == 'yes')
         {
             $obj = get_queried_object();
@@ -58,7 +64,7 @@ class Productions extends BaseShortcode
         ];
 
         if (count($categories) > 0)
-        {
+        {            
             $query['tax_query'][] = [
                   'taxonomy' => 'category',
                   'field' => 'term_id', 
@@ -130,6 +136,17 @@ class Productions extends BaseShortcode
                             break;
                     }
                 }
+
+                // Additional custom meta fields
+                if (isset($atts['metafields']) && is_array($atts['metafields']))
+                {                    
+                    foreach($atts['metafields'] as $field)
+                    {
+                        if (trim($field['field']) == '') continue;
+                        $row[] = ['key' => 'entase_'.$field['field'], 'val' => get_post_meta($production->ID, $field['field'], true)];
+                    }
+                }
+
                 $items[] = ['url' => esc_url(get_permalink($production)), 'fields' => $row];
             }
         }

@@ -247,6 +247,24 @@ class Events extends BaseShortcode
                     }
                 }
 
+                // Additional custom meta fields
+                if (isset($atts['metafields']) && is_array($atts['metafields']))
+                {
+                    $blockProductionQuery = false;
+                    foreach($atts['metafields'] as $field)
+                    {
+                        if (trim($field['field']) == '') continue;
+                        elseif (!$blockProductionQuery && $field['context'] == 'production' && $production == null)
+                        {
+                            $production = self::GetRelatedProduction($post);
+                            $blockProductionQuery = true;
+                        }
+
+                        $contextID = $field['context'] == 'production' ? $production->ID : $post->ID;
+                        $row[] = ['key' => 'entase_'.$field['field'], 'val' => get_post_meta($contextID, $field['field'], true)];
+                    }
+                }
+
                 // Additional params
                 $item = array_merge([
                     'entase_id' => get_post_meta($post->ID, 'entase_id', true),
