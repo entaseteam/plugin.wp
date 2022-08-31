@@ -106,7 +106,7 @@ class Productions
         $settings = GeneralSettings::Get('productionPosts');
         //$settings['lastIDSync'] = ''; // Debug
 
-        $filter = ['sort' => ['id' => 'desc']];
+        $filter = ['sort' => ['id' => 'asc']];
         if (trim($settings['lastIDSync']) != '')
             $filter['after'] = $settings['lastIDSync'];
 
@@ -146,7 +146,7 @@ class Productions
 
                 $settings['lastIDSync'] = $production->id;
                 $count++;
-                break;
+                //break; // Import by one for debugging
             }
 
             GeneralSettings::Set('productionPosts', $settings);
