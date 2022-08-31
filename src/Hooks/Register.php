@@ -44,6 +44,10 @@ class Register {
         add_action('entase_event_import_cron', function() { \Entase\Plugins\WP\Hooks\Cron::Run('event_import'); });
         add_action('entase_production_import_cron', function() { \Entase\Plugins\WP\Hooks\Cron::Run('production_import'); });
 
+        // Register update channel
+        add_filter('update_plugins_github.com', ['Entase\Plugins\WP\Hooks\Update', 'Check'], 10, 3);
+        
+
         /*register_activation_hook($sender, ['\FTAPI\Hooks\Install', 'Register']);
         add_action('init', ['\FTAPI\Hooks\Init', 'Register']);
         add_action('wp', ['\FTAPI\Hooks\WP', 'Register']);
@@ -55,7 +59,6 @@ class Register {
             add_action( 'add_meta_boxes', ['\FTAPI\Hooks\Dashboard', 'MetaBoxes'] );
             add_action( 'save_post', ['\FTAPI\Hooks\Dashboard', 'SaveMeta'] );
         }*/
-
 
     }
 }
