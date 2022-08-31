@@ -1,2 +1,2 @@
-# plugin.wp
-Integrate Entase in Wordpress
+# Entase plugin for Wordpress
+Official repository.
