@@ -1,12 +1,12 @@
 <?php
 
-namespace Entase\Plugins\WP\Core 
+namespace Entase\Plugins\WP\Core;
+
+class EntaseSDK 
 {
-    class EntaseSDK 
+    public static function PrepareClient() 
     {
-        public static function PrepareClient() 
-        {
-            return new \Entase\SDK\Client('cask_MTY2MDIxNjYyOQNjJmNGU1MzVjN2U4OWYyNjczMDYyNDY2abWlVuVlZ2SDc5eWRu');
-        }
+        $api = GeneralSettings::Get('api');
+        return new \Entase\SDK\Client($api['sk']);
     }
 }

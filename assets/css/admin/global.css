@@ -1,0 +1,25 @@
+.entase_status_msg {
+    position: fixed;
+    right: 0px;
+    top: 50px;
+    z-index: 1000;
+    padding: 20px !important;
+    min-width: 200px;
+    border: 0px !important;
+    margin: 0px !important;
+}
+
+.entase_status_msg.success {
+    color: #fff;
+    background-color: rgb(4, 173, 69);
+}
+
+.entase_status_msg.error {
+    color: #fff;
+    background-color: rgb(168, 43, 43);
+}
+
+.entase_status_msg.info {
+    color: #000;
+    background-color: rgb(233, 210, 190);
+}

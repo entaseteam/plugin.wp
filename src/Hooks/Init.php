@@ -11,6 +11,9 @@ class Init {
         self::ProductionPosts();
         self::EventPosts();
         self::FlushRewriteRules();
+        
+        // Schedule crons
+        Cron::Schedule();
     }
 
     public static function ProductionPosts()

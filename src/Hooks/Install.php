@@ -8,4 +8,9 @@ class Install
     {
         // Nothing to do here yet...
     }
+
+    public static function Unregister()
+    {
+        Cron::Unregister();
+    }
 }

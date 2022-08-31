@@ -7,6 +7,7 @@ class Client
 {
     public $productions;
     public $events;
+    public $photos;
 
     private $_secretKey;
 
@@ -94,8 +95,8 @@ class Client
         foreach ($arr as $key => $value)
         {
             if (is_array($value))
-                $str .= self::_Arr2HTTP($value, $wrapPrefix != '' ? $wrapPrefix.'['.$key.']' : $key.'[');
-            else $str .= $wrapPrefix.$key.($wrapPrefix != '' ? ']' : '').'='.urlencode($value).'&';
+                $str .= self::_Arr2HTTP($value, $wrapPrefix != '' ? $wrapPrefix.'['.$key.']' : $key);
+            else $str .= ($wrapPrefix != '' ? $wrapPrefix.'['.$key.']' : $key).'='.urlencode($value).'&';
         }
 
         return $str;

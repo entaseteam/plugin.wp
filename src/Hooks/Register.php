@@ -8,6 +8,7 @@ class Register {
     {
         // On install flush rules
         register_activation_hook($sender, ['Entase\Plugins\WP\Hooks\Install', 'Register']);
+        register_deactivation_hook($sender,  ['Entase\Plugins\WP\Hooks\Install', 'Unregister']);
 
         // General
         add_action('init', ['Entase\Plugins\WP\Hooks\Init', 'Register']);
@@ -22,6 +23,7 @@ class Register {
 
             // Add settings menu
             add_action('admin_menu', ['Entase\Plugins\WP\Hooks\Dashboard', 'AdminMenu']);
+            add_action('admin_enqueue_scripts', ['Entase\Plugins\WP\Hooks\Dashboard', 'GlobalScriptsBE']);
 
             // Hook to posts menus
             add_action('admin_head-edit.php', ['Entase\Plugins\WP\Hooks\Dashboard', 'PostsMenu']);
@@ -32,10 +34,15 @@ class Register {
 
             // AJAX
             add_action('wp_ajax_entase_import', ['Entase\Plugins\WP\Hooks\Ajax', 'Import']);
+            add_action('wp_ajax_entase_settings', ['Entase\Plugins\WP\Hooks\Ajax', 'Settings']);
             //add_action( 'wp_ajax_nopriv_addItemAJAX', ['Entase\Plugins\WP\Hooks\Ajax', 'Import']);  
             //add_action( 'wp_ajax_addItemAJAX', ['Entase\Plugins\WP\Hooks\Ajax', 'Import']);
-        }
+        }        
 
+        // Register crons
+        add_action('entase_event_status_cron', function() { \Entase\Plugins\WP\Hooks\Cron::Run('event_status'); });
+        add_action('entase_event_import_cron', function() { \Entase\Plugins\WP\Hooks\Cron::Run('event_import'); });
+        add_action('entase_production_import_cron', function() { \Entase\Plugins\WP\Hooks\Cron::Run('production_import'); });
 
         /*register_activation_hook($sender, ['\FTAPI\Hooks\Install', 'Register']);
         add_action('init', ['\FTAPI\Hooks\Init', 'Register']);

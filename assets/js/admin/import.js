@@ -36,10 +36,19 @@ var EntaseImport = new function() {
             context: data,
             success: function(response) {
                 if (response.status == 'ok') {
+                    EntaseStatusMsg(response.imported + ' records were imported.');
                     if (response.hasMore)
+                    {
+                        EntaseStatusMsg('Stay on this page! Import continues...', 'info');
                         EntaseImport.DoImport(this.data.role);
+                    }
                     else window.location.reload();
                 }
+                else if (response.msg) EntaseStatusMsg(response.msg, 'error');
+                else EntaseStatusMsg('Service unavailable.', 'error');
+            },
+            error: function(err) {
+                EntaseStatusMsg('Import failed.', 'error');
             }
         });
     }

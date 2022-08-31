@@ -2,6 +2,7 @@
 
 namespace Entase\Plugins\WP\Hooks;
 
+use \Entase\Plugins\WP\Conf;
 use \Entase\Plugins\WP\Core\Productions;
 use \Entase\Plugins\WP\Core\Events;
 
@@ -52,5 +53,11 @@ class Dashboard
 
 		if ($post->post_type == 'production') Productions::Save($post);
         //elseif ($post->post_type == 'event') Events::Save($post);
+    }
+
+    public static function GlobalScriptsBE()
+    {
+        wp_enqueue_script('entaseglobal', Conf::JSUrl.'/admin/global.js', ['jquery'], false, true);
+        wp_enqueue_style('entaseglobal', Conf::CSSUrl.'/admin/global.css');
     }
 }

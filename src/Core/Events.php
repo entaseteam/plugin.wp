@@ -143,7 +143,7 @@ class Events
         }
     }
 
-    public static function Import()
+    public static function Import($capture=false)
     {
         $settings = GeneralSettings::Get('eventPosts');
         //$settings['lastIDSync'] = ''; // Debug
@@ -160,6 +160,7 @@ class Events
 
         if ($events != null)
         {
+            $count = 0;
             foreach($events as $event)
             {
                 $meta = self::PrepareMetaFromAPI($event);
@@ -172,13 +173,21 @@ class Events
                 ]);
 
                 $settings['lastIDSync'] = $event->id;
+                $count++;
                 break;
             }
 
             GeneralSettings::Set('eventPosts', $settings);
-        }
 
-        Ajax::StatusOK(['hasMore' => $events->hasMore]);
+            $response = ['imported' => $count, 'hasMore' => $events->hasMore];
+            if ($capture) return $response;
+            else Ajax::StatusOK($response);
+        }
+        else 
+        {
+            if ($capture) return false;
+            else Ajax::StatusERR('No events were imported.');
+        }
     }
 
     public static function Save($post)
@@ -193,12 +202,98 @@ class Events
 
         if ($event != null)
         {
-            /*$meta = self::PrepareMetaFromAPI($production);
+            $meta = self::PrepareMetaFromAPI($event);
             foreach ($meta as $key => $val) 
             {
-                if ($key == 'entase_id') continue;
+                if ($key == 'entase_id' || 
+                    $key == 'entase_productionID') continue;
+
                 update_post_meta($post->ID, $key, $val);
-            }*/
+            }
+        }
+    }
+
+    public static function UpdateCurrent()
+    {
+        // Get all events that might be finished
+        $postsArr = get_posts([
+            'post_type' => 'event',
+            'posts_per_page' => -1,
+            'meta_query' => [
+                [
+                    'key' => 'entase_status',
+                    'value' => [0, 1, 2],
+                    'compare' => 'IN'
+                ]
+            ]
+        ]);
+
+        if (!$postsArr || count($postsArr) < 1) 
+            return;
+
+        // Retrieve Entase IDs
+        $posts = [];
+        foreach ($postsArr as $post)
+        {
+            $entaseID = get_post_meta($post->ID, 'entase_id', true);
+            $posts[$entaseID] = $post;
+        }
+
+        $entase = \Entase\Plugins\WP\Core\EntaseSDK::PrepareClient();
+        $events = null;
+        try 
+        {
+            // Get all recent events 
+            $events = $entase->events->GetAll([
+                'sort' => [
+                    'id' => 'desc'
+                ]
+            ]);
+        }
+        catch (\Entase\SDK\Exceptions\Base $ex) {}
+
+
+        if ($events != null)
+        {
+            // Only loop the first page
+            foreach($events as $event)
+            {
+                $post = $posts[$event->id] ?? null;
+                if ($post == null) continue;
+
+                $meta = self::PrepareMetaFromAPI($event);
+                foreach ($meta as $key => $val) 
+                {
+                    if ($key == 'entase_id' || 
+                        $key == 'entase_productionID') continue;
+
+                    update_post_meta($post->ID, $key, $val);
+                }
+
+                // Remove the post
+                unset($posts[$event->id]);
+            }
+        }
+
+        // Check all events that didn't
+        // appear on the first page
+        foreach($posts as $eventID => $post)
+        {
+            $event = null;
+            try { $event = $entase->events->GetByID($eventID); }
+            catch (\Entase\SDK\Exceptions\Base $ex) {}
+
+            if ($event != null)
+            {
+                $meta = self::PrepareMetaFromAPI($event);
+                foreach ($meta as $key => $val) 
+                {
+                    if ($key == 'entase_id' || 
+                        $key == 'entase_productionID') continue;
+
+                    update_post_meta($post->ID, $key, $val);
+                }
+            }
         }
     }
 

@@ -101,7 +101,7 @@ class Productions
         }
     }
 
-    public static function Import()
+    public static function Import($capture=false)
     {
         $settings = GeneralSettings::Get('productionPosts');
         //$settings['lastIDSync'] = ''; // Debug
@@ -110,7 +110,6 @@ class Productions
         if (trim($settings['lastIDSync']) != '')
             $filter['after'] = $settings['lastIDSync'];
 
-        //$entase = new \Entase\SDK\Client('cask_MTY2MDIxNjYyOQNjJmNGU1MzVjN2U4OWYyNjczMDYyNDY2abWlVuVlZ2SDc5eWRu');
         $entase = \Entase\Plugins\WP\Core\EntaseSDK::PrepareClient();
         
         $productions = null;
@@ -119,6 +118,7 @@ class Productions
 
         if ($productions != null)
         {
+            $count = 0;
             foreach($productions as $production)
             {
                 usort($production->tags, function($a, $b) {
@@ -145,14 +145,20 @@ class Productions
                 ]);
 
                 $settings['lastIDSync'] = $production->id;
+                $count++;
                 break;
             }
 
             GeneralSettings::Set('productionPosts', $settings);
 
+            $response = ['imported' => $count, 'hasMore' => $productions->hasMore];
+            if ($capture) return $response;
+            else Ajax::StatusOK($response);
         }
-
-        Ajax::StatusOK(['hasMore' => $productions->hasMore]);
+        else {            
+            if ($capture) return false;
+            else Ajax::StatusERR('No productions were imported.');
+        }
     }
 
     public static function Save($post)

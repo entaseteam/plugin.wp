@@ -10,12 +10,7 @@ class WP {
 
     public static function Register()
     {
-        self::ShortCodes();
         self::GlobalScriptsFE();
-    }
-
-    public static function ShortCodes()
-    {
         Shortcodes::Register();
     }
 
@@ -24,6 +19,5 @@ class WP {
         wp_enqueue_script('entaseclient', Conf::JSUrl.'/entaseclient.js', ['jquery'], false, true);
         wp_enqueue_script('entase', Conf::JSUrl.'/front/entase.js', ['jquery', 'entaseclient'], false, true);
     }
-
 
 }
