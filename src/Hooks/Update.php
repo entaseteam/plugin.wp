@@ -6,7 +6,6 @@ class Update
 {
     public static function Check($update, $plugin_data, $plugin_file)
     {
-        touch(\Entase\Plugins\WP\Conf::BasePath.'/update.log');
         static $response = false;
         
         if (empty( $plugin_data['UpdateURI'] ) || !empty($update))
