@@ -29,6 +29,34 @@ This plugin is integrated with Elementor, but it is **NOT REQUIRED**. It also wo
 - [entase_productions]
 - [entase_events]
 
+### Attributes
+
+#### [entase_story]
+- **markup2html** - Auto parse Entase markup description. Don't set or set to ``no``. Default: ``yes``.
+
+#### [entase_productions]
+- **limit** - Set items limit. ``0`` means no limit. Default: ``0``.
+- **fields** - Item fields to include. Comma separated list. Possible options: ``post_title``, ``post_content``, ``post_feature_image``, ``post_tags``, ``entase_title``, ``entase_story``, ``entase_photo_poster``, ``entase_photo_og``, ``multisource_image``.
+- **filter_categories** - Filter by category IDs. Comma separated list. 
+- **filter_tags** - Filter by tag IDs. Comma separated list.
+- **filter_current_categories** - Filter by the same categories of the current query object. Default: ``no``. Options: ``yes`` | ``no``.
+- **filter_current_tags** - Filter by the same tags of the current query object. Default: ``no``. Options: ``yes`` | ``no``.
+- **multisource_image** - Provide the sources for ``multisource_image`` field. Comma separated list. Default: ``""``. Options: ``post_feature_image``, ``entase_photo_poster``, ``entase_photo_og``.
+
+#### [entase_events]
+- **limit** - Set items limit. ``0`` means no limit. Default: ``0``.
+- **fields** - Item fields to include. Comma separated list. Possible options: ``production_post_title``, ``production_post_content``, ``production_post_feature_image``, ``entase_title``, ``entase_story``, ``entase_photo_poster``, ``entase_photo_og``, ``post_title``, ``post_content``, ``post_feature_image``, ``entase_dateStart``, ``entase_dateonly``, ``entase_timeonly``, ``entase_book``, ``entase_location_countryCode``, ``entase_location_countryName``, ``entase_location_cityName``, ``entase_location_postCode``, ``entase_location_address``, ``entase_location_placeName``, ``entase_location_lat``, ``entase_location_lng``
+- **filter_status** - Filter by event status. Comma separated list. Default: ``1``. Options: ``1``, ``2``, ``3``, ``4``, ``5``.
+- **filter_productions** - Filter by production Entase IDs. Comma separated list. 
+- **filter_current_production** - Filter by the same production of the current query object. Default: ``no``. Options: ``yes`` | ``no``.
+- **allow_qs_production** - Filter by production Entase ID provided in Query String with arg ``?produciton=......``. Default: ``no``. Options: ``yes`` | ``no``.
+- **allow_qs_date** - Filter by date provided in Query String with arg ``?date=start-end``. Date format: ``YYYYMMDD``. Example: ``20220901-2022-09-30``. Default: ``no``. Options: ``yes`` | ``no``.
+- **targeturl** - Click action when item is clicked. Default: ``book``. Options: ``book`` | ``production``.
+- **booklabel** - Label of the book button. Default: ``Book``.
+- **dateformat** - Date format. PHP compatible.
+- **timeformat** - Time format. PHP comaptible.
+- **contentchars** - Apply limit for ``post_content``, ``production_post_content``, ``entase_story`` fields. Default: ``200``
+
 ## Elementor
 For your conviniance the shortcode functionality is wrapped inside an Elementor widgets and active tags.
 
