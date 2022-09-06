@@ -20,9 +20,11 @@ class Productions extends BaseShortcode
         $limit = $atts['limit'] ?? 0;
         $categories = $atts['filter_categories'] ?? [];
         $tags = $atts['filter_tags'] ?? [];
+        $fields = $atts['fields'] ?? [];
 
         if (is_string($categories)) $categories = explode(',', $categories);
         if (is_string($tags)) $tags = explode(',', $tags);
+        if (is_string($fields)) $fields = explode(',', $fields);
 
         foreach ($categories as $key => $value) 
             if ($value == '') unset($categories[$key]);
@@ -91,7 +93,7 @@ class Productions extends BaseShortcode
             {
                 $photo = null;
                 $row = [];
-                foreach ($atts['fields'] as $field)
+                foreach ($fields as $field)
                 {
                     switch($field)
                     {
