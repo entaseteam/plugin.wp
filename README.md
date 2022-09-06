@@ -10,12 +10,16 @@ Official repository.
 This plugin creates two post types - ``Production`` and ``Event``. Both are imported & synced from Entase. You can however add an additional custom functionality by hooking to the wordpress hooks as usual. The plugin functionality should not conflict with any existing post types named ``Production`` and/or ``Event``. However some integrations might have unexpected result.
 
 This plugin is integrated with Elementor, but it is **NOT REQUIRED**. It also works as a standalone solution with shortcodes.
+<br><br>
+
 
 ## Setup
 1. Install and activate the plugin as usual.
 2. Retrieve your public and secret API keys from Entase and add them inside ``Dashboard -> Settigs -> Entase``
 3. Import your productions by going to ``Dashboard -> Productions`` and click ``Import from Entase`` button.
 4. Import your events by going to ``Dashboard -> Events`` and click ``Import from Entase`` button.
+<br><br>
+
 
 ## Shortcodes
 - [entase_title]
@@ -56,6 +60,8 @@ This plugin is integrated with Elementor, but it is **NOT REQUIRED**. It also wo
 - **dateformat** - Date format. PHP compatible.
 - **timeformat** - Time format. PHP comaptible.
 - **contentchars** - Apply limit for ``post_content``, ``production_post_content``, ``entase_story`` fields. Default: ``200``
+<br><br>
+
 
 ## Elementor
 For your conviniance the shortcode functionality is wrapped inside an Elementor widgets and active tags.
@@ -69,6 +75,8 @@ For your conviniance the shortcode functionality is wrapped inside an Elementor 
 - Production story
 - Production photo poster
 - Production photo og
+<br><br>
+
 
 ## Autosync
 You can turn on auto sync by going to ``Dashboard -> Settigs -> Entase`` and enable ``Auto sync periodically (cron)`` option.
@@ -85,6 +93,8 @@ The sync functions are pulling new data by querieng Entase API in scheduled inte
 Note that the cron jobs hooks with the ``WP-Cron`` schedule which is not a real cron job. If possible it's recommended to move the WP cron execution on a real cron job execution which will speed up the entire website.
 
 _For more information please [read here](https://developer.wordpress.org/plugins/cron/)._
+<br><br>
+
 
 ## Update Channel
 All plugins downloaded from this repository will receive updates from the [Releases](https://github.com/entaseteam/plugin.wp/releases) section.
