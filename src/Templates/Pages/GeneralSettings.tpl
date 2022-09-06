@@ -65,6 +65,15 @@
                     </div>
                 </td>
             </tr>
+            <!--tr>
+                <th scope="row"><label for="blogname">Clear sync cache</label></th>
+                <td>
+                    <div class="_optgroup">
+                        <input type="button" class="_btnClearSyncCache button button-primary button-large" value="Clear" />
+                        <span style="vertical-align:middle"> (Clear out the sync cache and disable "Auto sync")</span>
+                    </div>
+                </td>
+            </tr-->
         </tbody>
     </table>
 </div>

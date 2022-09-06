@@ -174,6 +174,9 @@ class Events extends BaseShortcode
                     $production = self::GetRelatedProduction($post);
 
 
+                $entaseID = get_post_meta($post->ID, 'entase_id', true);
+                $entaseStatus = get_post_meta($post->ID, 'entase_status', true);
+
                 // Add fields
                 foreach ($atts['fields'] as $field)
                 {
@@ -222,8 +225,7 @@ class Events extends BaseShortcode
                             $row[] = ['key' => 'entase_timeonly', 'val' => $datestr];
                             break;
                         case 'entase_book':
-                            $eventID = get_post_meta($post->ID, 'entase_id', true);
-                            $itemProps['entase_book'] = '<a href="javascript:void(0);" class="entase_book" data-event="'.$eventID.'">'.$atts['booklabel'].'</a>';
+                            $itemProps['entase_book'] = '<a href="javascript:void(0);" class="entase_book" data-event="'.$entaseID.'" data-status="'.$entaseStatus.'">'.$atts['booklabel'].'</a>';
                             break;
                         case 'entase_photo_poster':
                             if ($photo == null)
@@ -267,7 +269,8 @@ class Events extends BaseShortcode
 
                 // Additional params
                 $item = array_merge([
-                    'entase_id' => get_post_meta($post->ID, 'entase_id', true),
+                    'entase_id' => $entaseID,
+                    'entase_status' => $entaseStatus,
                     'fields' => $row
                 ], $itemProps);
                 

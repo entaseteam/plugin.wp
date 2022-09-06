@@ -108,10 +108,11 @@ class Productions extends \Elementor\Widget_Base
                     'post_content' => 'Post content',
                     'post_feature_image' => 'Post feature image',
                     'post_tags' => 'Post tags',
-                    'entase_title' => 'Entase title',
-                    'entase_story' => 'Entase story',
-                    'entase_photo_poster' => 'Entase photo poster',
-                    'entase_photo_og' => 'Entase photo og',
+                    'entase_title' => '[Production] Title',
+                    'entase_story' => '[Production] Story',
+                    'entase_photo_poster' => '[Production] Photo poster',
+                    'entase_photo_og' => '[Production] Photo OG',
+					'multisource_image' => 'Multi-source image'
                 ],
                 'default' => ['post_title', 'entase_photo_poster']
 			]
@@ -141,6 +142,45 @@ class Productions extends \Elementor\Widget_Base
 
 		$this->end_controls_section();
 
+
+		/* ************************* */
+        /* MULTISOURCE IMAGE SECTION */
+        /* ************************* */
+		$this->start_controls_section(
+			'multisource-image-section',
+			[
+				'label' => 'Multi-source image',
+				'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$repeater = new \Elementor\Repeater();
+		$repeater->add_control(
+			'source',
+			[
+				'label' => 'Source',                
+				'type' => \Elementor\Controls_Manager::SELECT,
+				'multiple' => false,
+				'options' => [
+                    'post_feature_image' => 'Post feature image',
+                    'entase_photo_poster' => '[Production] Photo poster',
+                    'entase_photo_og' => '[Production] Photo OG',
+                ],
+                'default' => 'post_feature_image'
+			]
+		);
+
+		$this->add_control(
+			'multisource_image',
+			[
+				'label' => 'Add sources for multi-source image',
+				'type' => \Elementor\Controls_Manager::REPEATER,
+				'fields' => $repeater->get_controls(),
+				'title_field' => '{{{ source }}}',
+			]
+		);
+
+		$this->end_controls_section();
 
         /* ************** */
         /* QUERY SECTION */

@@ -134,6 +134,45 @@ class Productions extends BaseShortcode
                             }
                             $row[] = ['key' => 'entase_photo_og', 'val' => $photo != null ? '<img src="'.$photo->og->large.'" />' : ''];
                             break;
+                        case 'multisource_image':
+                            if (isset($atts['multisource_image']) && is_array($atts['multisource_image']))
+                            {
+                                $source = '';
+                                foreach($atts['multisource_image'] as $image)
+                                {
+                                    if ($source != '') break;
+                                    elseif ($image['source'] == 'post_feature_image')
+                                    {
+                                        $source = get_the_post_thumbnail($production->ID, 'large');
+                                    }
+                                    elseif ($image['source'] == 'entase_photo_poster')
+                                    {
+                                        if ($photo == null)
+                                        {
+                                            $meta =  get_post_meta($production->ID, 'entase_photo', true);
+                                            $photo = @json_decode($meta) ?? null;
+                                        }
+                                        $source = $photo != null ? $photo->poster->medium : '';
+                                    }
+                                    elseif ($image['source'] == 'entase_photo_og')
+                                    {
+                                        if ($photo == null)
+                                        {
+                                            $meta =  get_post_meta($production->ID, 'entase_photo', true);
+                                            $photo = @json_decode($meta) ?? null;
+                                        }
+                                        $source = $photo != null ? $photo->og->large : '';
+                                    }
+
+                                }
+
+                                if ($source != '')
+                                {
+                                    $img = stripos($source, '<img') !== false ? $source : '<img src="'.$source.'" />';
+                                    $row[] = ['key' => 'multisource_image', 'val' => $img];
+                                }
+                            }
+                            break;
                     }
                 }
 

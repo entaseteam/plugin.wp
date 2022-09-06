@@ -7,7 +7,7 @@
 
             <div>
 
-                <a href="{$item.url}" {#if $item.allowbook}class="entase_book" rel="{$item.entase_id}"{#endif}>
+                <a href="{$item.url}" {#if $item.allowbook}class="entase_book" rel="{$item.entase_id}"{#endif} data-status="{$item.entase_status}">
 
                     
                     {#if $item.entase_photo_poster}<div class="event_entase_photo_poster">{$item.entase_photo_poster}</div>{#endif}
@@ -22,16 +22,12 @@
                         {#if $item.post_content}<div class="event_post_content">{$item.post_content}</div>{#endif}
                         {#if $item.production_post_content}<div class="event_production_post_content">{$item.production_post_content}</div>{#endif}
                         {#if $item.entase_story}<div class="event_entase_story">{$item.entase_story}</div>{#endif}
-                    </div>
-                   
-                
-
-                    <div class="event_entase_date">
+                  
                         {#each $item.fields as $field}
                             <div class="event_entase_field event_{$field.key}">{$field.val}</div>
                         {#end}
+                  
                     </div>
-          
 
                 </a>
 
