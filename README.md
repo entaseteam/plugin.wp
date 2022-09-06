@@ -7,7 +7,7 @@
 Official repository.
 
 ## How it works
-This plugin creates two post types - ``Production`` and ``Event``. Both are imported & synced from Entase. You can however add an additional custom functionality by hooking to the wordpress hooks as usual. The plugin functionality should not conflict with any existing post types named ``Production`` and/or ``Event``. However some integrations might have unexpected result.
+This plugin creates two post types - ``Production`` and ``Event``. Both are imported & synced from Entase. You can however add an additional custom functionality by attaching to the wordpress hooks as usual. The plugin functionality should not conflict with any existing post types named ``Production`` and/or ``Event``. However some integrations might have unexpected result.
 
 This plugin is integrated with Elementor, but it is **NOT REQUIRED**. It also works as a standalone solution with shortcodes.
 <br><br>
@@ -84,13 +84,13 @@ You can turn on auto sync by going to ``Dashboard -> Settigs -> Entase`` and ena
 **Sync method**<br>
 The sync functions are pulling new data by querieng Entase API in scheduled intervals of time.
 
-**Sync schedule:**
+**Sync schedule**
 - Every 10 minutes - Upcoming events update.
 - Every 15 minutes - New events import.
 - Every 25 minutes - New productions import.
 
-**Performace:**<br>
-Note that the cron jobs hooks with the ``WP-Cron`` schedule which is not a real cron job. If possible it's recommended to move the WP cron execution on a real cron job execution which will speed up the entire website.
+**Performance**<br>
+Note that the cron jobs hooks with the ``WP-Cron`` schedule which is not a real cron job. If possible it's recommended to move the WP cron execution on a real cron job execution which will speed up the entire website. This is highly dependent on your hosting provider and plan.
 
 _For more information please [read here](https://developer.wordpress.org/plugins/cron/)._
 <br><br>
