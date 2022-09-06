@@ -18,12 +18,29 @@ This plugin is integrated with Elementor, but it is **NOT REQUIRED**. It also wo
 4. Import your events by going to ``Dashboard -> Events`` and click ``Import from Entase`` button.
 
 ## Shortcodes
+- [entase_title]
+- [entase_story]
+- [entase_id]
+- [entase_productionid]
+- [entase_link]
+- [entase_book]
+- [entase_photo_poster]
+- [entase_photo_og]
+- [entase_productions]
+- [entase_events]
 
 ## Elementor
 For your conviniance the shortcode functionality is wrapped inside an Elementor widgets and active tags.
 
 ### Widgets
+- Productions widget - customizable productions grid
+- Events widget - customizable events grid
+
 ### Active Tags
+- Production title
+- Production story
+- Production photo poster
+- Production photo og
 
 ## Autosync
 You can turn on auto sync by going to ``Dashboard -> Settigs -> Entase`` and enable ``Auto sync periodically (cron)`` option.
