@@ -85,3 +85,6 @@ The sync functions are pulling new data by querieng Entase API in scheduled inte
 Note that the cron jobs hooks with the ``WP-Cron`` schedule which is not a real cron job. If possible it's recommended to move the WP cron execution on a real cron job execution which will speed up the entire website.
 
 _For more information please [read here](https://developer.wordpress.org/plugins/cron/)._
+
+## Update Channel
+All plugins downloaded from this repository will receive updates from the [Releases](https://github.com/entaseteam/plugin.wp/releases) section.
