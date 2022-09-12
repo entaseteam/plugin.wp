@@ -3,11 +3,53 @@
     grid-column-gap: 15px;
     grid-row-gap: 15px;
     width: 100%;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
 }
 	
+
+
+
+.event_item > div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.event_items .event_post_title {
+    color: black;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+
+.event_items .event_entase_field {
+    color: black;
+}
+.event_items .event_entase_dateonly {
+    font-size: 20px;
+    font-weight: 500;
+
+}
+.event_items .event_entase_book a {
+    background: rgb(31, 31, 31);
+    color: white;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    border: 10px;
+}
+.event_items .event_item:hover .event_entase_book a {
+    background: black;
+    color: white;
+}
+
+
+
+
 @media only screen and (max-width: 767px) {
-	.event_items {
+	.event_items .event_items {
         grid-template-columns: repeat(2, 1fr);
     }
 }

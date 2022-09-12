@@ -4,8 +4,32 @@
     grid-column-gap: 15px;
     grid-row-gap: 15px;
     width: 100%;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+
 }
+.production_item > a > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.production_item .production_post_title {
+    color: black;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.production_item .production_entase_story {
+    color: rgb(88, 88, 88);
+}
+
+.production_item .production_entase_story { order: 3;}
+.production_item .production_entase_photo_poster { order: 1; }
+.production_item .production_post_title { order: 2; }
+.production_item .production_entase_title { order: 2; }
+.production_item .production_post_tags { order: 3; }
+.production_item .production_post_content { order: 4; }
+.production_item .production_entase_dtruse_subtitle {order: 5;}
+
 @media only screen and (max-width: 767px) {
 	.production_items {
         grid-template-columns: repeat(2, 1fr);
