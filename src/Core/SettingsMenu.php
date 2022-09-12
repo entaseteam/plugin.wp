@@ -11,6 +11,7 @@ class SettingsMenu
     public static function DisplayPage()
     {
         wp_enqueue_script('entase_settings', Conf::JSUrl.'/admin/settings.js', ['jquery'], false, true);
+        wp_enqueue_style('entase_general_settings', Conf::CSSUrl.'/admin/general-settings.css');
 
         $api = GeneralSettings::Get('api');
 
