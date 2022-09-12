@@ -276,6 +276,7 @@ class Events extends \Elementor\Widget_Base
 				'type' => \Elementor\Controls_Manager::SELECT2,
 				'multiple' => true,
 				'options' => $productionsArr,
+				'default' => []
 			]
 		);
         

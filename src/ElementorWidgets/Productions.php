@@ -142,6 +142,29 @@ class Productions extends \Elementor\Widget_Base
 
 		$this->end_controls_section();
 
+		/* ***************** */
+        /* CUSTOMIZE SECTION */
+        /* ***************** */
+		$this->start_controls_section(
+			'customize_section',
+			[
+				'label' => 'Customize',
+				'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$this->add_control(
+			'contentchars',
+			[
+				'label' => 'Max content chars',
+				'type' => \Elementor\Controls_Manager::TEXT,
+                'default' => 200,
+                'placeholder' => 'Default: 30'
+			]
+		);
+
+        $this->end_controls_section();
+
 
 		/* ************************* */
         /* MULTISOURCE IMAGE SECTION */
