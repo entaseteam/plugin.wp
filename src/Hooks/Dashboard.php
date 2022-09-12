@@ -11,15 +11,17 @@ class Dashboard
     public static function AdminMenu()
     {
         // Add settings menu
-        add_submenu_page(
-            'options-general.php',
+        $iconb64 = file_exists(Conf::ImagePath.'/entaseicon.svg') ? base64_encode(file_get_contents(Conf::ImagePath.'/entaseicon.svg')) : '';
+        add_menu_page(
             'Entase',
             'Entase',
             'manage_options',
             'entase-settings',
-            ['Entase\Plugins\WP\Hooks\Dashboard', 'SettingsMenu']
+            ['Entase\Plugins\WP\Hooks\Dashboard', 'SettingsMenu'],
+            'data:image/svg+xml;base64,'.$iconb64,
+            plugins_url( 'myplugin/images/icon.png' ),
+            80
         );
-
     }
 
     public static function SettingsMenu()

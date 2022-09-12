@@ -8,23 +8,45 @@ class Productions extends BaseShortcode
 {
     public static function Do($atts, $content, $tag)
     {
+        /* ************ */
+        /* DEFAULT ARGS */
+        /* ************ */
         $atts = array_merge([
+
+            // Content
             'nostyles' => false,
             'limit' => 0,
-            'fields' => ['entase_photo_poster', 'post_title', 'post_tags']
+            'fields' => ['entase_photo_poster', 'post_title', 'post_tags'],
+            'contentchars' => 200
+
         ], is_array($atts) ? $atts : []);
 
+
+
+        /* ********************* */
+        /* Elementor load styles */
+        /* in different manner   */
+        /* ********************* */
         if (!$atts['nostyles'])
             wp_enqueue_style('entase-widget-productions', Conf::CSSUrl.'/front/widgets/productions-classic.css');
 
+
+
+        /* ******************** */
+        /* SANITIZE QUERY ARGS */
+        /* ******************** */
         $limit = $atts['limit'] ?? 0;
         $categories = $atts['filter_categories'] ?? [];
         $tags = $atts['filter_tags'] ?? [];
         $fields = $atts['fields'] ?? [];
+        $multisourceImage = $atts['multisource_image'] ?? [];
+        $contentChars = (int)$atts['contentchars'];        
 
         if (is_string($categories)) $categories = explode(',', $categories);
         if (is_string($tags)) $tags = explode(',', $tags);
         if (is_string($fields)) $fields = explode(',', $fields);
+        if (is_string($multisourceImage)) $multisourceImage = explode(',', $multisourceImage);
+        
 
         foreach ($categories as $key => $value) 
             if ($value == '') unset($categories[$key]);
@@ -59,6 +81,10 @@ class Productions extends BaseShortcode
             }
         }
 
+
+        /* *********** */
+        /* BUILD QUERY */
+        /* *********** */
         $query = [
             'post_type' => 'production',
             'posts_per_page' => $limit > 0 ? $limit : -1,
@@ -85,6 +111,10 @@ class Productions extends BaseShortcode
             ];
         }
 
+
+        /* ******************* */
+        /* BUILD TEMPLATE DATA */
+        /* ******************* */
         $items = [];
         $productions = get_posts($query);
         if ($productions && count($productions) > 0)
@@ -101,7 +131,8 @@ class Productions extends BaseShortcode
                             $row[] = ['key' => 'post_title', 'val' => $production->post_title];
                             break;
                         case 'post_content':
-                            $row[] = ['key' => 'post_content', 'val' => $production->post_content];
+                            $content = $production->post_content;
+                            $row[] = ['key' => 'post_content', 'val' => mb_strlen($content) > $contentChars ? mb_substr($content, 0, $contentChars).'...' : $content];
                             break;
                         case 'post_feature_image':
                             $row[] = ['key' => 'post_feature_image', 'val' => get_the_post_thumbnail($production->ID, 'large')];
@@ -118,7 +149,8 @@ class Productions extends BaseShortcode
                             $row[] = ['key' => 'entase_title', 'val' => get_post_meta($production->ID, 'entase_title', true)];
                             break;
                         case 'entase_story':
-                            $row[] = ['key' => 'entase_story', 'val' =>  get_post_meta($production->ID, 'entase_story', true)];
+                            $content = get_post_meta($production->ID, 'entase_story', true);
+                            $row[] = ['key' => 'entase_story', 'val' => mb_strlen($content) > $contentChars ? mb_substr($content, 0, $contentChars).'...' : $content];
                             break;
                         case 'entase_photo_poster':
                             if ($photo == null)
@@ -137,10 +169,10 @@ class Productions extends BaseShortcode
                             $row[] = ['key' => 'entase_photo_og', 'val' => $photo != null ? '<img src="'.$photo->og->large.'" />' : ''];
                             break;
                         case 'multisource_image':
-                            if (isset($atts['multisource_image']) && is_array($atts['multisource_image']))
+                            if (is_array($multisourceImage))
                             {
                                 $source = '';
-                                foreach($atts['multisource_image'] as $image)
+                                foreach($multisourceImage as $image)
                                 {
                                     if ($source != '') break;
                                     elseif ($image['source'] == 'post_feature_image')
