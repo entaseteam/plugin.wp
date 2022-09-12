@@ -49,7 +49,8 @@
 
 
 @media only screen and (max-width: 767px) {
-	.event_items .event_items {
+	
+    .event_items {
         grid-template-columns: repeat(2, 1fr);
     }
 }
