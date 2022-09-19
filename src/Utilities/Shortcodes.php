@@ -23,6 +23,14 @@ class Shortcodes
         }
         else $html = preg_replace('/(<a class="tag.*?)(>)(@|#)(.*?)(<\/a>)/m', '$3$4', $html);
 
+        $html = preg_replace('/(\[b\])(.*?)(\[\/b\])/m', '<b>$2</b>', $html);
+        $html = preg_replace('/(\[i\])(.*?)(\[\/i\])/m', '<i>$2</i>', $html);
+        $html = preg_replace('/(\[h1\])(.*?)(\[\/h1\])/m', '<h1>$2</h1>', $html);
+        $html = preg_replace('/(\[h2\])(.*?)(\[\/h2\])/m', '<h2>$2</h2>', $html);
+        $html = preg_replace('/(\[h3\])(.*?)(\[\/h3\])/m', '<h3>$2</h3>', $html);
+        $html = preg_replace('/(\[h4\])(.*?)(\[\/h4\])/m', '<h4>$2</h4>', $html);
+        $html = preg_replace('/(\[h5\])(.*?)(\[\/h5\])/m', '<h5>$2</h5>', $html);
+
         return $html;
     }
 
