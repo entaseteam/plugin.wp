@@ -4,7 +4,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/badge/license-GPL-blue)
 ![GitHub release (latest by date)](https://img.shields.io/badge/elementor%20integrated-93003c)
 
-Official repository.
+![Banner](assets/img/banner.jpg)
 
 ## How it works
 This plugin creates two post types - ``Production`` and ``Event``. Both are imported & synced from Entase. You can however add an additional custom functionality by attaching to the wordpress hooks as usual. The plugin functionality should not conflict with any existing post types named ``Production`` and/or ``Event``. However some integrations might have unexpected result.
