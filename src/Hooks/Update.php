@@ -14,7 +14,7 @@ class Update
         if($response === false)
             $response = wp_remote_get($plugin_data['UpdateURI']);
         
-        if(empty($response['body']))
+        if(!is_array($response) || empty($response['body']))
             return $update;
         
         $custom_plugins_data = json_decode($response['body'],true);

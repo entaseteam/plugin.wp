@@ -44,7 +44,7 @@ class Dashboard
         Events::MetaBoxes();
     }
 
-    public static function SavePost($id)
+    public static function SavePost($postID)
     {
         if (!current_user_can('edit_post', $postID)) return;
         if (wp_is_post_autosave($postID)) return;
@@ -54,7 +54,7 @@ class Dashboard
 		if ($post == null) return;
 
 		if ($post->post_type == 'production') Productions::Save($post);
-        //elseif ($post->post_type == 'event') Events::Save($post);
+        elseif ($post->post_type == 'event') Events::Save($post);
     }
 
     public static function GlobalScriptsBE()
