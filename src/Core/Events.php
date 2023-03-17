@@ -328,7 +328,7 @@ class Events
                 }
             }
         }
-
+        
         return [
             'entase_id' => $event->id,
             'entase_productionID' => $event->productionID,

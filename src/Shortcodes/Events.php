@@ -211,17 +211,26 @@ class Events extends BaseShortcode
                             break;
                         case 'entase_datestart':
                             $time = (int)get_post_meta($post->ID, 'entase_dateStart', true);
-                            $datestr = date($atts['dateformat'].' - '.$atts['timeformat'], $time);
+                            //$datestr = date($atts['dateformat'].' - '.$atts['timeformat'], $time);
+                            // Handling WP time zones
+                            $datestr = get_date_from_gmt(date('Y-m-d H:i', $time), $atts['dateformat'].' - '.$atts['timeformat']);
+
                             $row[] = ['key' => 'entase_datestart', 'val' => $datestr];
                             break;
                         case 'entase_dateonly':
                             $time = (int)get_post_meta($post->ID, 'entase_dateStart', true);
-                            $datestr = date($atts['dateformat'], $time);
+                            //$datestr = date($atts['dateformat'], $time);
+                            // Handling WP time zones
+                            $datestr = get_date_from_gmt(date('Y-m-d H:i', $time), $atts['dateformat']);
+
                             $row[] = ['key' => 'entase_dateonly', 'val' => $datestr];
                             break;
                         case 'entase_timeonly':
                             $time = (int)get_post_meta($post->ID, 'entase_dateStart', true);
-                            $datestr = date($atts['timeformat'], $time);
+                            //$datestr = date($atts['timeformat'], $time);
+                            // Handling WP time zones
+                            $datestr = get_date_from_gmt(date('Y-m-d H:i', $time), $atts['timeformat']);
+
                             $row[] = ['key' => 'entase_timeonly', 'val' => $datestr];
                             break;
                         case 'entase_book':

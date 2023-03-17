@@ -27,7 +27,10 @@ class Helper
         elseif ($column == 'entase_dateStart')
         {
             $timeStart = (int)get_post_meta($post->ID, 'entase_dateStart', true);
-            echo date('Y/m/d \a\t H:i', $timeStart);
+            // echo date('Y/m/d \a\t H:i', $timeStart);
+            
+            // Handling WP time zones
+            echo get_date_from_gmt(date('Y-m-d H:i', $timeStart), 'Y/m/d \a\t H:i');
         }
         elseif ($column == 'entase_status')
         {
