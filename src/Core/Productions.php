@@ -101,19 +101,25 @@ class Productions
         }
     }
 
-    public static function Import($capture=false)
+    public static function Import($capture=false, $id=null)
     {
         $settings = GeneralSettings::Get('productionPosts');
         //$settings['lastIDSync'] = ''; // Debug
 
-        $filter = ['sort' => ['id' => 'asc']];
+        $filter = ['extend' => 'ownerName', 'sort' => ['id' => 'asc']];
         if (trim($settings['lastIDSync']) != '')
             $filter['after'] = $settings['lastIDSync'];
 
         $entase = \Entase\Plugins\WP\Core\EntaseSDK::PrepareClient();
         
         $productions = null;
-        try { $productions = $entase->productions->GetAll($filter); }
+        try {
+            if ($id !== null) { // Import one
+                $production = $entase->productions->GetByID($id);
+                if ($production != null) $productions = [$production];
+            }
+            else $productions = $entase->productions->GetAll($filter); 
+        }
         catch (\Entase\SDK\Exceptions\Base $ex) {}
 
         if ($productions != null)
@@ -135,6 +141,7 @@ class Productions
                 }
 
                 $meta = self::PrepareMetaFromAPI($production);
+
                 wp_insert_post([
                     'post_title' => $production->title, 
                     'post_type' => 'production', 
@@ -143,6 +150,11 @@ class Productions
                     'meta_input' => $meta,
                     'tags_input' => $tags
                 ]);
+
+                // If it's single post import
+                // don't make any setting updates
+                // just leave the function
+                if ($id !== null) return true;
 
                 $settings['lastIDSync'] = $production->id;
                 $count++;
@@ -173,7 +185,7 @@ class Productions
 
         if ($production != null)
         {
-            $meta = self::PrepareMetaFromAPI($production);
+            $meta = self::PrepareMetaFromAPI($production, true);
             foreach ($meta as $key => $val) 
             {
                 if ($key == 'entase_id') continue;
@@ -182,7 +194,7 @@ class Productions
         }
     }
 
-    public static function PrepareMetaFromAPI($production)
+    public static function PrepareMetaFromAPI($production, $resolveOwnerName=false)
     {
         $entase = \Entase\Plugins\WP\Core\EntaseSDK::PrepareClient();
         
@@ -215,11 +227,25 @@ class Productions
             }
         }
 
-        return [
+        $meta = [
             'entase_id' => $production->id,
             'entase_title' => $production->title,
             'entase_story' => str_replace('\\', '\\\\', $production->story), // Because of the Tags markup
-            'entase_photo' => json_encode($metaPhoto, JSON_UNESCAPED_UNICODE)
+            'entase_photo' => json_encode($metaPhoto, JSON_UNESCAPED_UNICODE),
+            'entase_cohosting' => $production->cohosting,
+            'entase_ownerRef' => $production->ownerRef
         ];
+
+        if ($resolveOwnerName && $production->cohosting) {
+            $partner = null;
+            try { $partner = $entase->partners->GetByID($production->ownerRef); } 
+            catch (\Entase\SDK\Exceptions\Base $ex) {}
+
+            if ($partner != null) {
+                $meta['entase_ownerName'] = $partner->name;
+            }
+        }
+
+        return $meta;
     }
 }

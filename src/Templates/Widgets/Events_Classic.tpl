@@ -7,7 +7,7 @@
 
             <div>
 
-                <a href="{$item.url}" {#if $item.allowbook}class="entase_book" rel="{$item.entase_id}"{#endif} data-status="{$item.entase_status}">
+                <a href="{$item.url}" {#if $item.allowbook}class="entase_book" rel="{$item.entase_id}"{#endif} data-status="{$item.entase_status}" data-cohosting="{$item.entase_cohosting}" data-sameowner="{$item.entase_sameowner}">
 
                     
                     {#if $item.entase_photo_poster}<div class="event_entase_photo_poster">{$item.entase_photo_poster}</div>{#endif}

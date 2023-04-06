@@ -1,7 +1,8 @@
-var EntaseClient = function(pk) {
+var EntaseClient = function(pk, locale) {
 
     var $ = jQuery;
 
+    this.locale = locale ?? 'auto';
     this.dataTable = null;
     this.args = {
         parentScreenCenter: {
@@ -41,8 +42,22 @@ var EntaseClient = function(pk) {
                 top = 0;
             }
 
+            var supportedLocales = ['bg', 'en', 'en-gb', 'en-us'];
+            var documentLocale = (document.documentElement.lang ?? '').toLowerCase();
+            var locale = this.client.locale == 'auto' ? documentLocale : this.client.locale;
+            if (this.client.locale == 'auto' && locale != '' && !supportedLocales.includes(locale)) {
+                var lang = locale.split('-')[0];
+                for(var supportedLocale of supportedLocales) {
+                    if (supportedLocale == lang) {
+                        locale = supportedLocale;
+                        break;
+                    }
+                }
+            }
+
             var url = 'https://www.entase.bg/book?eid=' + settings.eventID;
             if (this.client.IsAppBrowser()) url += '&ref=' + settings.ref
+            if (locale != '') url += '&lcs=' + locale;
 
             if (navigator.userAgent.indexOf('Opera Mini') > -1) {
                 window.open(url, '_blank');
@@ -123,12 +138,12 @@ EntaseClient.prototype.ShowBGWrap = function() {
         var isFirefox = typeof InstallTrigger !== 'undefined';
         var msg = isFirefox ?
             ''
-            + 'Резервацията се осъществява в нов прозорец от entase.<br />'
-            + 'Можете да прекратите процеса като <a href="javascript:void(0);" onclick="rdrct(true)" style="color:#ee552b">кликнете тук</a>.' 
+            + 'The bookinng continues in a new window by Entase.<br />'
+            + 'To cancel it please <a href=\"javascript:void(0);\" onclick=\"rdrct(true)\" style=\"color:#ee552b\">click here</a>.'
             :
             ''
-            + 'Резервацията се осъществява в нов прозорец от entase.<br />'
-            + 'Ако не виждате прозореца, моля <a href="javascript:void(0);" onclick="rdrct(false)" style="color:#ee552b">кликнете тук</a>.';
+            + 'The bookinng continues in a new window by Entase.<br />'
+            + 'If you don\'t see the window, please <a href=\"javascript:void(0);\" onclick=\"rdrct(false)\" style=\"color:#ee552b\">click here</a>.';
         
             var htmlsrc = ''
             + '<html lang="bg">'

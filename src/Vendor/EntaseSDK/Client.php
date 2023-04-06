@@ -8,6 +8,7 @@ class Client
     public $productions;
     public $events;
     public $photos;
+    public $partners;
 
     private $_secretKey;
 
@@ -17,6 +18,7 @@ class Client
         $this->productions = new Endpoints\Productions($this);
         $this->events = new Endpoints\Events($this);
         $this->photos = new Endpoints\Photos($this);
+        $this->partners = new Endpoints\Partners($this);
     }
 
     public function GET($endpoint, $data=null)

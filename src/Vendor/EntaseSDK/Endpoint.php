@@ -19,6 +19,7 @@ class Endpoint
 
     public function GetByID($id)
     {
+        if (strpos($id, ':') !== false) $id = explode(':', $id)[1];
         return $this->client->GET($this->endpointURL.'/'.$id);
     }
 

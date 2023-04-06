@@ -163,6 +163,8 @@ class Events
             $count = 0;
             foreach($events as $event)
             {
+                self::CheckAndImportProduciton($event);
+                
                 $meta = self::PrepareMetaFromAPI($event);
                 wp_insert_post([
                     'post_title' => $event->extend->productionTitle, 
@@ -202,6 +204,8 @@ class Events
 
         if ($event != null)
         {
+            self::CheckAndImportProduciton($event);
+
             $meta = self::PrepareMetaFromAPI($event);
             foreach ($meta as $key => $val) 
             {
@@ -297,8 +301,28 @@ class Events
         }
     }
 
-    public static function PrepareMetaFromAPI($event)
+    public static function CheckAndImportProduciton($event)
     {
+        // If the event is cohosting,
+        // so the production can be
+        // and it might not be imported yet
+        if ($event->cohosting) 
+        {
+            // Find the production
+            $production = get_posts([
+                'post_type' => 'production',
+                'meta_key'   => 'entase_id',
+                'meta_value' => $event->productionID,
+            ]);
+
+            if (!$production || count($production) == 0) {
+                Productions::Import(true, $event->productionID);
+            }
+        }
+    }
+
+    public static function PrepareMetaFromAPI($event)
+    {        
         $entase = \Entase\Plugins\WP\Core\EntaseSDK::PrepareClient();
         $photos = null;
         try {
@@ -329,7 +353,7 @@ class Events
             }
         }
         
-        return [
+        $meta = [
             'entase_id' => $event->id,
             'entase_productionID' => $event->productionID,
             'entase_dateStart' => $event->dateStart,
@@ -342,7 +366,26 @@ class Events
             'entase_location_address' => $event->location->address,
             'entase_location_placeName' => $event->location->placeName,
             'entase_location_lat' => $event->location->lat,
-            'entase_location_lng' => $event->location->lng
+            'entase_location_lng' => $event->location->lng,
+            'entase_cohosting' => $event->cohosting,
+            'entase_ownerRef' => $event->ownerRef,
+            'entase_cohostRef' => $event->ownerRef
         ];
+
+        // Not optimized
+        /*if ($event->cohosting) {
+            $partnerRef = 'Partner:'.GeneralSettings::Get('partnerID');
+            if ($event->ownerRef != $partnerRef) {
+                $partner = null;
+                try { $partner = $entase->partners->GetByID($event->ownerRef); } 
+                catch (\Entase\SDK\Exceptions\Base $ex) {}
+                
+                if ($partner != null) {
+                    $meta['entase_ownerName'] = $partner->name;
+                }
+            }
+        }*/
+
+        return $meta;
     }
 }

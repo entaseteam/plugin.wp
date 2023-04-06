@@ -3,6 +3,7 @@
 namespace Entase\Plugins\WP\Shortcodes;
 
 use \Entase\Plugins\WP\Conf;
+use Entase\Plugins\WP\Core\GeneralSettings;
 use \Entase\Plugins\WP\Utilities\Shortcodes;
 
 class Events extends BaseShortcode
@@ -23,6 +24,8 @@ class Events extends BaseShortcode
             // Query
             'filter_status' => [1],
             'filter_productions' => [],
+            'filter_cohosting' => '',
+            'filter_sameowner' => '',
             'filter_current_production' => 'no',
             'allow_qs_production' => 'no',
             'allow_qs_date' => 'no',
@@ -102,6 +105,27 @@ class Events extends BaseShortcode
             ];
         }
 
+        // Filter Cohosting
+        if (in_array($atts['filter_cohosting'], ['yes', 'no']))
+        {
+            $query['meta_query'][] = [
+                'key' => 'entase_cohosting',
+                'value' => ($atts['filter_cohosting'] == 'yes'),
+                'compare' => '='
+            ];
+        }
+
+        // Filter same owner
+        if (in_array($atts['filter_sameowner'], ['yes', 'no']))
+        {
+            
+            $query['meta_query'][] = [
+                'key' => 'entase_ownerRef',
+                'value' => 'Partner:'.GeneralSettings::Get('partnerID'),
+                'compare' => ($atts['filter_sameowner'] == 'yes') ? '=' : '!='
+            ];
+        }
+
         // Add date filter
         if ($atts['allow_qs_date'] == 'yes')
         {
@@ -169,13 +193,16 @@ class Events extends BaseShortcode
                         'entase_title', 
                         'entase_story', 
                         'entase_photo_poster', 
-                        'entase_photo_og'
+                        'entase_photo_og',
+                        'entase_ownerName'
                     ], $atts['fields'] )) > 0)
                     $production = self::GetRelatedProduction($post);
 
 
                 $entaseID = get_post_meta($post->ID, 'entase_id', true);
                 $entaseStatus = get_post_meta($post->ID, 'entase_status', true);
+                $entaseCohosting = get_post_meta($post->ID, 'entase_cohosting', true);
+                $entaseOwnerRef = get_post_meta($post->ID, 'entase_ownerRef', true);
 
                 // Add fields
                 foreach ($atts['fields'] as $field)
@@ -272,7 +299,11 @@ class Events extends BaseShortcode
                         }
 
                         $contextID = $field['context'] == 'production' ? $production->ID : $post->ID;
-                        $row[] = ['key' => 'entase_'.$field['field'], 'val' => get_post_meta($contextID, $field['field'], true)];
+                        $meta_value = get_post_meta($contextID, $field['field'], true);
+                        if ($field['hide_if_empty'] == 'yes' && trim($meta_value) == '') continue;
+
+                        $val = $field['prefix'].$meta_value.$field['suffix'];
+                        $row[] = ['key' => 'entase_'.$field['field'], 'val' => $val];
                     }
                 }
 
@@ -280,6 +311,8 @@ class Events extends BaseShortcode
                 $item = array_merge([
                     'entase_id' => $entaseID,
                     'entase_status' => $entaseStatus,
+                    'entase_cohosting' => $entaseCohosting ? 'true' : 'false',
+                    'entase_sameowner' => $entaseOwnerRef == 'Partner:'.GeneralSettings::Get('partnerID') ? 'true' : 'false',
                     'fields' => $row
                 ], $itemProps);
                 

@@ -4,9 +4,14 @@ namespace Entase\Plugins\WP\Core;
 
 class EntaseSDK 
 {
-    public static function PrepareClient() 
+    public static function PrepareClient($sk=null) 
     {
-        $api = GeneralSettings::Get('api');
-        return new \Entase\SDK\Client($api['sk']);
+        $key = $sk;
+        if ($key == null) {
+            $api = GeneralSettings::Get('api');
+            $key = $api['sk'] ?? '';
+        }
+        
+        return new \Entase\SDK\Client($key);
     }
 }

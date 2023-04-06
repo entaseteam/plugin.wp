@@ -279,6 +279,36 @@ class Events extends \Elementor\Widget_Base
 				'default' => []
 			]
 		);
+
+		$this->add_control(
+			'filter_cohosting',
+			[
+				'label' => 'Co-hosting',
+				'type' => \Elementor\Controls_Manager::SELECT,
+				'multiple' => true,
+				'options' => [
+					'' => 'All events', 
+					'no' => 'Exclude co-hosting', 
+					'yes' => 'Co-hosting only'
+				],
+                'default' => ''
+			]
+		);
+
+		$this->add_control(
+			'filter_sameowner',
+			[
+				'label' => 'Owner',
+				'type' => \Elementor\Controls_Manager::SELECT,
+				'multiple' => true,
+				'options' => [
+					'' => 'All owners', 
+					'yes' => 'Same owner', 
+					'no' => 'Different owner'
+				],
+                'default' => ''
+			]
+		);
         
         $this->add_control(
 			'filter_current_production',
@@ -338,6 +368,26 @@ class Events extends \Elementor\Widget_Base
 			'field', [
 				'label' => 'Meta Field',
 				'type' => \Elementor\Controls_Manager::TEXT
+			]
+		);
+		$repeater->add_control(
+			'prefix', [
+				'label' => 'Prefix',
+				'type' => \Elementor\Controls_Manager::TEXT
+			]
+		);
+		$repeater->add_control(
+			'suffix', [
+				'label' => 'Suffix',
+				'type' => \Elementor\Controls_Manager::TEXT
+			]
+		);
+		$repeater->add_control(
+			'hide_if_empty',
+			[
+				'label' => 'Hide if empty',
+                //'description' => 'Use "?date=YYYMMDD-YYYMMDD"',
+				'type' => \Elementor\Controls_Manager::SWITCHER
 			]
 		);
 

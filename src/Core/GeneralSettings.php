@@ -21,7 +21,8 @@ class GeneralSettings extends Settings
             'lastIDSync' => ''
         ],
         'do_flush_rewrite' => true,
-        'enable_cron' => false
+        'enable_cron' => false,
+        'partnerID' => ''
     ];
     public static $data = null;
 }

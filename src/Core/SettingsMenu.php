@@ -26,12 +26,16 @@ class SettingsMenu
 
     public static function Save()
     {
+        
         $hasSave = false;
         foreach ($_POST as $key => $value) 
         {
             switch($key)
             {
                 case 'api_secret_key':
+                    if (!self::UpdatePartnerID($value))
+                        Ajax::StatusERR('Wrong API key.');
+
                     $api = GeneralSettings::Get('api');
                     $api['sk'] = $value;
                     GeneralSettings::Set('api', $api, false);
@@ -65,5 +69,19 @@ class SettingsMenu
         }
         else Ajax::StatusERR('No settings were changed.');
 
+    }
+
+    public static function UpdatePartnerID($secretKey)
+    {
+        $entase = \Entase\Plugins\WP\Core\EntaseSDK::PrepareClient($secretKey);
+        $partner = null;
+        try { $partner = $entase->partners->Me(); } 
+        catch (\Entase\SDK\Exceptions\Base $ex) {}
+
+        if ($partner != null) {
+            GeneralSettings::Set('partnerID', $partner->id, false);
+            return true;
+        }
+        else return false;
     }
 }
