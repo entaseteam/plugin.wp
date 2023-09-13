@@ -3,6 +3,7 @@
 namespace Entase\Plugins\WP\ElementorWidgets;
 
 use \Entase\Plugins\WP\Conf;
+use \Entase\Plugins\WP\Core\SkinSettings;
 
 class Events extends \Elementor\Widget_Base
 {
@@ -135,14 +136,20 @@ class Events extends \Elementor\Widget_Base
 			]
 		);
 
+
+		$skinsArr = ['classic' => 'Classic'];
+		$skins = SkinSettings::Get('skins');
+		foreach ($skins as $skin) {
+			if ($skin['widget'] == 'events')
+				$skinsArr[$skin['id']] = '[Custom] '.$skin['name'];
+		}
+
         $this->add_control(
 			'skin',
 			[
 				'label' => 'Skin',                
 				'type' => \Elementor\Controls_Manager::SELECT,
-				'options' => [
-                    'classic' => 'Classic'
-                ],
+				'options' => $skinsArr,
                 'default' => 'classic'
 			]
 		);
@@ -234,6 +241,20 @@ class Events extends \Elementor\Widget_Base
 				'type' => \Elementor\Controls_Manager::TEXT,
                 'default' => 200,
                 'placeholder' => 'Default: 30'
+			]
+		);
+
+		$this->add_control(
+			'cssnames',
+			[
+				'label' => 'Dynamic class names',
+				'type' => \Elementor\Controls_Manager::SELECT2,
+				'multiple' => true,
+				'options' => [
+					'category' => 'Relative categories',
+                    'tag' => 'Relative tags',
+                ],
+                'default' => []
 			]
 		);
 

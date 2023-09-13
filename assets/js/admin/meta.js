@@ -3,7 +3,7 @@ var EntaseMeta = new function() {
     var $ = jQuery;
 
     this.Init = function() {
-        this.$(document).ready(function() {
+        $(document).ready(function() {
             EntaseMeta.PageLoad();
         });
     };
@@ -15,6 +15,7 @@ var EntaseMeta = new function() {
             {
                 var isShortcode = $(this).data('type') == 'shortcode';
                 EntaseMeta.CopyToClipboard(isShortcode ? '[' + value + ']' : value);
+                new EntaseStatusMsg('Copied to clipboard');
             }
         });
     };

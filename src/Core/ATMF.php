@@ -17,8 +17,11 @@ namespace ATMF {
             if (self::$atmf == null)
             {
                 require_once(\Entase\Plugins\WP\Conf::VendorPath.'/ATMF/engine.php');
+                require_once(\Entase\Plugins\WP\Conf::VendorPath.'/ATMF-EXT/scripts.php');
+                
+
                 self::$atmf = new \ATMF\Engine();
-                self::$atmf->SetTemplateDiscoveryPath(\Entase\Plugins\WP\Conf::TemplatesPath);
+                self::$atmf->SetTemplateDiscoveryPath(\Entase\Plugins\WP\Conf::TemplatesPath, ['stpl', 'ptpl', 'mtpl']);
                 
                 //self::$atmf->SetCultureFolder(__DIR__.'/culture'); //Default: culture
                 //self::$atmf->SetCulture('bg-BG'); // Default: en-US

@@ -26,7 +26,7 @@ function AutoLoader($className)
     if (file_exists($fullFilePath)) {
         require_once $fullFilePath;
     }
-    else die('Class "'.$calledClass.'" does not exist.');
+    else { echo $fullFilePath."\r\n\r\n"; die('Class "'.$calledClass.'" does not exist.'); }
 }
 
 \spl_autoload_register('Entase\\Plugins\\WP\\AutoLoader'); // Registers the autoloader

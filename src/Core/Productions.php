@@ -101,6 +101,28 @@ class Productions
         }
     }
 
+    public static function ExtractProductionTags($production)
+    {
+        $tags = [];
+        if ($production != null)
+        {
+            usort($production->tags, function($a, $b) {
+                if ($a->type == $b->type) return 0;
+                else return ($a->type < $b->type) ? -1 : 1;
+            });
+            
+            foreach ($production->tags as $tag) {
+                $tagName = $tag->name;
+                $tagName = str_replace('\\', ' ', $tagName);
+                $tagName = str_replace('  ', ' ', $tagName);
+                $tagName = str_replace('  ', ' ', $tagName);
+                $tags[] = $tagName;
+            }
+        }
+
+        return $tags;
+    }
+
     public static function Import($capture=false, $id=null)
     {
         $settings = GeneralSettings::Get('productionPosts');
@@ -127,19 +149,7 @@ class Productions
             $count = 0;
             foreach($productions as $production)
             {
-                usort($production->tags, function($a, $b) {
-                    if ($a->type == $b->type) return 0;
-                    else return ($a->type < $b->type) ? -1 : 1;
-                });
-                $tags = [];
-                foreach ($production->tags as $tag) {
-                    $tagName = $tag->name;
-                    $tagName = str_replace('\\', ' ', $tagName);
-                    $tagName = str_replace('  ', ' ', $tagName);
-                    $tagName = str_replace('  ', ' ', $tagName);
-                    $tags[] = $tagName;
-                }
-
+                $tags = self::ExtractProductionTags($production);
                 $meta = self::PrepareMetaFromAPI($production);
 
                 wp_insert_post([
@@ -191,6 +201,8 @@ class Productions
                 if ($key == 'entase_id') continue;
                 update_post_meta($post->ID, $key, $val);
             }
+            
+            wp_set_post_tags($post->ID, self::ExtractProductionTags($production));
         }
     }
 

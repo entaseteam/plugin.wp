@@ -2,7 +2,7 @@
     {#each $items as $item}
 
 
-        <div class="event_item">
+        <div class="event_item{$item.cssnames}">
 
 
             <div>

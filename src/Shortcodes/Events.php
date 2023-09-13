@@ -3,8 +3,13 @@
 namespace Entase\Plugins\WP\Shortcodes;
 
 use \Entase\Plugins\WP\Conf;
-use Entase\Plugins\WP\Core\GeneralSettings;
+
+use \Entase\Plugins\WP\Core\GeneralSettings;
+use \Entase\Plugins\WP\Core\SkinSettings;
+
 use \Entase\Plugins\WP\Utilities\Shortcodes;
+use \Entase\Plugins\WP\Utilities\Skins;
+
 
 class Events extends BaseShortcode
 {
@@ -20,6 +25,9 @@ class Events extends BaseShortcode
             'limit' => 0,
             'sort' => 'entase_dateStart/asc',
             'fields' => ['entase_photo_poster', 'post_title', 'entase_dateonly', 'entase_timeonly', 'entase_book'],
+            'metafields' => [],
+            'skin' => 'classic',
+            'cssnames' => [],
 
             // Query
             'filter_status' => [1],
@@ -47,6 +55,35 @@ class Events extends BaseShortcode
         if (!$atts['nostyles'])
             wp_enqueue_style('entase-widget-events', Conf::CSSUrl.'/front/widgets/events-classic.css');
 
+        /* *************** */
+        /* SANITIZE FIELDS */
+        /* *************** */
+        $atts['fields'] = is_string($atts['fields']) ? explode(',', $atts['fields']) : $atts['fields'];
+        $atts['cssnames'] = is_string($atts['cssnames']) ? explode(',', $atts['cssnames']) : $atts['cssnames'];
+        if (is_string($atts['metafields']))
+        {
+            $arr = [];
+            $metafields = explode(',', $atts['metafields']);
+            foreach ($metafields as $metafield) {
+                list($field, $context) = explode(':', $metafield);
+                $arr[] = ['field' => $field, 'context' => $context, 'hide_if_empty' => 'yes'];
+            }
+            $atts['metafields'] = $arr;
+        }
+        
+        $hasProductionContext = false;
+        foreach ($atts['metafields'] as $arr) 
+        {
+            if ($arr['context'] == 'production')
+            {
+                $hasProductionContext = true;
+                break;
+            }
+        }
+
+        
+
+        //$atts['metafields'] = is_string($atts['metafields']) ? explode(',', $atts['fields']) : $atts['metafields'];
 
         /* ******************** */
         /* SANITIZE QUERY ARGS */
@@ -185,7 +222,7 @@ class Events extends BaseShortcode
 
                 // Extract related production if needed
                 $production = null;
-                if($atts['targeturl'] == 'production' ||
+                if($hasProductionContext || $atts['targeturl'] == 'production' ||
                     count(array_intersect([
                         'production_post_title', 
                         'production_post_content', 
@@ -230,10 +267,10 @@ class Events extends BaseShortcode
                             $itemProps['post_feature_image'] = get_the_post_thumbnail($post->ID, 'large');
                             break;
                         case 'entase_title':
-                            $itemProps['entase_title'] = get_post_meta($production->ID, 'entase_title', true);
+                            $itemProps['entase_title'] = apply_filters('entase_title', get_post_meta($production->ID, 'entase_title', true));
                             break;
                         case 'entase_story':
-                            $story = Shortcodes::MarkupToHTML(get_post_meta($production->ID, 'entase_story', true), ['searchurl' => '']);
+                            $story = apply_filters('entase_story', Shortcodes::MarkupToHTML(get_post_meta($production->ID, 'entase_story', true), ['searchurl' => '']));
                             $itemProps['entase_story'] = mb_strlen($story) > $atts['contentchars'] ? mb_substr($story, 0, $atts['contentchars']).'...' : $story;
                             break;
                         case 'entase_datestart':
@@ -241,27 +278,33 @@ class Events extends BaseShortcode
                             //$datestr = date($atts['dateformat'].' - '.$atts['timeformat'], $time);
                             // Handling WP time zones
                             $datestr = get_date_from_gmt(date('Y-m-d H:i', $time), $atts['dateformat'].' - '.$atts['timeformat']);
+                            $datestr = apply_filters('entase_datestart', $datestr);
 
                             $row[] = ['key' => 'entase_datestart', 'val' => $datestr];
+                            $itemProps['entase_datestart'] = $datestr;
                             break;
                         case 'entase_dateonly':
                             $time = (int)get_post_meta($post->ID, 'entase_dateStart', true);
                             //$datestr = date($atts['dateformat'], $time);
                             // Handling WP time zones
                             $datestr = get_date_from_gmt(date('Y-m-d H:i', $time), $atts['dateformat']);
+                            $datestr = apply_filters('entase_dateonly', $datestr);
 
                             $row[] = ['key' => 'entase_dateonly', 'val' => $datestr];
+                            $itemProps['entase_dateonly'] = $datestr;
                             break;
                         case 'entase_timeonly':
                             $time = (int)get_post_meta($post->ID, 'entase_dateStart', true);
                             //$datestr = date($atts['timeformat'], $time);
                             // Handling WP time zones
                             $datestr = get_date_from_gmt(date('Y-m-d H:i', $time), $atts['timeformat']);
+                            $datestr = apply_filters('entase_timeonly', $datestr);
 
                             $row[] = ['key' => 'entase_timeonly', 'val' => $datestr];
+                            $itemProps['entase_timeonly'] = $datestr;
                             break;
                         case 'entase_book':
-                            $itemProps['entase_book'] = '<a href="javascript:void(0);" class="entase_book" data-event="'.$entaseID.'" data-status="'.$entaseStatus.'">'.$atts['booklabel'].'</a>';
+                            $itemProps['entase_book'] = apply_filters('entase_book', '<a href="javascript:void(0);" class="entase_book" data-event="'.$entaseID.'" data-status="'.$entaseStatus.'">'.$atts['booklabel'].'</a>');
                             break;
                         case 'entase_photo_poster':
                             if ($photo == null)
@@ -280,7 +323,10 @@ class Events extends BaseShortcode
                             $itemProps['entase_photo_og'] = $photo != null ? '<img src="'.$photo->og->large.'" />' : '';
                             break;
                         default:
-                            $row[] = ['key' => $field, 'val' => get_post_meta($post->ID, $field, true)];
+                            $val = get_post_meta($post->ID, $field, true);
+                            $val = apply_filters($field, $val);
+                            $row[] = ['key' => $field, 'val' => $val];
+                            $itemProps[$field] = $val;
                             break;
                     }
                 }
@@ -291,19 +337,26 @@ class Events extends BaseShortcode
                     $blockProductionQuery = false;
                     foreach($atts['metafields'] as $field)
                     {
-                        if (trim($field['field']) == '') continue;
-                        elseif (!$blockProductionQuery && $field['context'] == 'production' && $production == null)
+                        $fieldName = trim($field['field']);
+                        $context = strtolower(trim($field['context']));
+                        $hideIfEmpty = strtolower(trim($field['hide_if_empty'])) == 'yes';
+
+                        if ($fieldName == '') continue;
+                        elseif (!$blockProductionQuery && $context == 'production' && $production == null)
                         {
                             $production = self::GetRelatedProduction($post);
                             $blockProductionQuery = true;
                         }
 
-                        $contextID = $field['context'] == 'production' ? $production->ID : $post->ID;
-                        $meta_value = get_post_meta($contextID, $field['field'], true);
-                        if ($field['hide_if_empty'] == 'yes' && trim($meta_value) == '') continue;
+                        $contextID = $context == 'production' ? $production->ID : $post->ID;
+                        $meta_value = get_post_meta($contextID, $fieldName, true);
+                        if ($hideIfEmpty && trim($meta_value) == '') continue;
 
                         $val = $field['prefix'].$meta_value.$field['suffix'];
-                        $row[] = ['key' => 'entase_'.$field['field'], 'val' => $val];
+                        $val = apply_filters('entase_meta_'.$fieldName, $val);
+
+                        $row[] = ['key' => 'meta_'.$fieldName, 'val' => $val];
+                        $itemProps['meta_'.$fieldName] = $val;
                     }
                 }
 
@@ -326,6 +379,35 @@ class Events extends BaseShortcode
                     $item['url'] = $production != null ? esc_url(get_permalink($production)) : '#';
                 }
 
+                if (isset($atts['cssnames']))
+                {
+                    $cssnames = '';
+                    $cssCategories = in_array('category', $atts['cssnames']);
+                    $cssTags = in_array('tag', $atts['cssnames']);
+
+                    if ($cssCategories)
+                    {
+                        $eventCategories = wp_get_post_categories($post->ID, ['fields' => 'slugs']);
+                        if ($production != null)
+                            $productionCategories = wp_get_post_categories($production->ID, ['fields' => 'slugs']);;
+
+                        $categories = array_unique(array_merge($eventCategories, $productionCategories));
+                        foreach ($categories as $slug) $cssnames .= ' category-'.$slug;
+                    }
+
+                    if ($cssTags)
+                    {
+                        $eventTags = wp_get_post_tags($post->ID, ['fields' => 'ids']);
+                        if ($production != null)
+                            $productionTags = wp_get_post_tags($production->ID, ['fields' => 'ids']);
+
+                        $tags = array_unique(array_merge($eventTags, $productionTags));
+                        foreach ($tags as $slug) $cssnames .= ' tag-'.$slug;
+                    }
+
+                    $item['cssnames'] = $cssnames;
+                }
+
                 // Add item to collection
                 $items[] = $item;
             }
@@ -337,6 +419,32 @@ class Events extends BaseShortcode
         $atmf = \ATMF\Setup::GetEngine();
         $atmf->vars['items'] = $items;
 
-        return $atmf->RendTemplate('Widgets/Events_Classic', true);
+        $templatePreview = $atmf->__('$_template_preview');
+        if ($templatePreview != '')
+        {
+            $atmf->SetTemplate('_Widget_Custom', $templatePreview);
+            //echo $templatePreview;exit;
+            return $atmf->RendTemplate('_Widget_Custom', true);
+        }
+        else 
+        {
+            if ($atts['skin'] != 'classic')
+            {
+                $skins = SkinSettings::Get('skins');
+		        foreach ($skins as $skin) 
+                {
+                    if ($skin['id'] == $atts['skin'])
+                    {
+                        $atmf->__('$_widget_src', Skins::BuildTemplateSource($skin['template']));
+                        $template = $atmf->RendTemplate('Widgets/Events_Custom', true);
+
+                        $atmf->SetTemplate('_Widget_Custom', $template);
+                        return $atmf->RendTemplate('_Widget_Custom', true);
+                    }
+                }
+            }
+
+            return $atmf->RendTemplate('Widgets/Events_Classic', true);
+        }
     }
 }

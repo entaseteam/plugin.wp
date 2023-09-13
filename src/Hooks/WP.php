@@ -4,6 +4,7 @@ namespace Entase\Plugins\WP\Hooks;
 
 use Entase\Plugins\WP\Conf;
 use Entase\Plugins\WP\Core\Shortcodes;
+use Entase\Plugins\WP\Core\FEPages;
 
 
 class WP {
@@ -12,6 +13,7 @@ class WP {
     {
         self::GlobalScriptsFE();
         Shortcodes::Register();
+        FEPages::Load();
     }
 
     public static function GlobalScriptsFE()

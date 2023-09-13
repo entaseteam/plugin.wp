@@ -1,0 +1,13 @@
+<div class="production_items">
+    \{#each $items as $item}
+        <div class="production_item\{$item.cssnames}">
+            <a href="\{$item.url}">
+                <div>
+                    
+                    {$_widget_src}
+
+                </div>
+            </a>
+        </div>
+    \{#end}
+</div>

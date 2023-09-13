@@ -2,7 +2,7 @@
 
 /**
  * ATMF functions handler. Part of ATMF core.
- * @version: ATMF-PHP Engine 1.0
+ * @version: ATMF-PHP Engine 1.1
  * @license: Apache-2.0 License
  * @repository: https://github.com/skito/ATMF-PHP
  */
@@ -19,8 +19,25 @@ class Functions
         {
             case '#template':
                 $name = isset($args[0]) ? $args[0] : '';
+                $label = isset($args[1]) ? $args[1] : '';
                 $template = $sender->GetTemplate($name);
+                if (!empty($template) && $label != '')
+                {
+                    preg_match_all('/\{\#label\s([a-z0-9-_\.]+)\}(.*)\{\#endlabel\}/imsxU', $template, $labels);
+                    foreach($labels[0] as $key => $match)
+                    {
+                        $lblname = $labels[1][$key];
+                        if ($lblname == $label)
+                            return $labels[2][$key];
+                    }
+                    return '';
+                }
                 return $template;
+            case '#label':
+                $hidden = $args[1] ?? '';
+                return $hidden != 'hidden' ? '<%:block_start%><%:show%>' : '<%:block_start%><%:hide%>';
+            case '#endlabel':
+                return '<%:block_end%>';
             case '#use':
                 $path = isset($args[0]) ? $args[0] : '';
                 $operator = isset($args[1]) ? $args[1]: 'as';
@@ -54,6 +71,7 @@ class Functions
                         $result = Variables::ProcessTag($sender, $argValue, []);
                     elseif ($cmd == '@')
                         $result = Culture::ProcessTag($sender, $argValue, []);
+                        
 
                     if ($reverseCond)
                         $result = !$result;
@@ -75,6 +93,7 @@ class Functions
                 $lastCondResult = ($count > 0) ? self::$_lastConditionResults[$count-1] : false;
                 return $lastCondResult ? '<%:block_end%><%:block_start%><%:show%>' : '<%:block_end%><%:block_start%><%:hide%>';
             case '#each':
+                self::$_lastConditionResults[] = false; // Hollow push, it will be removed at #end match
                 if (count($args) == 3 && in_array(trim($args[1]), ['as', 'in']))
                 {
                     $operator = trim($args[1]);

@@ -2,7 +2,7 @@
 
 /**
  * ATMF culture handler. Part of ATMF core.
- * @version: ATMF-PHP Engine 1.0
+ * @version: ATMF-PHP Engine 1.1
  * @license: Apache-2.0 License
  * @repository: https://github.com/skito/ATMF-PHP
  */
@@ -11,6 +11,7 @@ namespace ATMF;
 
 class Culture
 {
+    static public $settings = null;
     static private $_cachedTranslations = [];
     static private $_aliases = [];
 
@@ -90,10 +91,23 @@ class Culture
     }
 
 
-    public static function ResolveCultureResource($sender, $keyname)
+    public static function ResolveCultureResource($sender, $keyname, $locale=null)
     {
+
+        self::LoadSettings($sender);
+        
         $cultureResources = [];
-        $path = $sender->GetCultureFolder().'/'.$sender->GetCulture();
+        $localePath = $locale ?? $sender->GetCulture();
+
+        $localeData = self::$settings['locale'] ?? [];
+        $default = self::$settings['default'] ?? '';
+        $defaultLang = $localeData[$default] ?? [];
+        $langCode = isset($localeData[$localePath]) ? $localePath : $default;
+        $lang = $localeData[$localePath] ?? $defaultLang;
+        if (isset($lang['extend']) && isset($localeData[$lang['extend']]))
+            $cultureResources = self::ResolveCultureResource($sender, $keyname, $lang['extend']);
+
+        $path = $sender->GetCultureFolder().'/'.$langCode;
         $keypath = '';
         $keynameNS = explode('/', $keyname);
         $divider = '';
@@ -108,6 +122,9 @@ class Culture
             $divider = '/';
         }
         $path .= '/'.$keypath;
+
+
+        
 
         $translations = [];
         if (file_exists($path.'.cache.php')) {
@@ -130,23 +147,44 @@ class Culture
 
     private static function TranslationCache($path)
     {
+        $translations = json_decode(file_get_contents($path.'.json'));
+        $phpCache = '<?php'."\n".'return '.trim(self::Export($translations), ", \n").";";
         $translations = json_decode(file_get_contents($path.'.json'), true);
-        $phpCache = '<?php'."\n".'return ['."\n";
-        foreach($translations as $key => $value)
-        {
-            $phpCache .= "'".$key."'".' => ';
-            if (is_array($value)) {
-                $phpCache .= "[";
-                foreach($value as $v) {
-                    $phpCache .= "'".str_replace("'", "\\'", $v)."',";
-                }
-                $phpCache .= "],\n";
-            }
-            else $phpCache .= "'".str_replace("'", "\\'", $value)."',\n";
-        }
-        $phpCache = trim($phpCache, ",\n")."\n];";
         file_put_contents($path.'.cache.php', $phpCache);
 
-        return $translations;
+        return include($path . '.cache.php');
+    }
+
+    private static function Export($value, $level=0) {
+        $phpCache = '';
+        $prefix = str_repeat("\t", $level);
+        if (is_array($value) || is_object($value)) {
+            $phpCache .= "[\n";
+            foreach($value as $k => $v) {
+                $phpCache .= $prefix;
+                $phpCache .= is_object($value) ? "'".$k."' => ".self::Export($v, $level + 1) : self::Export($v, $level + 1);
+            }
+            $phpCache .= $prefix."],\n";
+        }
+        else $phpCache .= "'".str_replace("'", "\\'", $value)."',\n";
+
+        return $phpCache;
+    }
+
+    public static function LoadSettings($sender) 
+    {
+        if (self::$settings != null) 
+            return;
+
+        $path = $sender->GetCultureFolder() . '/culture';
+        if (file_exists($path.'.cache.php')) {
+            if (filemtime($path.'.cache.php') >= filemtime($path.'.json')) {
+                self::$settings = include($path.'.cache.php');
+            }
+            else self::$settings = self::TranslationCache($path);
+        }
+        elseif (file_exists($path.'.json')) {
+            self::$settings = self::TranslationCache($path);
+        }
     }
 }

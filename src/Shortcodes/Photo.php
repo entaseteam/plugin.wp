@@ -39,9 +39,10 @@ class Photo extends BaseShortcode
         $post = self::GetRelatedProduction();
         if ($post != null)
         {
-            self::ExtractMetaPhoto($post);
+            $photo = self::ExtractMetaPhoto($post);
+            if ($photo == null) return '';
             
-            $poster = self::$photo->poster ?? null;
+            $poster = $photo->poster ?? null;
             if ($poster != null) 
             {
                 $size = in_array($atts['size'], ['small', 'medium', 'large']) ? $atts['size'] : 'medium';

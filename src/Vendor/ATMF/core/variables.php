@@ -2,7 +2,7 @@
 
 /**
  * ATMF variables handler. Part of ATMF core.
- * @version: ATMF-PHP Engine 1.0
+ * @version: ATMF-PHP Engine 1.1
  * @license: Apache-2.0 License
  * @repository: https://github.com/skito/ATMF-PHP
  */
@@ -60,10 +60,37 @@ class Variables
 
     public static function SelectQuery($collection, $selector, &$var)
     {
-        if (is_string($selector)) $selector = explode('.', $selector);
+        if (is_string($selector)) 
+            $selector = explode('.', $selector);
+
+            
+        $selectorStr = implode('.', $selector);
+        if (is_array($collection) && isset($collection[$selectorStr]))
+        {
+            $var = $collection[$selectorStr];
+            return true;
+        }
+
+        $firstSelector = $selector[0];
+
         if (count($selector) > 1)
         {
-            $newCollection = isset($collection[$selector[0]]) && is_array($collection[$selector[0]]) ? $collection[$selector[0]] : null;
+            $newCollection = null;
+
+            if ((
+                    is_array($collection) && 
+                    isset($collection[$firstSelector]) &&
+                    (is_array($collection[$firstSelector]) || is_object($collection[$firstSelector]))
+                ) ||
+                (
+                    is_object($collection) && 
+                    isset($collection->$firstSelector) &&
+                    (is_array($collection->$firstSelector) || is_object($collection->$firstSelector))
+                ))
+            {
+                $newCollection = is_array($collection) ? $collection[$firstSelector] : $collection->$firstSelector;
+            }
+
             if ($newCollection != null)
             {
                 unset($selector[0]);
@@ -73,8 +100,19 @@ class Variables
         }
         else
         {
-            $var = $collection[$selector[0]] ?? '';
-            return isset($collection[$selector[0]]);
+            if (is_array($collection) && isset($collection[$firstSelector]))
+            {
+                $var = $collection[$firstSelector];
+                return true;
+            }
+            elseif (is_object($collection) && isset($collection->$firstSelector))
+            {
+                $var = $collection->$firstSelector;
+                return true;
+            }
+
+            $var = '';
+            return false;
         }
     }
 }

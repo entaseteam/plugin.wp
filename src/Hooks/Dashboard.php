@@ -19,7 +19,6 @@ class Dashboard
             'entase-settings',
             ['Entase\Plugins\WP\Hooks\Dashboard', 'SettingsMenu'],
             'data:image/svg+xml;base64,'.$iconb64,
-            plugins_url( 'myplugin/images/icon.png' ),
             80
         );
     }

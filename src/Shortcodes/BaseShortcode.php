@@ -4,7 +4,8 @@ namespace Entase\Plugins\WP\Shortcodes;
 
 class BaseShortcode
 {
-    public static $photo = null;
+    public static $photos = [];
+
 
     public static function Do($atts, $content, $tag)
     {
@@ -12,7 +13,17 @@ class BaseShortcode
     }
 
     public static function GetRelatedProduction($post=null)
-    {        
+    {
+        global $wp_query;
+
+        //echo get_the_ID()."\r\n\r\n<br><br>";
+        //echo get_queried_object_id()."\r\n\r\n<br><br>";
+        //print_r($wp_query->post->ID);
+        //echo "\r\n\r\n<br><br>";
+        //print_r(get_post()->ID);
+
+        //echo '___________'."\r\n\r\n<br><br>";
+
         if ($post == null) 
             $post = get_post();
 
@@ -39,10 +50,12 @@ class BaseShortcode
 
     public static function ExtractMetaPhoto($post)
     {
-        if (self::$photo == null)
+        if (!isset(self::$photos[$post->ID]))
         {
             $meta = get_post_meta($post->ID, 'entase_photo', true);
-            self::$photo = $meta != '' ? @json_decode($meta) : null;
+            self::$photos[$post->ID] = $meta != '' ? @json_decode($meta) : null;
         }
+        
+        return self::$photos[$post->ID];
     }
 }

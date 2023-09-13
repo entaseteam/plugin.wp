@@ -2,7 +2,7 @@
 
 /**
  * ATMF extensions manager. Part of ATMF core.
- * @version: ATMF-PHP Engine 1.0
+ * @version: ATMF-PHP Engine 1.1
  * @license: Apache-2.0 License
  * @repository: https://github.com/skito/ATMF-PHP
  */

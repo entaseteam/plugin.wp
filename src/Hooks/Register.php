@@ -35,6 +35,8 @@ class Register {
             // AJAX
             add_action('wp_ajax_entase_import', ['Entase\Plugins\WP\Hooks\Ajax', 'Import']);
             add_action('wp_ajax_entase_settings', ['Entase\Plugins\WP\Hooks\Ajax', 'Settings']);
+            add_action('wp_ajax_entase_updateskin', ['Entase\Plugins\WP\Hooks\Ajax', 'UpdateSkin']);
+            add_action('wp_ajax_entase_deleteskin', ['Entase\Plugins\WP\Hooks\Ajax', 'DeleteSkin']);
             //add_action( 'wp_ajax_nopriv_addItemAJAX', ['Entase\Plugins\WP\Hooks\Ajax', 'Import']);  
             //add_action( 'wp_ajax_addItemAJAX', ['Entase\Plugins\WP\Hooks\Ajax', 'Import']);
         }        

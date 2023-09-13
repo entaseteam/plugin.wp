@@ -46,6 +46,7 @@ class Init {
 
         $supports = ['title', 'thumbnail', 'editor'];
         $slug = $eventPosts['slug'];
+        
         register_post_type('event', [
             'labels' => [
                 'name' => __('Events'),
@@ -58,7 +59,6 @@ class Init {
             'menu_position' => 20,
             'supports' => $supports,
             'menu_icon' => 'dashicons-calendar',
-
         ]);
     }
 

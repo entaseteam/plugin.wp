@@ -285,7 +285,13 @@ class Events
         {
             $event = null;
             try { $event = $entase->events->GetByID($eventID); }
-            catch (\Entase\SDK\Exceptions\Base $ex) {}
+            catch (\Entase\SDK\Exceptions\Base $ex) 
+            { 
+                if ($ex->getCode() == 404)
+                {
+                    update_post_meta($post->ID, 'entase_status', 4);
+                }
+            }
 
             if ($event != null)
             {

@@ -10,6 +10,19 @@ class SettingsMenu
 {
     public static function DisplayPage()
     {
+        Dashboard\GeneralSettingsPage::Register();
+        Dashboard\SkinSettingsPage::Register();
+
+        $tab = $_GET['tab'] ?? 'general';
+        $page = Dashboard\BasePage::GetByPageName($tab);
+        if ($page != null && $page instanceof Dashboard\BasePage)
+        {
+            $page->Load();
+        }
+        else echo 'Page not found';
+
+
+        return;
         wp_enqueue_script('entase_settings', Conf::JSUrl.'/admin/settings.js', ['jquery'], false, true);
         wp_enqueue_style('entase_general_settings', Conf::CSSUrl.'/admin/general-settings.css');
 

@@ -2,7 +2,7 @@
 
 /**
  * ATMF Engine. Part of ATMF core.
- * @version: ATMF-PHP Engine 1.1
+ * @version: ATMF-PHP Engine 1.2
  * @license: Apache-2.0 License
  * @repository: https://github.com/skito/ATMF-PHP
  */
@@ -28,6 +28,8 @@ namespace ATMF {
         private $_indexEach = [];
         private $_lastBlockID = 0;
 
+        private $_callbacks = [];
+
         public static $latestInstance = null;
 
         /**
@@ -37,6 +39,20 @@ namespace ATMF {
         public function __construct($linkGlobalSelectors=true)
         {
             if ($linkGlobalSelectors) self::$latestInstance = $this;
+        }
+
+        /**
+         * Bind event callback
+		 * @param string $event - Event to bind for
+         * @param callable $callback - Callable object
+		 * @return string Modified output depend on the event and input params
+         */
+        public function Bind($event, $callback)
+        {
+            if (!is_array($this->_callbacks[$event]))
+                $this->_callbacks[$event] = [];
+            
+            $this->_callbacks[$event][] = $callback;
         }
 
 		/**
@@ -71,7 +87,7 @@ namespace ATMF {
                 }
 
                 if (!$blockMatch) die('ATMF Error: Closing curly bracket expected!');
-                elseif (strlen($blockStr) < 4) die('ATMF Error: Empty curly brackets detected!');
+                elseif (strlen($blockStr) < 4) continue; // die('ATMF Error: Empty curly brackets detected!');
 
                 // strip off top level brackets
                 $blockStr = substr($blockStr, 1, strlen($blockStr) - 2);
@@ -81,7 +97,7 @@ namespace ATMF {
                 if (strpos($blockStr, '#each') === 0 || strpos($blockStr, '#if') === 0)
                     $this->_openBlocks++;
 
-                if (strpos($blockStr, '#end') === 0)
+                if (strpos($blockStr, '#end') === 0 && strpos($blockStr, '#endlabel') !== 0)
                 {
                     if (isset($this->_indexEach[$this->_openBlocks]))
                     {
@@ -130,8 +146,8 @@ namespace ATMF {
 
             foreach($this->_tags as $id => $tag)
             {
-                if (strpos($str, '<%'.$id.'%>') !== false)
-                    $str = str_replace('<%'.$id.'%>', $tag->Build($this), $str);
+                if (strpos($str, '<%'.$id.'%>') !== false) 
+                    $str = str_replace('<%'.$id.'%>', (string)$tag->Build($this), $str);
             }
 
             // IF blocks, resulted by ATMF operations
@@ -152,7 +168,9 @@ namespace ATMF {
 
                 }
 
-                if (!$blockMatch) die('ATMF Error: Closing function block expected!');
+                if (!$blockMatch) 
+                    die('ATMF Error: Closing function block expected!');
+                
 
                 $str = substr($str, 0, $startPos).$this->ParseBlocks($blockStr).substr($str, $endPos + 14);
                 $startPos -= 1;
@@ -285,10 +303,10 @@ namespace ATMF {
         {
             if ($this->_currentCulture != $culture)
             {
-                if (empty($culture) ||
+                /*if (empty($culture) ||
                     !file_exists($this->_cultureFolder) ||
                     !is_dir($this->_cultureFolder))
-                    die('ATMF Error: Culture '.$culture.' not found!');
+                    die('ATMF Error: Culture '.$culture.' not found!');*/
 
                 $this->_currentCulture = $culture;
                 Culture::ResetTranslations();
@@ -388,6 +406,16 @@ namespace ATMF {
          */
         public function Rend($capture=false, $baseTemplate=null)
         {
+            $cbBeforeEnd = $this->_callbacks['beforerend'] ?? [];
+            if (is_array($cbBeforeEnd))
+            {
+                foreach($cbBeforeEnd as $callback)
+                {
+                    if (is_callable($callback))
+                        $baseTemplate = call_user_func($callback, $baseTemplate, $capture);
+                }
+            }
+
             $output = '';
             if ($baseTemplate != null)
             {
@@ -422,6 +450,16 @@ namespace ATMF {
 
             // Replace escaped tags
             $output = str_replace(['\{$', '\{@', '\{#', '\{/'], ['{$', '{@', '{#', '{/'], $output);
+
+            $cbAfterEnd = $this->_callbacks['afterend'] ?? [];
+            if (is_array($cbAfterEnd))
+            {
+                foreach($cbAfterEnd as $callback)
+                {
+                    if (is_callable($callback))
+                        $output = call_user_func($callback, $output, $baseTemplate, $capture);
+                }
+            }
 
             if ($capture) return $output;
             else echo $output;

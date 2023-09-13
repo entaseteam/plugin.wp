@@ -1,0 +1,31 @@
+
+.column {
+    width:45%;
+    margin-left:10px;
+    display:inline-block;
+    background-color: rgb(241, 241, 241);
+    padding:20px;
+    min-height: 250px;
+}
+
+.element {
+    font-size:25px;
+    min-height:30px;
+    padding: 10px;
+    text-align:center;
+    cursor: pointer;
+    border: 1px dashed black;
+    margin-bottom: 10px;
+}
+
+.drag-item {
+    cursor: move;    
+}
+
+.element.active:hover {
+    background-color: rgb(219, 232, 255);
+}
+
+.text-large {
+    font-size: 45px;
+}

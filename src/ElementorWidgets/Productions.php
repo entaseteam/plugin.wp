@@ -163,6 +163,20 @@ class Productions extends \Elementor\Widget_Base
 			]
 		);
 
+		$this->add_control(
+			'cssnames',
+			[
+				'label' => 'Dynamic class names',
+				'type' => \Elementor\Controls_Manager::SELECT2,
+				'multiple' => true,
+				'options' => [
+					'category' => 'Relative categories',
+                    'tag' => 'Relative tags',
+                ],
+                'default' => []
+			]
+		);
+
         $this->end_controls_section();
 
 
