@@ -123,6 +123,59 @@ class Productions
         return $tags;
     }
 
+    public static function Sync($capture=false, $fromID=null)
+    {
+        $entase = \Entase\Plugins\WP\Core\EntaseSDK::PrepareClient();
+        
+        $productions = null;
+        try {
+            $filter = ['extend' => 'ownerName', 'sort' => ['id' => 'asc']];
+            if ($fromID != null) $filter['after'] = $fromID;
+
+            $productions = $entase->productions->GetAll($filter); 
+        }
+        catch (\Entase\SDK\Exceptions\Base $ex) {}
+
+        if ($productions != null)
+        {
+            $count = 0;
+            $lastID = '';
+            foreach($productions as $production)
+            {
+                $lastID = $production->id;
+                $query = [
+                    'post_type' => 'production',
+                    'meta_key' => 'entase_id',
+                    'meta_value' => $production->id,
+                    'posts_per_page' => 1
+                ];
+                $posts = get_posts($query);
+                if (count($posts) > 0) continue;
+
+                $tags = self::ExtractProductionTags($production);
+                $meta = self::PrepareMetaFromAPI($production);
+                wp_insert_post([
+                    'post_title' => $production->title, 
+                    'post_type' => 'production', 
+                    'post_content' => '',
+                    'post_status' =>  'publish',
+                    'meta_input' => $meta,
+                    'tags_input' => $tags
+                ]);
+
+                $count++;
+            }
+            
+            $response = ['imported' => $count, 'hasMore' => $productions->cursor->hasMore, 'lastID' => $lastID];
+            if ($capture) return $response;
+            else Ajax::StatusOK($response);
+        }
+        else {            
+            if ($capture) return false;
+            else Ajax::StatusERR('No productions were imported.');
+        }
+    }
+
     public static function Import($capture=false, $id=null)
     {
         $settings = GeneralSettings::Get('productionPosts');
@@ -173,7 +226,7 @@ class Productions
 
             GeneralSettings::Set('productionPosts', $settings);
 
-            $response = ['imported' => $count, 'hasMore' => $productions->hasMore];
+            $response = ['imported' => $count, 'hasMore' => $productions->cursor->hasMore];
             if ($capture) return $response;
             else Ajax::StatusOK($response);
         }

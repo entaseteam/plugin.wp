@@ -12,7 +12,13 @@ class Ajax
     public static function Import()
     {
         if ($_POST['role'] == 'productions')
-            Productions::Import();
+        {
+            $procedure = $_POST['procedure'] ?? '';
+            $fromID = $_POST['fromID'] ?? null;
+            
+            if ($procedure == 'sync') Productions::Sync(false, $fromID);
+            else Productions::Import();
+        }
         elseif ($_POST['role'] == 'events')
             Events::Import();
     }

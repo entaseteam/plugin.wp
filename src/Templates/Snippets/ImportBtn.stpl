@@ -1,6 +1,8 @@
 <script type="text/javascript">
     jQuery(document).ready(function($) {
-        var $btnImport = $('<a href="javascript:void(0);" id="btnEntase_Import" data-role="{$role}" class="page-title-action">Import from Entase</a>');
+        var $btnImport = $('<a href="javascript:void(0);" id="btnEntase_Import" data-procedure="import" data-role="{$role}" class="page-title-action">Import from Entase</a>');
+        var $btnSync = $('<a href="javascript:void(0);" id="btnEntase_Sync" data-procedure="sync" data-role="{$role}" class="page-title-action">Full Sync</a>');
         $('.wp-header-end').before($btnImport);
+        $('.wp-header-end').before($btnSync);
     });
 </script>

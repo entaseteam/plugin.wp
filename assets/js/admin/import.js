@@ -11,22 +11,29 @@ var EntaseImport = new function() {
     this.PageLoad = function() {
         var $ = this.$;
 
-        $('#btnEntase_Import').click(function() {
+        $('#btnEntase_Import, #btnEntase_Sync').click(function() {
             if (!EntaseImport.importing) {
                 var html = $(this).html();
                 $(this).html(html + '...');
-                EntaseImport.DoImport($(this).data('role'));
+                EntaseImport.DoImport($(this).data('role'), $(this).data('procedure'));
             }
         });
     };
 
-    this.DoImport = function(role) {
+    this.DoImport = function(role, procedure, fromID) {
         this.importing = true;
+
+        if (typeof fromID == 'undefined') 
+            fromID = false;
 
         var data = {
             action: 'entase_import',
-            role: role
+            role: role,
+            procedure: procedure
         };
+
+        if (fromID) 
+            data.fromID = fromID;
 
         this.$.ajax({
             url: ajaxurl,
@@ -40,7 +47,7 @@ var EntaseImport = new function() {
                     if (response.hasMore)
                     {
                         EntaseStatusMsg('Stay on this page! Import continues...', 'info');
-                        EntaseImport.DoImport(this.data.role);
+                        EntaseImport.DoImport(this.role, this.procedure, response.lastID ?? false);
                     }
                     else window.location.reload();
                 }
