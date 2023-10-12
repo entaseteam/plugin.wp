@@ -57,10 +57,10 @@
 
     <div class="entaseadmin-footer">
         <div>
-            © 2023 Entase
+            © {/date Y} Entase
         </div>
         <div>
-            Plugin version 1.5.28
+            Plugin version {/version}
         </div>
     </div>
 

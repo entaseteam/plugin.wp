@@ -18,6 +18,7 @@ namespace ATMF {
             {
                 require_once(\Entase\Plugins\WP\Conf::VendorPath.'/ATMF/engine.php');
                 require_once(\Entase\Plugins\WP\Conf::VendorPath.'/ATMF-EXT/scripts.php');
+                require_once(\Entase\Plugins\WP\Conf::VendorPath.'/ATMF-EXT/version.php');
                 
 
                 self::$atmf = new \ATMF\Engine();
