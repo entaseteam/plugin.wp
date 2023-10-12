@@ -1,12 +1,14 @@
 .entase_status_msg {
     position: fixed;
     right: 0px;
-    top: 50px;
+    top: 0;
+   
     z-index: 1000;
-    padding: 20px !important;
+    padding: var(--space-md) !important;
     min-width: 200px;
     border: 0px !important;
     margin: 0px !important;
+    margin-top: -10px !important;
 }
 
 .entase_status_msg.success {

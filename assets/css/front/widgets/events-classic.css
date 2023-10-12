@@ -48,9 +48,32 @@
 
 
 
+
+
+
+body.entase-skin-preview {
+    background: transparent !important;
+}
+
+body.entase-skin-preview .event_items {
+    grid-template-columns: repeat(1, 1fr) !important; 
+
+    max-width: 350px;
+}
+body.entase-skin-preview .event_items a {
+    color: black !important;
+    font-size: 18px !important;
+}
+body.entase-skin-preview .event_items .event_entase_book a {
+    color: white !important;
+}
+
+
 @media only screen and (max-width: 767px) {
-	
     .event_items {
         grid-template-columns: repeat(2, 1fr);
+    }
+    body.entase-skin-preview .event_items {
+        grid-template-columns: repeat(1, 1fr) !important;
     }
 }

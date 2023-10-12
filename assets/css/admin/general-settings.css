@@ -1,3 +1,7 @@
+
+
+
+
 ._optgroup ._btnChange {
     vertical-align: bottom;
 }
@@ -14,79 +18,41 @@
 
 
 
-.entaseadmin-header {
-    padding: 25px 20px 20px 20px;
-    display: flex;
-    background: white;
-    border-bottom: 1px solid lightgrey;
-}
-.entaseadmin-header > div {
-    display: block;
-}
-.entaseadmin-header > div > img {
-    width: 130px;
-}
-
-
-.entaseadmin-content {
-    padding: 20px;
-
-}
 
 
 
 
-
-
-
-
-
-
-.entaseadmin-gensett {
-    box-shadow: 0 1px 1px rgb(0 0 0 / 4%);
-    background: #FFF;
-    padding: 15px;
-    border: 1px solid #ccd0d4;
-}
-.entaseadmin-gensett-header {
-     box-shadow: 0 1px 1px rgb(0 0 0 / 4%);
-    background: #FFF;
-    padding: 15px;
-    border: 1px solid #ccd0d4;
-    border-bottom: 0;
-}
-.entaseadmin-gensett-header h1 {
-    font-size: 20px;
-    padding: 0;
-    margin: 0;
-}
-.entaseadmin-gensett table tbody tr:nth-child(even) {
+.gensettings-table table tbody tr:nth-child(even) {
     background: #fff;
 }
-.entaseadmin-gensett table tbody tr:nth-child(odd) {
+.gensettings-table table tbody tr:nth-child(odd) {
     background: #f6f7f7;
 }
-.entaseadmin-gensett table th {
-    padding-left: 20px;
+.gensettings-table table th {
+    padding-left: var(--space-md);
 }
 
 @media screen and (max-width: 782px) {
-    .entaseadmin-gensett table th {
-        padding-left: 10px;
+    .gensettings-table table th {
+        padding-left:  var(--space-sm);
     }
-    .entaseadmin-gensett table td {
-        padding: 10px;
+    .gensettings-table table td {
+        padding:  var(--space-sm);;
     }
-    .entaseadmin-item > div {
+    .gensettings-table .entaseadmin-item {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    .gensettings-table .entaseadmin-item > div {
         min-width: 141px;
-        text-align: right;
+   
     }
 }
-.entaseadmin-item {
+.gensettings-table  .entaseadmin-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    gap:  var(--space-md);
 }
 
 
@@ -98,45 +64,6 @@
 
 
 
-.btn-change,
-.btn-cancel {
-    display: inline-block;
-    text-decoration: none;
-    text-shadow: none;
-    margin: 0;
-    min-height: 32px;
-    line-height: 2.30769231;
-    padding: 0 12px;
-    cursor: pointer;
-    border-width: 1px;
-    border-style: solid;
-    -webkit-appearance: none;
-    border-radius: 3px;
-    white-space: nowrap;
-    box-sizing: border-box;
-}
-
-.btn-change {
-    background: #eb5a36;
-    border-color: #eb5a36;
-    color: #fff;
-}
-.btn-change:hover {
-    background: #fa5c37;
-    border-color: #fa5c37;
-    color: #fff;
-}
-
-.btn-cancel {
-    background: #5c6f7e;
-    border-color: #5c6f7e;
-    color: #fff;
-}
-.btn-cancel:hover {
-    background: #728695;
-    border-color: #728695;
-    color: #fff;
-}
 
 
 
@@ -144,10 +71,8 @@
 
 
 
-.entaseadmin-footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 20px 0;
-    color: #969696;
-}
+
+
+
+
+

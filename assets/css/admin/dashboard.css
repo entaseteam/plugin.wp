@@ -1,0 +1,108 @@
+
+body {
+    background-color: var(--background);
+}
+
+
+
+
+
+/*
+Section Style
+*/
+
+.entaseadmin-content {
+    padding: var(--space-md);
+}
+.ent-box {
+    box-shadow: 0 1px 1px rgb(0 0 0 / 4%);
+    background: #FFF;
+    padding: var(--space-sm);
+    border: 1px solid #ccd0d4;
+}
+
+
+
+
+
+
+
+
+
+/*
+Header Logo
+*/
+.entaseadmin-header {
+    padding: var(--space-md);
+    display: flex;
+    background: white;
+    border-bottom: 1px solid lightgrey;
+}
+.entaseadmin-header > div {
+    display: block;
+}
+.entaseadmin-header > div > img {
+    width: 150px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+Section Header
+*/
+.ent-header {
+
+   padding-bottom: var(--space-sm);
+
+   
+
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+.ent-header h1 {
+   font-size: var(--text-lg);
+   padding: 0;
+   margin: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+Footer
+*/
+
+.entaseadmin-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: var(--space-md);
+    padding-top: 0;
+    color: #969696;
+
+    font-size: var(--text-sm);
+}
+#wpfooter {
+    display: none !important;
+}

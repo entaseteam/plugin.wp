@@ -1,0 +1,362 @@
+:root {
+
+  --btns-font-size: var(--text-base-size);
+  --btns-font-weight: var(--weight-bold);
+
+  --btns-padding-x: 24px;
+  --btns-padding-y: 12px;
+
+  --btns-radius: var(--radius-xl);
+  --btns-icon-size: 1em;
+
+}
+
+ 
+
+
+ul.tabs_navigationStyle li:focus,
+ul.tabs_navigationStyle li:active,
+ul.tabs_navigationStyle li a:focus,
+ul.tabs_navigationStyle li a:visited,
+ul.tabs_navigationStyle li a:active,
+a:active, a:focus, a:active,
+.btns, .link, .reset, .btns {
+    outline: none !important;
+      
+    text-decoration: none !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-user-select: none; /* Chrome/Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
+    user-select: none;
+  }
+
+
+button, input, textarea, select {
+  margin: 0;
+}
+
+.btns, .link, .reset {
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  line-height: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.btns {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-flex;
+ 
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  text-decoration: none;
+  line-height: 1;
+
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: all .1s ease;
+
+  font-weight: var(--btns-font-weight);
+  border-radius: var(--btns-radius);
+  gap: var(--space-xs);
+ 
+  color: var(--color-contrast-medium);
+  font-size: var(--btns-font-size);
+}
+.btns:focus,
+.btns:active {
+  color: var(--color-contrast-medium);
+}
+.btns:hover {
+  color: var(--color-primary);
+}
+
+.btns.btns--primary,
+.btns.btns--secondary,
+.btns.btns--accent,
+.btns.btns--accent2,
+.btns.btns--accent3,
+.btns.btns--md {
+  padding-top: var(--btns-padding-y);
+  padding-bottom: var(--btns-padding-y);
+  padding-left: var(--btns-padding-x);
+  padding-right: var(--btns-padding-x);
+}
+
+
+
+
+
+
+.btns:focus {
+  outline:none;
+}
+.btns:active {
+  transform:translateY(1px);
+}
+.btns label {
+  cursor: pointer;
+}
+
+  
+  
+
+
+
+/*Buttons text and icon - svg style*/
+.btns svg  {
+  display: inline-block;
+ 
+  fill: currentColor;
+  height: var(--btns-icon-size);
+  width: var(--btns-icon-size);
+  line-height: 1;
+  flex-shrink: 0;
+  max-width: initial;
+}
+
+
+
+
+
+
+
+.btns--sm {
+  font-size: var(--text-sm);
+}
+.btns--md {
+  font-size: var(--text-md);
+}
+
+
+
+.btns.icons {
+  font-size: var(--text-xl) !important;
+}
+
+
+
+/*Buttons only Icon*/
+.btns--icon {
+  color: var(--color-contrast-medium);
+}
+.btns--icon:hover {
+  color: var(--color-contrast-higher);
+}
+.btns--icon i {
+  font-size: inherit;
+}
+
+
+
+
+
+
+
+
+
+
+/* Sizes */
+
+.btns--icon.btns--primary,
+.btns--icon.btns--secondary,
+.btns--icon.btns--accent,
+.btns--icon.btns--accent2,
+.btns--icon.btns--accent3,
+.btns--icon {
+  padding: 2px;
+  font-size: var(--text-md);
+}
+.btns--icon.btns--primary,
+.btns--icon.btns--secondary,
+.btns--icon.btns--accent,
+.btns--icon.btns--accent2,
+.btns--icon.btns--accent3 {
+  padding: 10px;
+}
+
+
+
+
+
+
+.btns--icon.btns--primary.btns--sm,
+.btns--icon.btns--secondary.btns--sm,
+.btns--icon.btns--accent.btns--sm,
+.btns--icon.btns--accent2.btns--sm,
+.btns--icon.btns--accent3.btns--sm,
+.btns--icon.btns--sm {
+  padding: 2px;
+  font-size: var(--text-sm);
+}
+.btns--icon.btns--primary.btns--sm,
+.btns--icon.btns--secondary.btns--sm,
+.btns--icon.btns--accent.btns--sm,
+.btns--icon.btns--accent2.btns--sm,
+.btns--icon.btns--accent3.btns--sm {
+  padding: 8px;
+}
+
+
+
+
+
+
+.btns--icon.btns--primary.btns--md,
+.btns--icon.btns--secondary.btns--md,
+.btns--icon.btns--accent.btns--md,
+.btns--icon.btns--accent2.btns--md,
+.btns--icon.btns--accent3.btns--md,
+.btns--icon.btns--md {
+  padding: 2px;
+  font-size: var(--text-lg);
+}
+.btns--icon.btns--primary.btns--md,
+.btns--icon.btns--secondary.btns--md,
+.btns--icon.btns--accent.btns--md,
+.btns--icon.btns--accent2.btns--md,
+.btns--icon.btns--accent3.btns--md  {
+  padding: 13px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Disabled buttons */
+.btns[disabled="disabled"],
+.btns--disabled {
+  cursor: default !important;
+  opacity: 0.5;
+} 
+
+.btns[disabled="disabled"],
+.btns--disabled:active {
+  transform:translateY(0px);
+  transform:translateY(0px);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* COLORS VARIATIONS */
+.btns--primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+.btns--primary:hover,
+.btns--primary:focus,
+.btns--primary:active {
+  background-color:var(--color-primary-dark);
+  color: var(--color-white);
+}
+.btns--primary.disabled:hover {
+  background-color:var(--color-primary);
+  color: var(--color-white);
+}
+.btns--primary:disabled {
+  background-color:var(--color-primary);
+  color: var(--color-white);
+}
+
+
+  
+
+.btns--secondary {
+  background-color: var(--btns-bg-secondary);
+  color: var(--btns-color-secondary);
+}
+.btns--secondary:hover {
+  background-color: var(--btns-bg-secondary-hover);
+  color: var(--btns-color-secondary);
+}
+
+.btns--secondary.disabled:hover,
+.btns--secondary:disabled:hover {
+  background-color:var(--btns-bg-secondary);
+  color: var(--btns-color-secondary);
+}
+
+
+
+
+.btns--accent {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+}
+.btns--accent:hover {
+  background-color:var(--color-accent-dark);
+  color: var(--color-white);
+}
+.btns--accent.disabled:hover,
+.btns--accent:disabled {
+  background-color:var(--color-accent);
+  color: var(--color-white);
+}
+
+  
+
+
+.btns--accent2 {
+  background-color: var(--color-accent2);
+  color: var(--color-black);
+}
+.btns--accent2:hover {
+  background-color:var(--color-accent2-dark);
+  color: var(--color-black);
+}
+.btns--accent2.disabled:hover,
+.btns--accent2:disabled {
+  background-color:var(--color-accent2);
+  color: var(--color-white);
+}
+
+
+
+
+.btns--accent3 {
+  background-color: var(--color-accent3);
+  color: var(--color-white);
+}
+.btns--accent3:hover {
+  background-color:var(--color-accent3-dark);
+  color: var(--color-white);
+}
+.btns--accent3.disabled:hover,
+.btns--accent3:disabled {
+  background-color:var(--color-accent3);
+  color: var(--color-white);
+}

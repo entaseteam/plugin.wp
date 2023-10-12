@@ -1,97 +1,113 @@
 
 <div class="entaseadmin-content">
 
-    <div class="entaseadmin-gensett-header">
+
+    <div class="ent-header">
         <h1>General settings</h1>
     </div>
-    
-    <div class="entaseadmin-gensett">
-        <table class="form-table" role="presentation">
-            <tbody>
-                <tr>
-                    <th scope="row"><label for="blogname">API secret key</label></th>
-                    <td>
-                        <div class="_optgroup entaseadmin-item">
-                            <input type="text" data-field="api_secret_key" data-type="hidden" value="{$api_sk}" disabled="disabled" class="_input regular-text">
-                            <div>
-                                <a href="javascript:void(0);" class="_btnChange page-title-actio btn-change">Change</a>
-                                <input type="button" class="_btnSave btn-change" value="Save" />
-                                <input type="button" class="_btnCancel btn-cancel" value="Cancel" />
+
+
+    <div class="ent-box">
+        <div class="gensettings-table">
+            <table class="form-table" role="presentation">
+                <tbody>
+                    <tr>
+                        <th scope="row"><label for="blogname">API secret key</label></th>
+                        <td>
+                            <div class="_optgroup entaseadmin-item">
+                                <input type="text" data-field="api_secret_key" data-type="hidden" value="{$api_sk}" disabled="disabled" class="_input regular-text">
+                                <div class="flex-none ">
+                                    <input type="button" class="_btnCancel btns btns--secondary" value="Cancel" />
+                                    <a href="javascript:void(0);" class="_btnChange page-title-actio btns btns--primary">Change</a>
+                                    <input type="button" class="_btnSave btns btns--primary" value="Save" />
+                                
+                                </div>
+                            
                             </div>
-                          
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="blogname">API public key</label></th>
-                    <td>
-                        <div class="_optgroup entaseadmin-item">
-                            <input type="text" data-field="api_public_key" data-type="hidden" value="{$api_pk}" disabled="disabled" class="_input regular-text">
-                            <div>
-                                <a href="javascript:void(0);" class="_btnChange page-title-actio btn-change">Change</a>
-                                <input type="button" class="_btnSave btn-change" value="Save" />
-                                <input type="button" class="_btnCancel btn-cancel" value="Cancel" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="blogname">API public key</label></th>
+                        <td>
+                            <div class="_optgroup entaseadmin-item">
+                                <input type="text" data-field="api_public_key" data-type="hidden" value="{$api_pk}" disabled="disabled" class="_input regular-text">
+                                <div class="flex-none ">
+                                    <input type="button" class="_btnCancel btns btns--secondary" value="Cancel" />
+                                    <a href="javascript:void(0);" class="_btnChange page-title-actio btns btns--primary">Change</a>
+                                    <input type="button" class="_btnSave btns btns--primary" value="Save" />
+                                    
+                                </div>
+                        
                             </div>
-                       
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="blogname">Productions link</label></th>
-                    <td>
-                        <div class="_optgroup entaseadmin-item">
-                            <input type="text" data-field="productions_slug" value="{$productionPosts.slug}" disabled="disabled" class="_input regular-text">
-                            <div>
-                                <a href="javascript:void(0);" class="_btnChange page-title-actio btn-change">Change</a>
-                                <input type="button" class="_btnSave btn-change" value="Save" />
-                                <input type="button" class="_btnCancel btn-cancel" value="Cancel" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="blogname">Productions link</label></th>
+                        <td>
+                            <div class="_optgroup entaseadmin-item">
+                                <input type="text" data-field="productions_slug" value="{$productionPosts.slug}" disabled="disabled" class="_input regular-text">
+                                <div class="flex-none ">
+                                    <input type="button" class="_btnCancel btns btns--secondary" value="Cancel" />
+                                    <a href="javascript:void(0);" class="_btnChange page-title-actio btns btns--primary">Change</a>
+                                    <input type="button" class="_btnSave btns btns--primary" value="Save" />
+                                
+                                </div>
+                
                             </div>
-             
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="blogname">Auto sync periodically (cron)</label></th>
-                    <td>
-                        <div class="_optgroup entaseadmin-item">
-                            <select data-field="enable_cron" class="_input regular-text" disabled="disabled">
-                                <option value="disable" {#if !$enable_cron}selected{#end}>Disable</option>
-                                <option value="enable" {#if $enable_cron}selected{#end}>Enable</option>
-                            </select>
-                            <div>
-                                <a href="javascript:void(0);" class="_btnChange page-title-actio btn-change">Change</a>
-                                <input type="button" class="_btnSave  btn-change" value="Save" />
-                                <input type="button" class="_btnCancel btn-cancel" value="Cancel" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="blogname">Auto sync periodically (cron)</label></th>
+                        <td>
+                            <div class="_optgroup entaseadmin-item">
+
+                                <div class="select">
+                                    <select data-field="enable_cron" class="_input regular-text ent-select" disabled="disabled">
+                                        <option value="disable" {#if !$enable_cron}selected{#end}>Disable</option>
+                                        <option value="enable" {#if $enable_cron}selected{#end}>Enable</option>
+                                    </select>
+                                    <svg aria-hidden="true" viewBox="0 0 16 16"><polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polyline></svg>
+                                    
+                                </div>
+                             
+
+
+                                <div class="flex-none ">
+                                    <input type="button" class="_btnCancel btns btns--secondary" value="Cancel" />
+                                    <a href="javascript:void(0);" class="_btnChange page-title-actio btns btns--primary">Change</a>
+                                    <input type="button" class="_btnSave  btns btns--primary" value="Save" />
+                                    
+                                </div>
+                            
                             </div>
-                           
-                        </div>
-                    </td>
-                </tr>
-                <!--tr>
-                    <th scope="row"><label for="blogname">Clear sync cache</label></th>
-                    <td>
-                        <div class="_optgroup entaseadmin-item">
-                            <input type="button" class="_btnClearSyncCache button button-primary button-large" value="Clear" />
-                            <span style="vertical-align:middle"> (Clear out the sync cache and disable "Auto sync")</span>
-                        </div>
-                    </td>
-                </tr-->
-            </tbody>
-        </table>
+                        </td>
+                    </tr>
+                    <!--tr>
+                        <th scope="row"><label for="blogname">Clear sync cache</label></th>
+                        <td>
+                            <div class="_optgroup entaseadmin-item">
+                                <input type="button" class="_btnClearSyncCache button button-primary button-large" value="Clear" />
+                                <span style="vertical-align:middle"> (Clear out the sync cache and disable "Auto sync")</span>
+                            </div>
+                        </td>
+                    </tr-->
+                </tbody>
+            </table>
+        </div>
     </div>
+
+ 
+
+
+
+    
+    
         
     
     
     
     
-    <!--div class="entaseadmin-footer">
-        <div>
-            © Entase
-        </div>
-        <div>
-            Plugin version 1.5.28
-        </div>
-    </divr-->
+
 
 
 

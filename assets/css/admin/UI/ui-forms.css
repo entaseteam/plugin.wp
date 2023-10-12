@@ -1,0 +1,286 @@
+
+:root {
+  --forms-font-size: 1em;
+  --forms-padding-x: 0.8em;
+  --forms-padding-y: var(--space-sm);
+  --forms-radius: var(--radius-md);
+
+  --select-icon-size: .65em;
+  --select-icon-right-margin: var(--space-sm);
+  --select-text-icon-gap: var(--space-xxxs);
+  --select-dropdown-gap: 4px;
+}
+
+
+
+
+
+
+
+div.select select,
+.forms,
+input[type=text],
+input[type=phone],
+input[type=email],
+input[type=tel],
+input[type=number],
+input[type=password],
+textarea {
+  width: 100%;
+  font-family: inherit;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: var(--color-contrast-higher);
+  line-height: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  background: var(--surface);
+
+  box-sizing: border-box;
+
+  opacity: 0.8;
+
+  padding-top: var(--forms-padding-y);
+  padding-bottom: var(--forms-padding-y);
+  padding-left: var(--forms-padding-y);
+  padding-right: var(--forms-padding-x);
+  border-radius: var(--forms-radius);
+  box-shadow: inset 0px 0px 0px 1px var(--input-border);
+}
+
+div.select select:hover,
+.forms:hover,
+input[type=text]:hover,
+input[type=phone]:hover,
+input[type=number]:hover,
+input[type=email]:hover,
+input[type=tel]:hover,
+input[type=password]:hover,
+textarea:hover {
+  opacity: 1;
+  box-shadow: inset 0px 0px 0px 1px var(--color-primary);
+  color: var(--color-contrast-higher);
+}
+.forms::placeholder{
+  opacity: 1;  
+}
+div.select select:focus,
+.forms:focus,
+input[type=text]:focus,
+input[type=phone]:focus,
+input[type=number]:focus,
+input[type=email]:focus,
+input[type=tel]:focus,
+input[type=password]:focus,
+textarea:focus {
+  box-shadow: inset 0px 0px 0px 1px var(--color-primary);
+  outline: none;
+}
+
+
+
+
+
+
+
+select[disabled=disabled],
+input[disabled=disabled],
+textarea[disabled=disabled],
+.forms--disabled,
+.forms:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed;
+}
+select[disabled=disabled],
+input[disabled=disabled]:hover,
+textarea[disabled=disabled]:hover,
+.forms--disabled:hover,
+.forms:disabled:hover {
+  opacity: 0.4 !important;
+  cursor: not-allowed;
+  border: 0 !important;
+  box-shadow: inset 0px 0px 0px 1px var(--input-border) !important;
+  color: var(--color-contrast-higher) !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+textarea {
+  resize: vertical;
+  overflow: auto;
+  vertical-align: top;
+  min-height: 130px;
+}
+
+
+
+div.select {
+  position: relative;
+  width: 100%;
+}
+
+select {
+  width: 100%;
+  min-width: 100%;
+  cursor: pointer;
+  padding-right: var(--space-lg) !important;
+  background-image: none !important;
+}
+
+div.select svg {
+  color: var(--color-contrast-high);
+  width: var(--select-icon-size);
+  height: var(--select-icon-size);
+  pointer-events: none;
+  position: absolute;
+  right: var(--select-icon-right-margin);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+input[type="checkbox"] {
+  /* remove standard background appearance */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* create custom radiobutton appearance */
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  padding: 2px;
+  /* background-color only for content */
+  background-clip: content-box;
+  border: 2px solid var(--border-contrast-darker);
+  background-color:transparent;
+
+  border-radius: 3px;
+}
+
+/* appearance for checked radiobutton */
+input[type="checkbox"]:checked {
+  background-color: var(--color-primary);
+}
+
+
+
+
+
+
+
+
+input[type="radio"] {
+/* remove standard background appearance */
+-webkit-appearance: none;
+-moz-appearance: none;
+appearance: none;
+/* create custom radiobutton appearance */
+display: inline-block;
+width: 18px;
+height: 18px;
+padding: 3px;
+/* background-color only for content */
+background-clip: content-box;
+border: 2px solid var(--border-contrast-dark);
+background-color: var(--color-contrast-low);
+border-radius: 50%;
+}
+
+/* appearance for checked radiobutton */
+input[type="radio"]:checked {
+background-color: var(--color-primary);
+}
+
+
+
+
+
+
+
+
+
+/* Search bo in office page header*/
+
+.search-box {
+position: relative;
+width: 100%;
+}
+.search-box input {
+padding-right: var(--space-xl);
+}
+.search-box a.btns {
+position: absolute;
+display: flex;
+right: 10px;
+z-index: 77;
+height: 100%;
+color: var(--btns-color-secondary);
+}
+
+
+
+
+label.inputtitle {
+display: block;
+padding-bottom: var(--space-xs);
+}
+
+
+
+
+
+
+
+

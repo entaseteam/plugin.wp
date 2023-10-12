@@ -1,0 +1,149 @@
+
+
+
+
+
+
+/* Table Scroll and Table Responsive Styles */
+div.table-container {
+  position: relative;
+  z-index: 1;
+  overflow: auto;
+  -webkit-overflow-scrolling: auto;
+  border-bottom: 2px solid var(--border-contrast-darker);
+}
+div.table-container table{
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+div.table-container table thead tr {
+  text-align: left;
+  font-weight: var(--weight-bold);
+  border-bottom: 2px solid var(--border-contrast-darker);
+}
+div.table-container table tfoot tr {
+  border-top: 2px solid var(--border-contrast-darker);
+}
+div.table-container table tbody tr {
+  border-bottom: 1px solid var(--border-contrast-dark);
+  opacity: 0.75;
+  transition: .2s;
+}
+
+div.table-container table tbody tr:hover {
+  opacity:unset;
+  border-bottom: 1px solid var(--border-contrast-dark);
+  
+}
+div.table-container table tbody tr:last-child {
+  border-bottom: 0px;
+}
+
+
+
+
+
+
+
+
+
+/* Mobile Breakpoint XS > div.table-responsive */
+@media only screen and (max-width: 960px) {
+  div.table-responsive {
+    border-top: 1px solid var(--border-contrast-low);
+  }
+  div.table-responsive table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  
+ div.table-responsive table tr {
+    display: block;
+  }
+  
+  div.table-responsive table td {
+    display: block;
+    text-align: right;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  div.table-responsive table td::before {
+    font-weight: 600;
+    content: attr(data-label);
+    float: left;
+    padding-right: var(--space-lg);
+  }
+  
+ div.table-responsive table td:last-child {
+    border-bottom: 0;
+  }
+}
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+/* td, th Padding - XXS, XS, SM */
+
+div.table-pd-xxs td,
+div.table-pd-xxs th{
+  padding: var(--space-xxs);
+}
+
+div.table-pd-xs td,
+div.table-pd-xs th {
+  padding: var(--space-xs);
+}
+div.table-pd-sm td,
+div.table-pd-sm th {
+  padding: var(--space-sm);
+}
+div.table-pd-md td,
+div.table-pd-md th {
+  padding: var(--space-md);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+div.table-container table >tbody>tr.locked>td {
+	background: var(--surface-dark);
+	color: var(--silverhigh);
+	cursor: default;
+	
+}
+.events tr.locked td {
+  background-color: var(--surface-dark);
+}
+

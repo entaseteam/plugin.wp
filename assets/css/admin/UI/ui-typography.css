@@ -1,0 +1,257 @@
+
+
+:root {
+
+    --font-primary: 'Montserrat', sans-serif;
+    --text-base-size: 15px; 
+  
+    --weight-thin: 100;
+    --weight-lighter: 200;
+    --weight-light: 300;
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-bold: 600;
+    --weight-bolder: 700;
+    --weight-black: 800;
+  }
+  
+  
+  
+  :root, * {
+    --text-xs: 10.41px;
+    --text-sm: 12.49px;
+    --text-md: 17.98px;
+    --text-lg:21.57px;
+    --text-xl: 25.89px;
+    --text-xxl: 31px;
+    --text-xxxl: 37.28px;
+  
+  
+    --lineheight-xs: 13px;
+    --lineheight-sm: 16px;
+    --lineheight-normal: 19px;
+    --lineheight-md: 23px;
+    --lineheight-lg:27.5px;
+    --lineheight-xl: 33px;
+    --lineheight-xxl: 39px;
+    --lineheight-xxxl: 48px;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  .entase-container {
+    color: var(--color-contrast-higher);
+    font-family: var(--font-primary);
+    font-size: var(--text-base-size);
+    font-weight: var(--weight-normal);
+    line-height: normal;
+  }
+  
+  
+  
+  
+  
+  ol, ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  li {
+    position: relative;
+  }
+  
+  
+  a, .link {
+    color: var(--brandcolor);
+  }
+  
+  a, .link, a span {
+    cursor:pointer;
+    text-decoration: none;
+    color: var(--brandcolor);
+  }
+  
+  
+  html.brk-xs-md a {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  html.brk-xs-md a:focus {
+    outline: none !important;
+  }
+  
+  
+  
+  
+  
+  
+  
+  .thin {
+    font-weight: var(--weight-thin);
+  }
+  .lighter {
+    font-weight: var(--weight-lighter);
+  }
+  .light {
+    font-weight: var(--weight-light);
+  }
+  .medium {
+    font-weight: var(--weight-medium);
+  }
+  .bold {
+    font-weight: var(--weight-bold);
+  }
+  .bolder {
+    font-weight: var(--weight-bolder);
+  }
+  .black {
+    font-weight: var(--weight-black);
+  }
+  
+  
+  b {
+    font-weight: var(--weight-bold);
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  .dd_filters_btn a.periodlink label,
+  .periodBox a.periodlink label,
+  .boarList .dd-selected label,
+  .boarList ul li.dd-option label,
+  .selectize-control.multi .selectize-input > div,
+  .ddslick-basic .dd-selected-text,
+  .selectize-input label,
+  .selectize-input div.label,
+  .selectize-input > * ,
+  button {
+    font-family: var( --font-primary) !important;
+  }
+  
+  
+  
+  
+  
+  
+  h1, h2, h3, h4, h5,
+  p, .tx-xs, .tx-sm, .tx-md, .tx-lg, .tx-xl, .tx-xxl, .tx-xxxl, .tx-xxxxl {
+    margin: 0;
+  }
+  
+  
+  i, em {
+    font-style: italic;
+  }
+  
+  
+  
+  
+  h1, .title-xxxl {
+    font-weight: var(--weight-bolder);
+    font-size: var(--text-xxxl);
+    line-height: var(--lineheight-xxxl);
+  }
+  h2, .title-xxl {
+    font-weight: var(--weight-bold);
+    font-size: var(--text-xxl);
+    line-height: var(--lineheight-xxl);
+  }
+  h3, .title-xl {
+    font-weight: var(--weight-bold);
+    font-size: var(--text-xl);
+    line-height: var(--lineheight-xl);
+  }
+  h4, .title-lg {
+    font-weight: var(--weight-bold);
+    font-size: var(--text-lg);
+    line-height: var(--lineheight-lg);
+  }
+  h5, .title-md {
+    font-weight: var(--weight-bold);
+    font-size: var(--text-md);
+    line-height: var(--lineheight-md);
+  }
+  
+  
+  
+  .tx-xs {
+    font-size: var(--text-xs);
+    line-height: var(--lineheight-xs);
+  }
+  .tx-sm {
+    font-size: var(--text-sm);
+    line-height: var(--lineheight-sm);
+  }
+  .tx-normal {
+    font-size: var(--text-base-size);
+    line-height: var(--lineheight-normal);
+  }
+  .tx-md {
+    font-size: var(--text-md); 
+    line-height: var(--lineheight-md);
+  }
+  .tx-lg {
+    font-size: var(--text-lg);
+    line-height: var(--lineheight-lg);
+  }
+  .tx-xl {
+    font-size: var(--text-xl);
+    line-height: var(--lineheight-xl);
+  }
+  .tx-xxl {
+    font-size: var(--text-xxl);
+    line-height: var(--lineheight-xxl);
+  }
+  .tx-xxxl {
+    font-size: var(--text-xxxl);
+    line-height: var(--lineheight-xxxl);
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

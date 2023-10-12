@@ -1,0 +1,52 @@
+
+
+/* tabs slider t*/
+
+.tabs_navigation {
+    margin-top: var(--space-lg);
+    margin-bottom: -20px;
+
+}
+ul.tabs_navigationStyle {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+ul.tabs_navigationStyle li {
+    display: inline-block;
+    margin: 0 20px;
+    margin-left: 0;
+}
+ul.tabs_navigationStyle li a {
+    color: var(--color-contrast-medium);
+    text-decoration: inherit;
+    cursor: pointer;
+    text-decoration: none;
+
+
+    font-weight: var(--weight-medium);
+
+    border-bottom: 2px solid var(--border-contrast-dark);
+    padding-bottom: 13px;
+
+    transition: color .1s ease-in;
+}
+
+ul.tabs_navigationStyle li a:hover {
+    color: var(--color-contrast-high);
+}
+
+
+
+
+
+
+
+ul.tabs_navigationStyle li.tabactive a,
+ul.tabs_navigationStyle li a._selected {
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: 13px;
+
+}
+
+

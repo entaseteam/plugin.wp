@@ -1,31 +1,151 @@
 
 .column {
-    width:45%;
-    margin-left:10px;
-    display:inline-block;
-    background-color: rgb(241, 241, 241);
-    padding:20px;
-    min-height: 250px;
+
 }
 
-.element {
-    font-size:25px;
-    min-height:30px;
-    padding: 10px;
-    text-align:center;
-    cursor: pointer;
-    border: 1px dashed black;
-    margin-bottom: 10px;
-}
+
 
 .drag-item {
     cursor: move;    
 }
 
 .element.active:hover {
-    background-color: rgb(219, 232, 255);
+    
 }
 
 .text-large {
     font-size: 45px;
 }
+
+
+
+
+
+
+
+
+
+.etn-templates {
+    display: flex;
+    gap: 30px;
+    margin-top: var(--space-lg);
+    box-sizing: border-box;
+
+
+}
+.etn-templates > div {
+    width: 50%;
+    
+}
+.etn-templates h3,
+.etn-templates h4  {
+    padding-bottom: var(--space-md);
+}
+
+
+
+
+
+.tm-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.tm-container {
+    
+}
+.tm-container > div..tm-container {
+    border: 1px solid black;
+}
+a.tm-remove {
+
+}
+
+
+
+
+
+.tm-removeicon {
+    font-size: var(--text-xl);
+}
+
+
+._pnlElement {
+    margin-bottom: 20px;
+}
+
+.tm-element {
+    min-height:30px;
+    text-align:center;
+    cursor: pointer;
+
+    background: white;
+    border: 2px solid #d7dbde;
+    border-radius: 7px;
+    padding:var(--space-md);
+
+    gap: 30px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+.etn-templates div[data-type=group] {
+
+    display: flex;
+    flex-direction: column;
+    gap: 5x;
+}
+.tm-addcomponents {
+    background: white;
+    padding: var(--space-md);
+}
+._pnlElementHead {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-md);
+}
+.addmore {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.tm-btnAdd {
+    flex: 1;
+    background: #dfdfdf;
+    padding: var(--space-md);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.tm-btnAdd:hover {
+    background: #c1c1c5;
+    color: black !important;
+}
+.tm-btnAdd span {
+    display: flex;
+    font-size: var(--text-lg);
+}
+
+
+
+
+
+
+
+/*
+Iframe
+*/
+iframe[name=skinpreview] {
+    pointer-events:none;
+    width:100%;
+    height:700px;
+    display:block
+}
+
