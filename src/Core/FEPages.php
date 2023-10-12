@@ -21,6 +21,8 @@ class FEPages
         http_response_code(200);
         $atmf = \ATMF\GetEngine();
 
+        $fields = [];
+        
         $_POST = array_map('stripslashes_deep', $_POST);
         $widget = $_POST['widget'] ?? '';
         $templateJson = $_POST['template'] ?? '';
@@ -33,11 +35,12 @@ class FEPages
             if ($widget == 'events')
                 $fields['fields'][] = 'entase_book'; // Append booking button at the end
         }
+        else die('Empty template.');
         
         //echo '[entase_events fields="'.implode(',', $fields).'"]';exit;
         echo '<html><head>';
         wp_head();
-        echo '</head><body>';
+        echo '</head><body class="entase-skin-preview">';
 
         $fieldsStr = implode(',', $fields['fields']);
         $metaStr = implode(',', $fields['meta']);
@@ -46,12 +49,12 @@ class FEPages
         if ($widget == 'events')
         {
             $atmf->__('$_template_preview', $atmf->RendTemplate('Widgets/Events_Custom', true));
-            echo do_shortcode('[entase_events status="0,1" fields="'.$fieldsStr.'" metafields="'.$metaStr.'"]');
+            echo do_shortcode('[entase_events limit="1" status="0,1" fields="'.$fieldsStr.'" metafields="'.$metaStr.'"]');
         }
         else if ($widget == 'productions')
         {
             $atmf->__('$_template_preview', $atmf->RendTemplate('Widgets/Productions_Custom', true));
-            echo do_shortcode('[entase_productions fields="'.$fieldsStr.'" metafields="'.$metaStr.'" multisource_image="'.$multiSourceImgStr.'"]');
+            echo do_shortcode('[entase_productions limit="1" fields="'.$fieldsStr.'" metafields="'.$metaStr.'" multisource_image="'.$multiSourceImgStr.'"]');
         }
 
         wp_footer();
