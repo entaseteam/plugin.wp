@@ -375,7 +375,8 @@ class Events
             'entase_location_lng' => $event->location->lng,
             'entase_cohosting' => $event->cohosting,
             'entase_ownerRef' => $event->ownerRef,
-            'entase_cohostRef' => $event->ownerRef
+            'entase_cohostRef' => $event->ownerRef,
+            'entase_stats' => json_encode($event->stats)
         ];
 
         // Not optimized

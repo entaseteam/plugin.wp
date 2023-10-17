@@ -52,7 +52,7 @@ class Meta extends BaseShortcode
             }
         }
 
-        $value = apply_filters($tag, $value);
+        $value = apply_filters($tag, $value, $post);
 
         return $value;
     }

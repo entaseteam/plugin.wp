@@ -207,11 +207,19 @@ class Events extends BaseShortcode
             $query['orderby'] = 'meta_value_num';
         }
 
+
+        /* ******************* */
+        /* CUSTOM QUERY FILTER */
+        /* ******************* */
+        if(has_filter('entase_events_query')) {
+            $query = apply_filters('entase_events_query', $query);
+        }
+
         /* ******************* */
         /* BUILD TEMPLATE DATA */
         /* ******************* */
         $items = [];
-        $posts = get_posts($query);
+        $posts = $query != null ? get_posts($query) : null;
         if ($posts && count($posts) > 0)
         {
             foreach($posts as $post)
@@ -267,10 +275,10 @@ class Events extends BaseShortcode
                             $itemProps['post_feature_image'] = get_the_post_thumbnail($post->ID, 'large');
                             break;
                         case 'entase_title':
-                            $itemProps['entase_title'] = apply_filters('entase_title', get_post_meta($production->ID, 'entase_title', true));
+                            $itemProps['entase_title'] = apply_filters('entase_title', get_post_meta($production->ID, 'entase_title', true), $post);
                             break;
                         case 'entase_story':
-                            $story = apply_filters('entase_story', Shortcodes::MarkupToHTML(get_post_meta($production->ID, 'entase_story', true), ['searchurl' => '']));
+                            $story = apply_filters('entase_story', Shortcodes::MarkupToHTML(get_post_meta($production->ID, 'entase_story', true), ['searchurl' => '']), $post);
                             $itemProps['entase_story'] = mb_strlen($story) > $atts['contentchars'] ? mb_substr($story, 0, $atts['contentchars']).'...' : $story;
                             break;
                         case 'entase_datestart':
@@ -278,7 +286,7 @@ class Events extends BaseShortcode
                             //$datestr = date($atts['dateformat'].' - '.$atts['timeformat'], $time);
                             // Handling WP time zones
                             $datestr = get_date_from_gmt(date('Y-m-d H:i', $time), $atts['dateformat'].' - '.$atts['timeformat']);
-                            $datestr = apply_filters('entase_datestart', $datestr);
+                            $datestr = apply_filters('entase_datestart', $datestr, $post);
 
                             $row[] = ['key' => 'entase_datestart', 'val' => $datestr];
                             $itemProps['entase_datestart'] = $datestr;
@@ -288,7 +296,7 @@ class Events extends BaseShortcode
                             //$datestr = date($atts['dateformat'], $time);
                             // Handling WP time zones
                             $datestr = get_date_from_gmt(date('Y-m-d H:i', $time), $atts['dateformat']);
-                            $datestr = apply_filters('entase_dateonly', $datestr);
+                            $datestr = apply_filters('entase_dateonly', $datestr, $post);
 
                             $row[] = ['key' => 'entase_dateonly', 'val' => $datestr];
                             $itemProps['entase_dateonly'] = $datestr;
@@ -298,13 +306,13 @@ class Events extends BaseShortcode
                             //$datestr = date($atts['timeformat'], $time);
                             // Handling WP time zones
                             $datestr = get_date_from_gmt(date('Y-m-d H:i', $time), $atts['timeformat']);
-                            $datestr = apply_filters('entase_timeonly', $datestr);
+                            $datestr = apply_filters('entase_timeonly', $datestr, $post);
 
                             $row[] = ['key' => 'entase_timeonly', 'val' => $datestr];
                             $itemProps['entase_timeonly'] = $datestr;
                             break;
                         case 'entase_book':
-                            $itemProps['entase_book'] = apply_filters('entase_book', '<a href="javascript:void(0);" class="entase_book" data-event="'.$entaseID.'" data-status="'.$entaseStatus.'">'.$atts['booklabel'].'</a>');
+                            $itemProps['entase_book'] = apply_filters('entase_book', '<a href="javascript:void(0);" class="entase_book" data-event="'.$entaseID.'" data-status="'.$entaseStatus.'">'.$atts['booklabel'].'</a>', $post);
                             break;
                         case 'entase_photo_poster':
                             if ($photo == null)
@@ -324,7 +332,7 @@ class Events extends BaseShortcode
                             break;
                         default:
                             $val = get_post_meta($post->ID, $field, true);
-                            $val = apply_filters($field, $val);
+                            $val = apply_filters($field, $val, $post);
                             $row[] = ['key' => $field, 'val' => $val];
                             $itemProps[$field] = $val;
                             break;
@@ -353,7 +361,7 @@ class Events extends BaseShortcode
                         if ($hideIfEmpty && trim($meta_value) == '') continue;
 
                         $val = $field['prefix'].$meta_value.$field['suffix'];
-                        $val = apply_filters('entase_meta_'.$fieldName, $val);
+                        $val = apply_filters('entase_meta_'.$fieldName, $val, $post);
 
                         $row[] = ['key' => 'meta_'.$fieldName, 'val' => $val];
                         $itemProps['meta_'.$fieldName] = $val;

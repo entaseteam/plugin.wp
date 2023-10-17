@@ -128,12 +128,18 @@ class Productions extends BaseShortcode
             ];
         }
 
+        /* ******************* */
+        /* CUSTOM QUERY FILTER */
+        /* ******************* */
+        if(has_filter('entase_productions_query')) {
+            $query = apply_filters('entase_productions_query', $query);
+        }
 
         /* ******************* */
         /* BUILD TEMPLATE DATA */
         /* ******************* */
         $items = [];
-        $productions = get_posts($query);
+        $productions = $query != null ? get_posts($query) : null;
         if ($productions && count($productions) > 0)
         {
             foreach($productions as $production)
@@ -172,7 +178,7 @@ class Productions extends BaseShortcode
                             break;
                         case 'entase_title':
                             $title = get_post_meta($production->ID, 'entase_title', true);
-                            $title = apply_filters('entase_title', $title);
+                            $title = apply_filters('entase_title', $title, $production);
 
                             $row[] = ['key' => 'entase_title', 'val' => $title];
                             $itemProps['entase_title'] = $title;
@@ -180,7 +186,7 @@ class Productions extends BaseShortcode
                         case 'entase_story':
                             $content = get_post_meta($production->ID, 'entase_story', true);
                             $contentExport = mb_strlen($content) > $contentChars ? mb_substr($content, 0, $contentChars).'...' : $content;
-                            $contentExport = apply_filters('entase_story', $contentExport);
+                            $contentExport = apply_filters('entase_story', $contentExport, $production);
 
                             $row[] = ['key' => 'entase_story', 'val' => $contentExport];
                             $itemProps['entase_story'] = $contentExport;
@@ -192,7 +198,7 @@ class Productions extends BaseShortcode
                                 $photo = @json_decode($meta) ?? null;
                             }
                             $img = $photo != null ? '<img src="'.$photo->poster->medium.'" />' : '';
-                            $img = apply_filters('entase_photo_poster', $img);
+                            $img = apply_filters('entase_photo_poster', $img, $production);
 
                             $row[] = ['key' => 'entase_photo_poster', 'val' => $img];
                             $itemProps['entase_photo_poster'] = $img;
@@ -205,7 +211,7 @@ class Productions extends BaseShortcode
                             }
                             
                             $img = $photo != null ? '<img src="'.$photo->og->large.'" />' : '';
-                            $img = apply_filters('entase_photo_og', $img);
+                            $img = apply_filters('entase_photo_og', $img, $production);
                             
                             $row[] = ['key' => 'entase_photo_og', 'val' => $img];
                             $itemProps['entase_photo_poster'] = $img;
@@ -247,7 +253,7 @@ class Productions extends BaseShortcode
                                 if ($source != '')
                                 {
                                     $img = stripos($source, '<img') !== false ? $source : '<img src="'.$source.'" />';
-                                    $img = apply_filters('entase_multisource_image', $img);
+                                    $img = apply_filters('entase_multisource_image', $img, $production);
 
                                     $row[] = ['key' => 'multisource_image', 'val' => $img];
                                     $itemProps['multisource_image'] = $img;
@@ -266,7 +272,7 @@ class Productions extends BaseShortcode
                         
                         $fieldName = $field['field'];
                         $fieldValue = get_post_meta($production->ID, $fieldName, true);
-                        $fieldValue = apply_filters('entase_meta_'.$fieldName, $fieldValue);
+                        $fieldValue = apply_filters('entase_meta_'.$fieldName, $fieldValue, $production);
 
                         $row[] = ['key' => 'meta_'.$field['field'], 'val' => $fieldValue];
                         $itemProps['meta_'.$fieldName] = $fieldValue;
