@@ -100,7 +100,7 @@ class Events
                     ],
                     [
                         'name' => 'Book Link',
-                        'value' => 'https://www.entase.bg/book?eid='.get_post_meta($post->ID, 'entase_id', true),
+                        'value' => 'https://www.entase.com/book?eid='.get_post_meta($post->ID, 'entase_id', true),
                         'shortcode' => 'entase_link event='.get_post_meta($post->ID, 'entase_id', true)
                     ],
                     [

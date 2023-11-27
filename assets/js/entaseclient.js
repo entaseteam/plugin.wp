@@ -55,7 +55,7 @@ var EntaseClient = function(pk, locale) {
                 }
             }
 
-            var url = 'https://www.entase.bg/book?eid=' + settings.eventID;
+            var url = 'https://www.entase.com/book?eid=' + settings.eventID;
             if (this.client.IsAppBrowser()) url += '&ref=' + settings.ref
             if (locale != '') url += '&lcs=' + locale;
 

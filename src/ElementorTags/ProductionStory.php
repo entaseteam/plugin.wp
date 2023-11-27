@@ -82,7 +82,7 @@ class ProductionStory extends \Elementor\Core\DynamicTags\Tag
 		$this->add_control('searchurl', [
             'type' => \Elementor\Controls_Manager::TEXT,
             'label' => 'Search URL',
-            'placeholder' => 'https://www.entase.bg/?search=$tag',
+            'placeholder' => 'https://www.entase.com/?search=$tag',
         ]);
         
         $this->add_control('linktarget', [

@@ -7,7 +7,7 @@ class Shortcodes
     static function MarkupToHTML($markup, $options=[])
     {
         $options = array_merge([
-            'searchurl' => 'https://www.entase.bg/?search=$tag',
+            'searchurl' => 'https://www.entase.com/?search=$tag',
             'linktarget' => '_blank' 
         ], $options);
         // (<ts-person>)(.*?)(\\)(.*?)(<\/ts-person>)
