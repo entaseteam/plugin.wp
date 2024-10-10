@@ -194,9 +194,9 @@ var SkinsBuilder = function (container, template, opts)
         for (let elementNode of elements)
         {
             var $elementNode = $(elementNode);
-            var $elementType = $elementNode.find('._pnlElementType:visible');
+            var $elementType = $elementNode.children('._pnlElementType:visible');
             var type = $elementType.attr('data-type');
-            if (typeof type == 'undefined') continue;
+            if ($elementType.length < 1 || typeof type == 'undefined') continue;
 
             var element = {type: type};
             if (type == 'field')
@@ -212,7 +212,7 @@ var SkinsBuilder = function (container, template, opts)
             else if (type == 'group')
             {
                 element.cssClass = $elementNode.find('._txtClass').val();
-                element.elements = this.ExportTemplate($elementType);
+                element.elements = this.ExportTemplate($elementType.length > 0 ? $elementType : null);
             }
 
             template.push(element);
