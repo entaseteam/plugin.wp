@@ -33,6 +33,9 @@ var SkinsBuilder = function (container, template, opts)
 
             // Meta
             meta_key: 'Meta value',
+
+            // Taxonomy
+            taxonomy: 'Taxonomy',
         },
         productions: {
             post_title: 'Post title',
@@ -96,11 +99,14 @@ var SkinsBuilder = function (container, template, opts)
             if ($sender.val() == 'meta_key') $pnlElementType.find('._pnlMetaField').show();
             else $pnlElementType.find('._pnlMetaField').hide();
 
+            if ($sender.val() == 'taxonomy') $pnlElementType.find('._pnlTaxonomy').show();
+            else $pnlElementType.find('._pnlTaxonomy').hide();
+
             this.OnChange();
         });
 
         $container.find('._txtMetaKey, ._txtCustomClass').blur(() => { this.OnChange(); });
-        $container.find('._ddlMetaContext').change(() => { this.OnChange(); });
+        $container.find('._ddlMetaContext, ._ddlTaxonomyType, ._ddlTaxonomyContext, ._chkTaxonomyLinks').change(() => { this.OnChange(); });
     };
 
     this.SetFieldOptions = function(widget, container) {
@@ -146,9 +152,18 @@ var SkinsBuilder = function (container, template, opts)
                 $element.find('._ddlField').val(data.name).change();
                 if (data.name == 'meta_key')
                 {
-                    console.log(data.meta);
                     $element.find('._txtMetaKey').val(data.meta.key);
                     $element.find('._ddlMetaContext').val(data.meta.context);
+                }
+                else if (data.name == 'taxonomy')
+                {
+                    $element.find('._ddlTaxonomyType').val(data.taxonomy.type);
+                    $element.find('._ddlTaxonomyContext').val(data.taxonomy.context);
+
+                    if (data.taxonomy.nolinks)
+                        $element.find('._chkTaxonomyLinks').prop('checked', false);
+                    else $element.find('._chkTaxonomyLinks').prop('checked', true);
+                    
                 }
             }
             else if (data.type == 'group')
@@ -206,6 +221,13 @@ var SkinsBuilder = function (container, template, opts)
                     element.meta = {
                         key: $elementType.find('._txtMetaKey').val(),
                         context: $elementType.find('._ddlMetaContext').val()
+                    }
+                }
+                else if (element.name == 'taxonomy') {
+                    element.taxonomy = {
+                        type: $elementType.find('._ddlTaxonomyType').val(),
+                        context: $elementType.find('._ddlTaxonomyContext').val(),
+                        nolinks: $elementType.find('._chkTaxonomyLinks').is(':checked')
                     }
                 }
             }

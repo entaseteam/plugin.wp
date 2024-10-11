@@ -18,8 +18,15 @@ class Skins
                 {
                     if (isset($element->meta) && !is_object($element->meta))
                         $element->meta = (object)$element->meta;
+                    elseif (isset($element->taxonomy) && !is_object($element->taxonomy))
+                        $element->taxonomy = (object)$element->taxonomy;
                     
-                    $key = $element->name == 'meta_key' ? 'meta_'.$element->meta->key : $element->name;
+                    $key = '';
+                    if ($element->name == 'meta_key') $key = 'meta_'.$element->meta->key;
+                    elseif ($element->name == 'taxonomy') $key = 'taxonomy_'.$element->taxonomy->type;
+                    else $key = $element->name;
+                    //$key = $element->name == 'meta_key' ? 'meta_'.$element->meta->key : $element->name;
+
                     $src .= '\{#if $item.'.$key.'}<div class="event_'.$key.'">\{$item.'.$key.'}</div>\{#endif}';   
                 }
                 elseif ($element->type == 'group')
@@ -37,7 +44,8 @@ class Skins
     {
         $fields = [
             'fields' => [],
-            'meta' => []
+            'meta' => [],
+            'taxonomies' => []
         ];
         
         if (is_array($template))
@@ -52,6 +60,14 @@ class Skins
                         $context = $element->meta->context ?? '';
                         $fields['meta'][] = $key.':'.$context;
                     }
+                    elseif ($element->name == 'taxonomy')
+                    {
+                        $type = $element->taxonomy->type ?? '';
+                        $context = $element->taxonomy->context ?? '';
+                        $nolinks = $element->taxonomy->nolinks ?? false;
+                        $atts = $nolinks ? 'nolinks' : '';
+                        $fields['taxonomies'][] = $type.':'.$context.':'.$atts;
+                    }
                     else $fields['fields'][] = $element->name;
                 }
                 elseif ($element->type == 'group')
@@ -59,12 +75,14 @@ class Skins
                     $nested = self::ExtractTemplateFields($element->elements);
                     $fields['fields'] = array_merge($fields['fields'], $nested['fields']);
                     $fields['meta'] = array_merge($fields['meta'], $nested['meta']);
+                    $fields['taxonomies'] = array_merge($fields['taxonomies'], $nested['taxonomies']);
                 }
             }
         }
 
         $fields['fields']  = array_unique($fields['fields']);
         $fields['meta']  = array_unique($fields['meta']);
+        $fields['taxonomies']  = array_unique($fields['taxonomies']);
 
         return $fields;
     }

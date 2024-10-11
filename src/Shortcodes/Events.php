@@ -28,6 +28,7 @@ class Events extends BaseShortcode
             'metafields' => [],
             'skin' => 'classic',
             'cssnames' => [],
+            'taxonomies' => [],
 
             // Query
             'filter_status' => [1],
@@ -65,11 +66,12 @@ class Events extends BaseShortcode
             $arr = [];
             $metafields = explode(',', $atts['metafields']);
             foreach ($metafields as $metafield) {
+                if ($metafield == '') continue;
                 list($field, $context) = explode(':', $metafield);
                 $arr[] = ['field' => $field, 'context' => $context, 'hide_if_empty' => 'yes'];
             }
             $atts['metafields'] = $arr;
-        }
+        }        
         
         $hasProductionContext = false;
         foreach ($atts['metafields'] as $arr) 
@@ -81,7 +83,37 @@ class Events extends BaseShortcode
             }
         }
 
-        
+        if (is_string($atts['taxonomies']))
+        {
+            $arr = [];
+            $taxonomies = explode(',', $atts['taxonomies']);
+            foreach ($taxonomies as $taxonomy) {
+                if ($taxonomy == '') continue;
+                list($type, $context, $attsStr) = explode(':', $taxonomy);
+                $taxAtts = explode('|', $attsStr);
+                $arr[] = ['type' => $type, 'context' => $context, 'atts' => $taxAtts, 'hide_if_empty' => 'yes'];
+            }
+            $atts['taxonomies'] = $arr;
+        }
+
+        foreach ($atts['taxonomies'] as $key => $taxonomy) 
+        {
+            if (!isset($taxonomy['context']))
+                $taxonomy['context'] = ['both'];
+
+            if (!isset($taxonomy['atts']))
+                $taxonomy['atts'] = [];
+
+            if ($taxonomy['show_links'] == 'yes')
+                unset($taxonomy[array_search('nolink', $taxonomy)]);
+            else $taxonomy['atts'][] = 'nolink';
+
+            $atts['taxonomies'][$key] = $taxonomy;
+
+            if (in_array($taxonomy['context'], ['production', 'both']))
+                $hasProductionContext = true;
+            
+        }
 
         //$atts['metafields'] = is_string($atts['metafields']) ? explode(',', $atts['fields']) : $atts['metafields'];
 
@@ -92,7 +124,7 @@ class Events extends BaseShortcode
         $statuses = is_string($atts['filter_status']) ? explode(',', $atts['filter_status']) : $atts['filter_status'];
         $productions = is_string($atts['filter_productions']) ? explode(',', $atts['filter_productions']) : $atts['filter_productions'];
         $atts['contentchars'] = (int)$atts['contentchars'];
-
+        
         // Find and add current production
         if ($atts['filter_current_production'] == 'yes')
         {
@@ -104,14 +136,14 @@ class Events extends BaseShortcode
 
             $productions[] = $productionID;
         }
-
+        
         // Get from query string if any
         if ($atts['allow_qs_production'] == 'yes')
         {
             if (!empty($_GET['prod']))
                 $productions[] = $_GET['prod'];
         }
-
+        
         /* *********** */
         /* BUILD QUERY */
         /* *********** */
@@ -121,17 +153,18 @@ class Events extends BaseShortcode
             'meta_query' => [],
             'tax_query' => []
         ];
-
+        
         // Add status filter
         if (count($statuses) > 0)
         {
+            
             $query['meta_query'][] = [
                 'key' => 'entase_status',
                 'value' => $statuses,
                 'compare' => 'IN'
             ];
         }
-
+        
         // Add productions filter
         if (count($productions) > 0)
         {
@@ -368,6 +401,157 @@ class Events extends BaseShortcode
                     }
                 }
 
+
+                // Query taxanomies
+                $queryCategories = false;
+                $cssCategories = false;
+                $showCategories = false;
+                $showCategoriesOpts = [];
+
+                $queryTags = false;
+                $cssTags = false;
+                $showTags = false;
+                $showTagsOpts = [];
+                
+                if (isset($atts['cssnames']) && in_array('category', $atts['cssnames']))
+                {
+                    $queryCategories = true;
+                    $cssCategories = true;
+                }
+
+                if (isset($atts['cssnames']) && in_array('tag', $atts['cssnames']))
+                {
+                    $queryTags = true;
+                    $cssTags = true;
+                }
+                
+                if (isset($atts['taxonomies']) && is_array($atts['taxonomies']))
+                {
+                    foreach ($atts['taxonomies'] as $taxonomy) 
+                    {
+                        if ($taxonomy['type'] == 'category')
+                        {
+                            
+                            $queryCategories = true;
+                            $showCategories = true;
+                            $showCategoriesOpts = $taxonomy;
+                        }
+                        elseif ($taxonomy['type'] == 'tag')
+                        {
+                            $queryTags = true;
+                            $showTags = true;
+                            $showTagsOpts = $taxonomy;
+                        }
+                    }
+                }
+                
+
+                // Do query taxonomies
+                $cssnames = '';
+                
+                if ($queryCategories)
+                {
+                    $eventCategories = wp_get_post_categories($post->ID, ['fields' => 'all']);
+                    $productionCategories = [];
+                    if ($production != null)
+                        $productionCategories = wp_get_post_categories($production->ID, ['fields' => 'all']);
+
+                        
+                    $taxonomyVals = [];
+                    $categories = array_merge($eventCategories, $productionCategories);
+                    foreach ($categories as $category) 
+                    {
+                        if ($cssCategories)
+                            $cssnames .= ' category-'.$category->slug;
+                    }
+
+                    if ($showCategories)
+                    {
+                        if (in_array($showCategoriesOpts['context'], ['event', 'both']))
+                        {
+                            foreach ($eventCategories as $category) 
+                            {
+                                $val = in_array('nolink', $showCategoriesOpts['atts']) ? $category->name : '<a href="'.get_category_link($category->term_id).'">'.$category->name.'</a>';
+                                $taxonomyVals[] = '<span>'.$val.'</span>';
+                            }
+                        }
+
+                        if (in_array($showCategoriesOpts['context'], ['production', 'both']))
+                        {
+                            foreach ($productionCategories as $category) 
+                            {
+                                $val = in_array('nolink', $showCategoriesOpts['atts']) ? $category->name : '<a href="'.get_category_link($category->term_id).'">'.$category->name.'</a>';
+                                $taxonomyVals[] = '<span>'.$val.'</span>';
+                            }
+                        }
+                    }
+                    
+                    if (!isset($itemProps['taxonomy_category']))
+                        $itemProps['taxonomy_category'] = '';
+                    
+                    $itemProps['taxonomy_category'] .= implode(' ', $taxonomyVals);
+                }
+
+
+                if ($queryTags)
+                {
+                    $eventTags = wp_get_post_tags($post->ID);
+                    $productionTags = [];
+                    if ($production != null)
+                        $productionTags = wp_get_post_tags($production->ID);
+
+                    $taxonomyVals = [];
+                    $tags = array_merge($eventTags, $productionTags);
+                    $tagIDs = [];
+                    foreach ($tags as $tag) 
+                    {
+                        if (!in_array($tagID, $tagIDs)) $tagIDs[] = $tag->term_id;
+                        else continue;
+
+                        if ($cssTags)
+                            $cssnames .= ' tag-'.$tag->term_id;
+                    }
+
+                    if ($showTags)
+                    {
+                        $tagIDs = [];
+
+                        if (in_array($showTagsOpts['context'], ['event', 'both']))
+                        {
+                            foreach ($eventTags as $tag) 
+                            {
+                                if (!in_array($tagID, $tagIDs)) $tagIDs[] = $tag->term_id;
+                                else continue;
+
+                                $val = in_array('nolink', $showTagsOpts['atts']) ? $tag->name : '<a href="'.get_tag_link($tag->term_id).'">'.$tag->name.'</a>';
+                                $taxonomyVals[] = '<span>'.$val.'</span>';
+                            }
+                        }
+
+                        if (in_array($showTagsOpts['context'], ['production', 'both']))
+                        {
+                            foreach ($productionTags as $tag) 
+                            {
+                                if (!in_array($tagID, $tagIDs)) $tagIDs[] = $tag->term_id;
+                                else continue;
+                                
+                                $val = in_array('nolink', $showTagsOpts['atts']) ? $tag->name : '<a href="'.get_tag_link($tag->term_id).'">'.$tag->name.'</a>';
+                                $taxonomyVals[] = '<span>'.$val.'</span>';
+                            }
+                        }
+                    }
+
+                    if (!isset($itemProps['taxonomy_tag']))
+                        $itemProps['taxonomy_tag'] = '';
+
+                    $itemProps['taxonomy_tag'] = implode(' ', $taxonomyVals);
+                    
+                }
+
+                
+                $item['cssnames'] = $cssnames;
+
+
                 // Additional params
                 $item = array_merge([
                     'entase_id' => $entaseID,
@@ -386,8 +570,11 @@ class Events extends BaseShortcode
                 {                    
                     $item['url'] = $production != null ? esc_url(get_permalink($production)) : '#';
                 }
-
-                if (isset($atts['cssnames']))
+                
+                
+                /*if (isset($atts['cssnames']) || 
+                    in_array('categories', $atts['fields']) ||
+                    in_array('tags', $atts['fields']))
                 {
                     $cssnames = '';
                     $cssCategories = in_array('category', $atts['cssnames']);
@@ -397,7 +584,7 @@ class Events extends BaseShortcode
                     {
                         $eventCategories = wp_get_post_categories($post->ID, ['fields' => 'slugs']);
                         if ($production != null)
-                            $productionCategories = wp_get_post_categories($production->ID, ['fields' => 'slugs']);;
+                            $productionCategories = wp_get_post_categories($production->ID, ['fields' => 'slugs']);
 
                         $categories = array_unique(array_merge($eventCategories, $productionCategories));
                         foreach ($categories as $slug) $cssnames .= ' category-'.$slug;
@@ -414,7 +601,7 @@ class Events extends BaseShortcode
                     }
 
                     $item['cssnames'] = $cssnames;
-                }
+                }*/
 
                 // Add item to collection
                 $items[] = $item;

@@ -421,7 +421,73 @@ class Events extends \Elementor\Widget_Base
 				'title_field' => '{{{ field }}}',
 			]
 		);
+		$this->end_controls_section();
+
+		/* ******************* */
+        /* TAXONOMY SECTION */
+        /* ******************* */
+        $this->start_controls_section(
+			'taxonomy_section',
+			[
+				'label' => 'Taxonomy',
+				'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$repeaterTax = new \Elementor\Repeater();
+		$repeaterTax->add_control(
+			'type', 
+			[
+				'label' => 'Taxonomy Type',
+				'type' => \Elementor\Controls_Manager::SELECT,
+				'options' => [
+					'category' => 'Category',
+					'tag' => 'Tag',
+				],
+				'default' => 'category'
+			]
+		);
+		$repeaterTax->add_control(
+			'context', 
+			[
+				'label' => 'Taxonomy Context',
+				'type' => \Elementor\Controls_Manager::SELECT,
+				'options' => [
+					'both' => 'Both',
+					'production' => 'Production',
+					'event' => 'Event',
+				],
+				'default' => 'both'
+			]
+		);
+		$repeaterTax->add_control(
+			'show_links',
+			[
+				'label' => 'Show Links',
+				'type' => \Elementor\Controls_Manager::SWITCHER
+			]
+		);
 		
+		$repeaterTax->add_control(
+			'hide_if_empty',
+			[
+				'label' => 'Hide if Empty',
+                //'description' => 'Use "?date=YYYMMDD-YYYMMDD"',
+				'type' => \Elementor\Controls_Manager::SWITCHER
+			]
+		);
+
+		$this->add_control(
+			'taxonomies',
+			[
+				'label' => 'Display taxonomies',
+				'type' => \Elementor\Controls_Manager::REPEATER,
+				'fields' => $repeaterTax->get_controls(),
+				'title_field' => '{{{ type }}}',
+			]
+		);
+
+
 		$this->end_controls_section();
 
 	}

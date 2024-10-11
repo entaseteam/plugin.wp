@@ -41,15 +41,16 @@ class FEPages
         echo '<html><head>';
         wp_head();
         echo '</head><body class="entase-skin-preview">';
-
+        
         $fieldsStr = implode(',', $fields['fields']);
         $metaStr = implode(',', $fields['meta']);
+        $taxonomiesStr = implode(',', $fields['taxonomies']);
         $multiSourceImgStr = implode(',', ['post_feature_image', 'entase_photo_poster', 'entase_photo_og']);
         
         if ($widget == 'events')
         {
             $atmf->__('$_template_preview', $atmf->RendTemplate('Widgets/Events_Custom', true));
-            echo do_shortcode('[entase_events limit="1" status="0,1" fields="'.$fieldsStr.'" metafields="'.$metaStr.'"]');
+            echo do_shortcode('[entase_events limit="1" status="0,1" fields="'.$fieldsStr.'" metafields="'.$metaStr.'" taxonomies="'.$taxonomiesStr.'"]');
         }
         else if ($widget == 'productions')
         {

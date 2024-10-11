@@ -166,6 +166,28 @@
                             </div>
                             
                         </div>
+
+                        <div class="_pnlTaxonomy" style="font-size: 16px; text-align: left;width: 254px;margin: auto;display:none;">
+                            Taxonomy type: 
+                            <div class="select">
+                                <select class="_ddlTaxonomyType ent-select">
+                                    <option value="category">Category</option>
+                                    <option value="tag">Tag</option>
+                                </select>
+                                <svg aria-hidden="true" viewBox="0 0 16 16"><polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polyline></svg>                                    
+                            </div><br>
+                            Context: 
+                            <div class="select">
+                                <select class="_ddlTaxonomyContext ent-select">
+                                    <option value="both">Both</option>
+                                    <option value="event">Event</option>
+                                    <option value="production">Production</option>
+                                </select>
+                                <svg aria-hidden="true" viewBox="0 0 16 16"><polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polyline></svg>                                    
+                            </div><br>
+                            Enable links: <input type="checkbox" class="_chkTaxonomyLinks" value="yes" checked />
+                            
+                        </div>
                     </div>
                 </div>
 
