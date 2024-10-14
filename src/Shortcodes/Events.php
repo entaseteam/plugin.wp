@@ -8,6 +8,7 @@ use \Entase\Plugins\WP\Core\GeneralSettings;
 use \Entase\Plugins\WP\Core\SkinSettings;
 
 use \Entase\Plugins\WP\Utilities\Shortcodes;
+use \Entase\Plugins\WP\Utilities\Timezone;
 use \Entase\Plugins\WP\Utilities\Skins;
 
 
@@ -316,9 +317,12 @@ class Events extends BaseShortcode
                             break;
                         case 'entase_datestart':
                             $time = (int)get_post_meta($post->ID, 'entase_dateStart', true);
-                            //$datestr = date($atts['dateformat'].' - '.$atts['timeformat'], $time);
+                            $tz = get_post_meta($post->ID, 'entase_location_timezone', true);
+                            if ($tz == '') $tz = 'Europe/Sofia';
+                            
                             // Handling WP time zones
                             $datestr = get_date_from_gmt(date('Y-m-d H:i', $time), $atts['dateformat'].' - '.$atts['timeformat']);
+                            //$datestr = Timezone::ConvertToTimezone(date('Y-m-d H:i', $time), $tz, null, $atts['dateformat'].' - '.$atts['timeformat']);
                             $datestr = apply_filters('entase_datestart', $datestr, $post);
 
                             $row[] = ['key' => 'entase_datestart', 'val' => $datestr];
@@ -326,9 +330,12 @@ class Events extends BaseShortcode
                             break;
                         case 'entase_dateonly':
                             $time = (int)get_post_meta($post->ID, 'entase_dateStart', true);
-                            //$datestr = date($atts['dateformat'], $time);
+                            $tz = get_post_meta($post->ID, 'entase_location_timezone', true);
+                            if ($tz == '') $tz = 'Europe/Sofia';
+                            
                             // Handling WP time zones
                             $datestr = get_date_from_gmt(date('Y-m-d H:i', $time), $atts['dateformat']);
+                            //$datestr = Timezone::ConvertToTimezone(date('Y-m-d H:i', $time), $tz, null, $atts['dateformat']);
                             $datestr = apply_filters('entase_dateonly', $datestr, $post);
 
                             $row[] = ['key' => 'entase_dateonly', 'val' => $datestr];
@@ -336,9 +343,12 @@ class Events extends BaseShortcode
                             break;
                         case 'entase_timeonly':
                             $time = (int)get_post_meta($post->ID, 'entase_dateStart', true);
-                            //$datestr = date($atts['timeformat'], $time);
+                            $tz = get_post_meta($post->ID, 'entase_location_timezone', true);
+                            if ($tz == '') $tz = 'Europe/Sofia';
+
                             // Handling WP time zones
                             $datestr = get_date_from_gmt(date('Y-m-d H:i', $time), $atts['timeformat']);
+                            //$datestr = Timezone::ConvertToTimezone(date('Y-m-d H:i', $time), $tz, null, $atts['timeformat']);
                             $datestr = apply_filters('entase_timeonly', $datestr, $post);
 
                             $row[] = ['key' => 'entase_timeonly', 'val' => $datestr];

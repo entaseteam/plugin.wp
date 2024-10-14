@@ -371,6 +371,7 @@ class Events
             'entase_location_postCode' => $event->location->postCodeName,
             'entase_location_address' => $event->location->address,
             'entase_location_placeName' => $event->location->placeName,
+            'entase_location_timezone' => $event->location->timezone ?? wp_timezone_string(),
             'entase_location_lat' => $event->location->lat,
             'entase_location_lng' => $event->location->lng,
             'entase_cohosting' => $event->cohosting,
