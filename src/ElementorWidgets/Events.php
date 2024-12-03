@@ -9,6 +9,7 @@ class Events extends \Elementor\Widget_Base
 {
     private static $widgetName = 'entase_events';
     private static $widgetTitle = 'Events - Entase';
+	private static $entaseSettings = [];
 
     /**
 	 * Get widget name.
@@ -86,7 +87,6 @@ class Events extends \Elementor\Widget_Base
 	 */
 	protected function register_controls() 
     {
-
         /* ************** */
         /* CONTENT SECTION */
         /* ************** */
@@ -283,8 +283,12 @@ class Events extends \Elementor\Widget_Base
 			]
 		);
 
+		//$data = parent::get_data();
+		//print_r($data);
+		//$filterCurrentProduction = ($data['settings'] ?? [])['filter_current_production'] ?? 'no';
+		//$productionsDefault = $filterCurrentProduction == 'yes' ? ['_current'] : [];
         $productions = get_posts(['post_type' => 'production']);
-        $productionsArr = [];
+        $productionsArr = [];//['_current' => '[CURRENT PRODUCTION]'];
         foreach ($productions as $production) 
 		{
 			$productionID = get_post_meta($production->ID, 'entase_id', true);
@@ -297,6 +301,21 @@ class Events extends \Elementor\Widget_Base
 				'type' => \Elementor\Controls_Manager::SELECT2,
 				'multiple' => true,
 				'options' => $productionsArr,
+				'default' => [],//$productionsDefault
+			]
+		);
+
+		$categories = get_categories();
+        $categoriesArr = ['_current' => '[CURRENT CATEGORY]'];
+		foreach ($categories as $category) $categoriesArr[$category->term_id] = $category->name;
+		
+		$this->add_control(
+			'filter_categories',
+			[
+				'label' => 'Categories',
+				'type' => \Elementor\Controls_Manager::SELECT2,
+				'multiple' => true,
+				'options' => $categoriesArr,
 				'default' => []
 			]
 		);

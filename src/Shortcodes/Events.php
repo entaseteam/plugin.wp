@@ -34,6 +34,7 @@ class Events extends BaseShortcode
             // Query
             'filter_status' => [1],
             'filter_productions' => [],
+            'filter_categories' => [],
             'filter_cohosting' => '',
             'filter_sameowner' => '',
             'filter_current_production' => 'no',
@@ -124,6 +125,7 @@ class Events extends BaseShortcode
         $limit = (int)$atts['limit'];
         $statuses = is_string($atts['filter_status']) ? explode(',', $atts['filter_status']) : $atts['filter_status'];
         $productions = is_string($atts['filter_productions']) ? explode(',', $atts['filter_productions']) : $atts['filter_productions'];
+        $categories = is_string($atts['filter_categories']) ? explode(',', $atts['filter_categories']) : $atts['filter_categories'];
         $atts['contentchars'] = (int)$atts['contentchars'];
         
         // Find and add current production
@@ -136,6 +138,17 @@ class Events extends BaseShortcode
             else $productionID = '--';
 
             $productions[] = $productionID;
+        }
+
+        if (in_array('_current', $categories)) 
+        {
+            $categories = array_diff($categories, ['_current']);
+            if (is_category()) {
+                $category = get_queried_object();
+                if ($category && isset($category->term_id)) {
+                    $categories[] = $category->term_id;
+                }
+            }
         }
         
         // Get from query string if any
@@ -173,6 +186,17 @@ class Events extends BaseShortcode
                 'key' => 'entase_productionID',
                 'value' => $productions,
                 'compare' => 'IN'
+            ];
+        }
+
+        // Add productions filter
+        if (count($categories) > 0)
+        {
+            $query['tax_query'][] = [
+                'taxonomy' => 'category',
+                'field' => 'term_id',
+                'terms' => $categories,
+                'operator' => 'IN'
             ];
         }
 
