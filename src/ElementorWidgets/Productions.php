@@ -272,6 +272,18 @@ class Productions extends \Elementor\Widget_Base
 			]
 		);
 
+		$this->add_control(
+			'filter_event_status',
+			[
+				'label' => 'Event status',
+				'description' => 'Show only productions with events in this status',
+				'type' => \Elementor\Controls_Manager::SELECT2,
+				'multiple' => true,
+				'options' => ['Pending', 'Open Sell', 'Closed Sell', 'Finished', 'Canceled'],
+                'default' => []
+			]
+		);
+
         $this->end_controls_section();
 
 

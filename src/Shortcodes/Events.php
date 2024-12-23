@@ -465,7 +465,6 @@ class Events extends BaseShortcode
                     {
                         if ($taxonomy['type'] == 'category')
                         {
-                            
                             $queryCategories = true;
                             $showCategories = true;
                             $showCategoriesOpts = $taxonomy;
@@ -506,7 +505,7 @@ class Events extends BaseShortcode
                             foreach ($eventCategories as $category) 
                             {
                                 $val = in_array('nolink', $showCategoriesOpts['atts']) ? $category->name : '<a href="'.get_category_link($category->term_id).'">'.$category->name.'</a>';
-                                $taxonomyVals[] = '<span>'.$val.'</span>';
+                                $taxonomyVals[] = '<span class="category-label-'.$category->slug.'">'.$val.'</span>';
                             }
                         }
 
@@ -515,7 +514,7 @@ class Events extends BaseShortcode
                             foreach ($productionCategories as $category) 
                             {
                                 $val = in_array('nolink', $showCategoriesOpts['atts']) ? $category->name : '<a href="'.get_category_link($category->term_id).'">'.$category->name.'</a>';
-                                $taxonomyVals[] = '<span>'.$val.'</span>';
+                                $taxonomyVals[] = '<span class="category-label-'.$category->slug.'">'.$val.'</span>';
                             }
                         }
                     }
@@ -558,7 +557,7 @@ class Events extends BaseShortcode
                                 else continue;
 
                                 $val = in_array('nolink', $showTagsOpts['atts']) ? $tag->name : '<a href="'.get_tag_link($tag->term_id).'">'.$tag->name.'</a>';
-                                $taxonomyVals[] = '<span>'.$val.'</span>';
+                                $taxonomyVals[] = '<span class="tag-label-'.$tag->slug.'">'.$val.'</span>';
                             }
                         }
 
@@ -570,7 +569,7 @@ class Events extends BaseShortcode
                                 else continue;
                                 
                                 $val = in_array('nolink', $showTagsOpts['atts']) ? $tag->name : '<a href="'.get_tag_link($tag->term_id).'">'.$tag->name.'</a>';
-                                $taxonomyVals[] = '<span>'.$val.'</span>';
+                                $taxonomyVals[] = '<span class="tag-label-'.$tag->slug.'">'.$val.'</span>';
                             }
                         }
                     }
@@ -583,7 +582,7 @@ class Events extends BaseShortcode
                 }
 
                 
-                $item['cssnames'] = $cssnames;
+                $itemProps['cssnames'] = $cssnames;
 
 
                 // Additional params

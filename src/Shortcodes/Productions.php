@@ -18,7 +18,8 @@ class Productions extends BaseShortcode
             'limit' => 0,
             'fields' => ['entase_photo_poster', 'post_title', 'post_tags'],
             'contentchars' => 200,
-            'cssnames' => []
+            'cssnames' => [],
+            'filter_event_status' => []
 
         ], is_array($atts) ? $atts : []);
 
@@ -57,13 +58,14 @@ class Productions extends BaseShortcode
         $tags = $atts['filter_tags'] ?? [];
         $fields = $atts['fields'] ?? [];
         $multisourceImage = $atts['multisource_image'] ?? [];
-        $contentChars = (int)$atts['contentchars'];        
+        $contentChars = (int)$atts['contentchars'];
+        $eventStatus = $atts['filter_event_status'] ?? [];
 
         if (is_string($categories)) $categories = explode(',', $categories);
         if (is_string($tags)) $tags = explode(',', $tags);
         if (is_string($fields)) $fields = explode(',', $fields);
         if (is_string($multisourceImage)) $multisourceImage = explode(',', $multisourceImage);
-        
+        if (is_string($eventStatus)) $eventStatus = explode(',', $eventStatus);
 
         foreach ($categories as $key => $value) 
             if ($value == '') unset($categories[$key]);
@@ -126,6 +128,42 @@ class Productions extends BaseShortcode
                   'terms' => $tags,
                   'include_children' => true
             ];
+        }
+
+        if ($eventStatus != null && count($eventStatus) > 0)
+        {
+            // Get production IDs that have events with matching statuses
+            $event_query = new \WP_Query([
+                'post_type' => 'event',
+                'fields' => 'ids',
+                'posts_per_page' => -1,
+                'meta_query' => [
+                    [
+                        'key' => 'entase_status',
+                        'value' => $eventStatus,
+                        'compare' => 'IN'
+                    ]
+                ]
+            ]);
+
+            if ($event_query->posts) {
+                // Get unique production IDs from matching events
+                $production_ids = array_unique(
+                    array_map(function($event_id) {
+                        return get_post_meta($event_id, 'entase_productionID', true);
+                    }, $event_query->posts)
+                );
+
+                // Add meta query to filter productions
+                $query['meta_query'][] = [
+                    'key' => 'entase_id',
+                    'value' => $production_ids,
+                    'compare' => 'IN'
+                ];
+            } else {
+                // No events match the status filter, so no productions should match
+                $query['post__in'] = [0]; 
+            }
         }
 
         /* ******************* */
