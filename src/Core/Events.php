@@ -181,7 +181,7 @@ class Events
 
             GeneralSettings::Set('eventPosts', $settings);
 
-            $response = ['imported' => $count, 'hasMore' => $events->hasMore];
+            $response = ['imported' => $count, 'hasMore' => $events->cursor->hasMore];
             if ($capture) return $response;
             else Ajax::StatusOK($response);
         }
@@ -368,7 +368,7 @@ class Events
             'entase_location_countryCode' => $event->location->countryCode,
             'entase_location_countryName' => $event->location->countryName,
             'entase_location_cityName' => $event->location->cityName,
-            'entase_location_postCode' => $event->location->postCodeName,
+            'entase_location_postCode' => $event->location->postCode,
             'entase_location_address' => $event->location->address,
             'entase_location_placeName' => $event->location->placeName,
             'entase_location_timezone' => $event->location->timezone ?? wp_timezone_string(),
