@@ -4,7 +4,7 @@
 Plugin Name: Entase
 Description: Sell event tickets directly from your website with Entase integrated API.
 Author: Entase, Inc.
-Version: 1.6
+Version: 1.7
 Author URI: http://www.entase.com
 Plugin URI: https://github.com/entaseteam/plugin.wp/
 Update URI: https://github.com/entaseteam/plugin.wp/releases/latest/download/package.json
