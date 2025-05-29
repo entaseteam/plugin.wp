@@ -1,7 +1,5 @@
 var EntaseClient = function(pk, locale) {
 
-    var $ = jQuery;
-
     this.locale = locale ?? 'auto';
     this.dataTable = null;
     this.args = {
@@ -59,6 +57,10 @@ var EntaseClient = function(pk, locale) {
             if (this.client.IsAppBrowser()) url += '&ref=' + settings.ref
             if (locale != '') url += '&lcs=' + locale;
 
+            if (Object.keys(this.tprm).length > 0)
+                url += '&' + new URLSearchParams(this.tprm).toString();
+            
+
             if (navigator.userAgent.indexOf('Opera Mini') > -1) {
                 window.open(url, '_blank');
                 return;
@@ -80,12 +82,17 @@ var EntaseClient = function(pk, locale) {
         },
         client: this,
         window: null,
-        closeHandler: 9
+        closeHandler: 9,
+        tprm: {}
     };
 
     this.Dispose = function() {
         if (window.addEventListener) window.removeEventListener("message", this.OnMessage, false);
         else if (window.attachEvent) window.detachEvent("onmessage", this.OnMessage, false);
+    };
+
+    this.SetTracking = function(params) {
+        this.booking.tprm = params;
     };
 
     this.BookEvent = function(eventID) {
