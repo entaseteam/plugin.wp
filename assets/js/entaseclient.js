@@ -40,7 +40,7 @@ var EntaseClient = function(pk, locale) {
                 top = 0;
             }
 
-            var supportedLocales = ['bg', 'en', 'en-gb', 'en-us'];
+            var supportedLocales = ['en','en-us','en-gb','bg','it','es','fr','lb','pt-pt','pt-br','de','nl','fi','ro','et','lv','lt','mt','el','tr','sr','uk','ru','hr','sl','sk'];
             var documentLocale = (document.documentElement.lang ?? '').toLowerCase();
             var locale = this.client.locale == 'auto' ? documentLocale : this.client.locale;
             if (this.client.locale == 'auto' && locale != '' && !supportedLocales.includes(locale)) {
