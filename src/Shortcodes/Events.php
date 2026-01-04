@@ -169,7 +169,7 @@ class Events extends BaseShortcode
         ];
         
         // Add status filter
-        if (count($statuses) > 0)
+        if (is_array($statuses) && count($statuses) > 0)
         {
             
             $query['meta_query'][] = [
@@ -180,7 +180,7 @@ class Events extends BaseShortcode
         }
         
         // Add productions filter
-        if (count($productions) > 0)
+        if (is_array($productions) && count($productions) > 0)
         {
             $query['meta_query'][] = [
                 'key' => 'entase_productionID',
@@ -190,7 +190,7 @@ class Events extends BaseShortcode
         }
 
         // Add productions filter
-        if (count($categories) > 0)
+        if (is_array($categories) && count($categories) > 0)
         {
             $query['tax_query'][] = [
                 'taxonomy' => 'category',
