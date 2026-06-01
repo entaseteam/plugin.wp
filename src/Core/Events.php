@@ -364,6 +364,7 @@ class Events
             'entase_productionID' => $event->productionID,
             'entase_dateStart' => $event->dateStart,
             'entase_status' => $event->status,
+            'entase_type' => $event->type,
             'entase_photo' => json_encode($metaPhoto, JSON_UNESCAPED_UNICODE),
             'entase_location_countryCode' => $event->location->countryCode,
             'entase_location_countryName' => $event->location->countryName,

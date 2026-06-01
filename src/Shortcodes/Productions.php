@@ -3,6 +3,9 @@
 namespace Entase\Plugins\WP\Shortcodes;
 
 use Entase\Plugins\WP\Conf;
+use \Entase\Plugins\WP\Core\SkinSettings;
+
+use \Entase\Plugins\WP\Utilities\Skins;
 
 class Productions extends BaseShortcode
 {

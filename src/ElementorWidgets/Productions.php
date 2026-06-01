@@ -3,6 +3,7 @@
 namespace Entase\Plugins\WP\ElementorWidgets;
 
 use \Entase\Plugins\WP\Conf;
+use \Entase\Plugins\WP\Core\SkinSettings;
 
 class Productions extends \Elementor\Widget_Base
 {
@@ -118,14 +119,19 @@ class Productions extends \Elementor\Widget_Base
 			]
 		);
 
+		$skinsArr = ['classic' => 'Classic'];
+		$skins = SkinSettings::Get('skins');
+		foreach ($skins as $skin) {
+			if ($skin['widget'] == 'productions')
+				$skinsArr[$skin['id']] = '[Custom] '.$skin['name'];
+		}
+
         $this->add_control(
 			'skin',
 			[
 				'label' => 'Skin',                
 				'type' => \Elementor\Controls_Manager::SELECT,
-				'options' => [
-                    'classic' => 'Classic'
-                ],
+				'options' => $skinsArr,
                 'default' => 'classic'
 			]
 		);
