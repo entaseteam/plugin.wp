@@ -1,6 +1,7 @@
 var EntaseWP = new function() {
     
     var $ = jQuery;
+    var config = (typeof window.entaseWPSettings === 'object' && window.entaseWPSettings !== null) ? window.entaseWPSettings : {};
 
     this.client = null;
 
@@ -11,17 +12,22 @@ var EntaseWP = new function() {
     };
 
     this.PageLoad = function() {
-        this.client = new EntaseClient();
+        if (typeof Entase !== 'function') {
+            console.error('Entase client SDK is not loaded.');
+            return;
+        }
+
+        this.client = new Entase({ pk: config.pk || null });
 
         $('body').on('click', '.entase_book', [], function() {
             var eventID = $(this).data('event') || $(this).attr('rel');
-            console.log(eventID);
             EntaseWP.BookEvent(eventID);
         });
     };
 
     this.BookEvent = function(eventID) {
-        this.client.BookEvent(eventID);
+        if (!eventID || this.client === null || typeof this.client.book !== 'function') return;
+        this.client.book(eventID, {});
     };
 };
 EntaseWP.Init();
