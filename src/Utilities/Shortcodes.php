@@ -4,41 +4,118 @@ namespace Entase\Plugins\WP\Utilities;
 
 class Shortcodes
 {
+    /**
+     * Render an Entase story into HTML.
+     *
+     * The Entase API now delivers stories as Markdown, but older stories
+     * (and legacy content) still rely on the custom markup: hashtags
+     * (#foo) and person tags (@Person\Name\Family). Both must keep working.
+     *
+     * The legacy tags are extracted into placeholders before the Markdown
+     * is parsed (so Parsedown does not treat "#foo" as a heading or eat the
+     * backslashes in a person tag) and are restored as links afterwards.
+     */
     static function MarkupToHTML($markup, $options=[])
     {
         $options = array_merge([
             'searchurl' => 'https://www.entase.com/?search=$tag',
-            'linktarget' => '_blank' 
-        ], $options);
-        // (<ts-person>)(.*?)(\\)(.*?)(<\/ts-person>)
+            'linktarget' => '_blank'
+        ], is_array($options) ? $options : []);
 
-        $html = $markup;
-        $html = preg_replace('/(\#[a-zA-Z0-9\p{L}]+)/umx', '<a class="tag hashtag">$1</a>', $html);
-        $html = preg_replace('/(@[a-zA-Z0-9-_\.\/\p{L}\\\]+)/umx', '<a class="tag person">$1</a>', $html);
-        $html = self::preg_replace_all('/(<a.*class="tag.*person".*>)(.*?)(\\\)(.*?)(<\/a>)/Um', '$1$2 $4$5', $html);
-        if ($options['searchurl'] != '')
-        {
-            $options['searchurl'] = str_replace('$tag', '$4', $options['searchurl']);
-            $html = preg_replace('/(<a class="tag.*?)(>)(@|#)(.*?)(<\/a>)/m', '$1 target="'.$options['linktarget'].'" href="'.$options['searchurl'].'"$2$3$4$5', $html);
-        }
-        else $html = preg_replace('/(<a class="tag.*?)(>)(@|#)(.*?)(<\/a>)/m', '$3$4', $html);
+        $markup = (string)$markup;
+        if (trim($markup) === '')
+            return '';
 
-        $html = preg_replace('/(\[b\])(.*?)(\[\/b\])/m', '<b>$2</b>', $html);
-        $html = preg_replace('/(\[i\])(.*?)(\[\/i\])/m', '<i>$2</i>', $html);
-        $html = preg_replace('/(\[h1\])(.*?)(\[\/h1\])/m', '<h1>$2</h1>', $html);
-        $html = preg_replace('/(\[h2\])(.*?)(\[\/h2\])/m', '<h2>$2</h2>', $html);
-        $html = preg_replace('/(\[h3\])(.*?)(\[\/h3\])/m', '<h3>$2</h3>', $html);
-        $html = preg_replace('/(\[h4\])(.*?)(\[\/h4\])/m', '<h4>$2</h4>', $html);
-        $html = preg_replace('/(\[h5\])(.*?)(\[\/h5\])/m', '<h5>$2</h5>', $html);
+        // 1. Protect legacy hashtags / person tags from the Markdown parser.
+        $tokens = [];
+        $markup = self::ProtectLegacyTags($markup, $options, $tokens);
+
+        // 2. Parse the Markdown into HTML.
+        $html = self::ParseMarkdown($markup);
+
+        // 3. Restore the legacy tags as their rendered links.
+        if (!empty($tokens))
+            $html = strtr($html, $tokens);
+
+        // 4. Keep backwards compatibility with the old BBCode-style markup.
+        $html = self::LegacyBBCodeToHTML($html);
 
         return $html;
     }
 
-    private static function preg_replace_all($regex, $replace, $str)
+    private static function ParseMarkdown($markup)
     {
-        while (preg_match($regex, $str))
-            $str = preg_replace($regex, $replace, $str);
+        // The Parsedown helper lives outside the plugin namespace and is not
+        // handled by the autoloader, so it is required explicitly here.
+        require_once __DIR__.'/Parsedown.php';
 
-        return $str;
+        $parser = new \Utilities\Parsedown();
+
+        return $parser->text($markup, \Utilities\Parsedown::$headingFromH2);
+    }
+
+    private static function ProtectLegacyTags($markup, $options, &$tokens)
+    {
+        $prefix = 'entasetoken'.substr(md5(uniqid('', true)), 0, 12);
+        $index = 0;
+
+        // A legacy tag only starts at the beginning of the text or right after
+        // whitespace. The (?<!\S) guard keeps "#" and "@" that live inside URLs,
+        // emails, inline code, etc. (e.g. "example.com/page#section") untouched
+        // so the Markdown parser can handle them normally.
+
+        // Person tags: @Person\Name\Family (may contain backslashes/slashes).
+        $markup = preg_replace_callback('/(?<!\S)@[\p{L}0-9._\/\\\\-]+/u', function($match) use (&$tokens, &$index, $prefix, $options) {
+            $token = $prefix.($index++).'z';
+            $tokens[$token] = self::RenderPersonTag($match[0], $options);
+            return $token;
+        }, $markup);
+
+        // Hashtags: #foo. A "#" immediately followed by a word character is a
+        // legacy hashtag; "# " (with a space) stays a Markdown heading.
+        $markup = preg_replace_callback('/(?<!\S)#[\p{L}0-9]+/u', function($match) use (&$tokens, &$index, $prefix, $options) {
+            $token = $prefix.($index++).'z';
+            $tokens[$token] = self::RenderHashtag($match[0], $options);
+            return $token;
+        }, $markup);
+
+        return $markup;
+    }
+
+    private static function RenderPersonTag($raw, $options)
+    {
+        $name = substr($raw, 1);
+        $name = str_replace('\\', ' ', $name);
+        $name = trim(preg_replace('/\s+/u', ' ', $name));
+
+        return self::RenderTagLink('person', '@', $name, $options);
+    }
+
+    private static function RenderHashtag($raw, $options)
+    {
+        return self::RenderTagLink('hashtag', '#', substr($raw, 1), $options);
+    }
+
+    private static function RenderTagLink($type, $symbol, $label, $options)
+    {
+        if ($label === '')
+            return $symbol;
+
+        if ($options['searchurl'] === '')
+            return $symbol.$label;
+
+        $href = str_replace('$tag', $label, $options['searchurl']);
+
+        return '<a class="tag '.$type.'" target="'.$options['linktarget'].'" href="'.$href.'">'.$symbol.$label.'</a>';
+    }
+
+    private static function LegacyBBCodeToHTML($html)
+    {
+        $html = preg_replace('/(\[b\])(.*?)(\[\/b\])/m', '<b>$2</b>', $html);
+        $html = preg_replace('/(\[i\])(.*?)(\[\/i\])/m', '<i>$2</i>', $html);
+        for ($level = 1; $level <= 5; $level++)
+            $html = preg_replace('/(\[h'.$level.'\])(.*?)(\[\/h'.$level.'\])/m', '<h'.$level.'>$2</h'.$level.'>', $html);
+
+        return $html;
     }
 }

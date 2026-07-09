@@ -73,7 +73,7 @@ class Productions
         {
             case 'entase_story':
                 $story = get_post_meta($post->ID, 'entase_story', true);
-                echo Shortcodes::MarkupToHTML(Helper::EscapeDocument($story));
+                echo Shortcodes::MarkupToHTML($story);
                 break;
             case 'entase_photo_poster':
                 self::ExtractMetaPhoto($post);

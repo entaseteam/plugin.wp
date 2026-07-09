@@ -336,8 +336,11 @@ class Events extends BaseShortcode
                             $itemProps['entase_title'] = apply_filters('entase_title', get_post_meta($production->ID, 'entase_title', true), $post);
                             break;
                         case 'entase_story':
-                            $story = apply_filters('entase_story', Shortcodes::MarkupToHTML(get_post_meta($production->ID, 'entase_story', true), ['searchurl' => '']), $post);
-                            $itemProps['entase_story'] = mb_strlen($story) > $atts['contentchars'] ? mb_substr($story, 0, $atts['contentchars']).'...' : $story;
+                            $story = (string)get_post_meta($production->ID, 'entase_story', true);
+                            if (mb_strlen($story) > $atts['contentchars'])
+                                $story = mb_substr($story, 0, $atts['contentchars']).'...';
+                            $story = apply_filters('entase_story', Shortcodes::MarkupToHTML($story, ['searchurl' => '']), $post);
+                            $itemProps['entase_story'] = $story;
                             break;
                         case 'entase_datestart':
                             $time = (int)get_post_meta($post->ID, 'entase_dateStart', true);

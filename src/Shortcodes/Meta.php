@@ -36,9 +36,15 @@ class Meta extends BaseShortcode
                 else 
                 {
                     $metaValue = (string)get_post_meta($production->ID, $tag, true);
-                    $value = Helper::EscapeDocument($metaValue);
-                    if ($tag == 'entase_story' && $atts['markup2html'] === true)
-                        $value = Shortcodes::MarkupToHTML($value, $atts);
+                    if ($tag == 'entase_story')
+                    {
+                        // The story arrives as Markdown (with legacy tag markup);
+                        // Parsedown handles the escaping, so the raw value is passed through.
+                        $value = $atts['markup2html'] === true
+                            ? Shortcodes::MarkupToHTML($metaValue, $atts)
+                            : Helper::EscapeDocument($metaValue);
+                    }
+                    else $value = Helper::EscapeDocument($metaValue);
                 }
             }
         }

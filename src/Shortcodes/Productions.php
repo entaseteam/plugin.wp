@@ -5,6 +5,7 @@ namespace Entase\Plugins\WP\Shortcodes;
 use Entase\Plugins\WP\Conf;
 use \Entase\Plugins\WP\Core\SkinSettings;
 
+use \Entase\Plugins\WP\Utilities\Shortcodes;
 use \Entase\Plugins\WP\Utilities\Skins;
 
 class Productions extends BaseShortcode
@@ -225,9 +226,10 @@ class Productions extends BaseShortcode
                             $itemProps['entase_title'] = $title;
                             break;
                         case 'entase_story':
-                            $content = get_post_meta($production->ID, 'entase_story', true);
-                            $contentExport = mb_strlen($content) > $contentChars ? mb_substr($content, 0, $contentChars).'...' : $content;
-                            $contentExport = apply_filters('entase_story', $contentExport, $production);
+                            $content = (string)get_post_meta($production->ID, 'entase_story', true);
+                            if (mb_strlen($content) > $contentChars)
+                                $content = mb_substr($content, 0, $contentChars).'...';
+                            $contentExport = apply_filters('entase_story', Shortcodes::MarkupToHTML($content, ['searchurl' => '']), $production);
 
                             $row[] = ['key' => 'entase_story', 'val' => $contentExport];
                             $itemProps['entase_story'] = $contentExport;
