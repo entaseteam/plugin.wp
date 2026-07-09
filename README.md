@@ -1,6 +1,6 @@
 # Entase plugin for Wordpress
 ![GitHub release (latest by date)](https://img.shields.io/badge/php-%3E%3D7.4-blue)
-![GitHub release (latest by date)](https://img.shields.io/badge/wp-6.0.2-green)
+![GitHub release (latest by date)](https://img.shields.io/badge/wp-6.9.2-green)
 ![GitHub release (latest by date)](https://img.shields.io/badge/license-GPL-blue)
 ![GitHub release (latest by date)](https://img.shields.io/badge/elementor%20integrated-93003c)
 
