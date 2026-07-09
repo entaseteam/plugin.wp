@@ -3,7 +3,7 @@
 namespace Entase\Plugins\WP;
 
 abstract class Conf {
-    const Version = '1.7';
+    const Version = '1.8';
 
     // Backend
     const BasePath = __DIR__;
