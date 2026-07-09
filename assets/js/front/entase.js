@@ -12,12 +12,12 @@ var EntaseWP = new function() {
     };
 
     this.PageLoad = function() {
-        if (typeof Entase !== 'function') {
-            console.error('Entase client SDK is not loaded.');
-            return;
-        }
 
-        this.client = new Entase({ pk: config.pk || null });
+        // Init Entase client
+        var initClient = () => { this.client = new Entase({ pk: config.pk || null }); };
+        if (typeof Entase != 'undefined') initClient();
+        else window.addEventListener('entase:ready', initClient);
+        
 
         $('body').on('click', '.entase_book', [], function() {
             var eventID = $(this).data('event') || $(this).attr('rel');
